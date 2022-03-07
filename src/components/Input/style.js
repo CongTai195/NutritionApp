@@ -6,20 +6,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.BACK_GROUND_COLOR,
   },
-  heading: {
-    marginLeft: 30,
-    marginTop: 10,
-  },
-  textHeading: {
-    color: colors.WHITE,
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
   inputPart: {
     flexDirection: 'row',
     alignItems: "center",
     marginHorizontal: 30,
-    height: 40,
+    height: 45,
     margin: 12,
     borderWidth: 1.5,
     paddingHorizontal: 10,
@@ -33,49 +24,13 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 10,
   },
-  buttonPart: {
-    marginHorizontal: 15,
-  },
-  button: {
+  errorPart: {
     alignItems: 'center',
-    backgroundColor: colors.RED,
-    padding: 10,
-    height: 40,
-    borderRadius: 20,
-    margin: 12,
+    justifyContent: 'center',
   },
-  textButton: {
-    color: colors.WHITE,
-    fontWeight: 'bold',
+  errorText: {
     fontSize: 16,
-  },
-  errorPart:{
-      alignItems: "center",
-      justifyContent: "center"
-  },
-  errorText:{
-    fontSize: 16,
-    color: colors.RED
-  },
-  logo:{
-      marginTop: 30,
-      alignItems: "center",
-      justifyContent: "center"
-  },
-  logoImage:{
-      height: 200,
-      width: 200,
-      resizeMode: "cover",
-      borderRadius: 50
-  },
-  hidePassword:{
-    backgroundColor: colors.BACK_GROUND_COLOR,
-    marginHorizontal: 5
-  },
-  textHidePassword: {
-    color: colors.WHITE,
-    fontSize: 16,
-    fontWeight: "500"
+    color: colors.RED,
   }
 });
 

@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import LoginScreen from './src/screens/LoginScreen';
+import LoginStack from './src/navigations/LoginStack';
 import SplashScreen from './src/screens/SplashScreen';
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +24,7 @@ const App = () => {
   } else 
   return (
     <View style={styles.container}>
-      <LoginScreen/>
+      <LoginStack/>
     </View>
   );
 };

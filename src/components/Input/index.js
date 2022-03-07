@@ -8,23 +8,28 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import styles from '../../assets/styles/auth';
+import styles from './style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const Input = props => {
   return (
-    <View style={styles.inputPart}>
-      <Icon name={props.icon} color="#FFF" size={20} />
-      <TextInput
-        style={styles.input}
-        placeholder={props.initialPlaceholder}
-        placeholderTextColor="#FFF"
-        onChangeText={text => props.onChangeText(text)}
-        secureTextEntry={props.secureText}
-        value={props.value}
-        onFocus={() => props.setPlaceholder('')}
-        onBlur={() => props.setPlaceholder(`${props.name}`)}
-      />
-      {props.pressable}
+    <View>
+      <View style={styles.inputPart}>
+        <Icon name={props.icon} color="#FFF" size={20} />
+        <TextInput
+          style={styles.input}
+          placeholder={props.initialPlaceholder}
+          placeholderTextColor="#FFF"
+          onChangeText={props.onChangeText}
+          secureTextEntry={props.secureText}
+          value={props.value}
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
+        />
+        {props.pressable}
+      </View>
+      {props.error !== "" ? <View style={styles.errorPart}>
+        <Text style={styles.errorText}>{`Please input your ${props.error}`}.</Text>
+      </View> : null}
     </View>
   );
 };

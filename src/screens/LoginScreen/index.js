@@ -7,49 +7,57 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
-import styles from '../../assets/styles/auth';
+import styles from './style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Input from '../../components/Input';
+import Button from '../../components/Button';
+import {useNavigation} from '@react-navigation/native';
 const LoginScreen = () => {
+  const navigation = useNavigation();
   const [isUserNameInputEmpty, setIsUserNameInputEmpty] = useState(false);
   const [isPasswordInputEmpty, setIsPasswordInputEmpty] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [initialUsernamePlaceholder, setInitialUsernamePlaceholder] =
-    useState('Username');
-  const [initialPasswordPlaceholder, setInitialPasswordPlaceholder] =
-    useState('Password');
+  const [data, setData] = useState({
+    username: '',
+    password: '',
+  });
+  const [initialPlaceholder, setInitialPlaceholder] = useState({
+    username: 'Username',
+    password: 'Password',
+  });
   const [secureTextEntry, setSecurityTextEntry] = useState(true);
 
   const changeSecureTextEntry = () => {
     setSecurityTextEntry(prev => !prev);
   };
   const onPress = () => {
-    if (username === '' || password === '') {
-      if (username === '') {
+    if (data.username === '' || data.password === '') {
+      if (data.username === '') {
         if (isUserNameInputEmpty === false) {
           setIsUserNameInputEmpty(true);
         }
       }
-      if (password === '') {
+      if (data.password === '') {
         if (isPasswordInputEmpty === false) {
           setIsPasswordInputEmpty(true);
         }
       }
     }
-    if (username !== '') {
+    if (data.username !== '') {
       if (isUserNameInputEmpty === true) {
         setIsUserNameInputEmpty(false);
       }
     }
-    if (password !== '') {
+    if (data.password !== '') {
       if (isPasswordInputEmpty === true) {
         setIsPasswordInputEmpty(false);
       }
     }
-    if (username !== '' && password !== '') {
-      alert(`Username: ${username} Password: ${password}`);
+    if (data.username !== '' && data.password !== '') {
+      alert(`Username: ${data.username} Password: ${data.password}`);
     }
   };
   const RenderLogo = () => {
@@ -69,70 +77,63 @@ const LoginScreen = () => {
       </View>
     );
   };
-  const RenderButton = () => {
-    return (
-      <View style={styles.buttonPart}>
-        <TouchableOpacity style={styles.button} onPress={() => onPress()}>
-          <Text style={styles.textButton}>LOG IN</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-  const RenderErrorText = name => {
-    if (name === 'username') {
-      if (isUserNameInputEmpty === false) return null;
-      else
-        return (
-          <View style={styles.errorPart}>
-            <Text style={styles.errorText}>Please input your {name}.</Text>
-          </View>
-        );
-    }
-    if (name === 'password') {
-      if (isPasswordInputEmpty === false) return null;
-      else
-        return (
-          <View style={styles.errorPart}>
-            <Text style={styles.errorText}>Please input your {name}.</Text>
-          </View>
-        );
-    }
-  };
   return (
-    <View style={styles.container}>
-      {RenderLogo()}
-      {RenderHeading()}
-      <Input
-        name="Username"
-        icon="user"
-        secureText={false}
-        value={username}
-        initialPlaceholder={initialUsernamePlaceholder}
-        setPlaceholder={setInitialUsernamePlaceholder}
-        onChangeText={setUsername}
-      />
-      {RenderErrorText('username')}
-      <Input
-        name="Password"
-        icon="lock"
-        secureText={secureTextEntry}
-        value={password}
-        initialPlaceholder={initialPasswordPlaceholder}
-        setPlaceholder={setInitialPasswordPlaceholder}
-        onChangeText={setPassword}
-        pressable={
-          <Pressable
-            style={styles.hidePassword}
-            onPress={() => changeSecureTextEntry()}>
-            <Text style={styles.textHidePassword}>
-              {secureTextEntry === false ? 'Hide' : 'Show'}
-            </Text>
-          </Pressable>
-        }
-      />
-      {RenderErrorText('password')}
-      {RenderButton()}
-    </View>
+    <KeyboardAvoidingView style={styles.container} behavior={'height'}>
+      <View style={styles.inner}>
+        {RenderLogo()}
+        {RenderHeading()}
+        <Input
+          name="Username"
+          icon="user"
+          secureText={false}
+          value={data.username}
+          initialPlaceholder={initialPlaceholder.username}
+          onFocus={() =>
+            setInitialPlaceholder({...initialPlaceholder, username: ''})
+          }
+          onBlur={() =>
+            setInitialPlaceholder({...initialPlaceholder, username: 'Username'})
+          }
+          onChangeText={text => setData({...data, username: text})}
+          error={isUserNameInputEmpty === false ? '' : 'username'}
+        />
+        <Input
+          name="Password"
+          icon="lock"
+          secureText={secureTextEntry}
+          value={data.password}
+          initialPlaceholder={initialPlaceholder.password}
+          onFocus={() =>
+            setInitialPlaceholder({...initialPlaceholder, password: ''})
+          }
+          onBlur={() =>
+            setInitialPlaceholder({...initialPlaceholder, password: 'Password'})
+          }
+          onChangeText={text => setData({...data, password: text})}
+          pressable={
+            <Pressable
+              style={styles.hidePassword}
+              onPress={() => changeSecureTextEntry()}>
+              <Text style={styles.textHidePassword}>
+                {secureTextEntry === false ? 'Hide' : 'Show'}
+              </Text>
+            </Pressable>
+          }
+          error={isPasswordInputEmpty === false ? '' : 'password'}
+        />
+        <Button onPress={onPress} text={'LOG IN'} />
+        <View style={styles.toSignup}>
+          <Text style={styles.textToSignup}>Don't have account?</Text>
+          <Text
+            style={styles.textSignup}
+            onPress={() => {
+              navigation.navigate('SignupScreen');
+            }}>
+            Sign Up
+          </Text>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

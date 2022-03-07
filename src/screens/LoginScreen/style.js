@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import colors from '../colors/colors';
+import colors from '../../assets/colors/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,40 +18,6 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
     fontSize: 30,
     fontWeight: 'bold',
-  },
-  inputPart: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 30,
-    height: 40,
-    margin: 12,
-    borderWidth: 1.5,
-    paddingHorizontal: 10,
-    borderColor: colors.RED,
-    borderRadius: 20,
-  },
-  input: {
-    flex: 1,
-    color: colors.WHITE,
-    fontSize: 16,
-    height: 40,
-    margin: 10,
-  },
-  buttonPart: {
-    marginHorizontal: 15,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.RED,
-    padding: 10,
-    height: 40,
-    borderRadius: 20,
-    margin: 12,
-  },
-  textButton: {
-    color: colors.WHITE,
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   errorPart: {
     alignItems: 'center',
@@ -85,6 +51,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  toSignup:{
+    flexDirection: 'row',
+    margin: 20,
+    justifyContent: "center"
+  },
+  textToSignup:{
+    fontSize: 16,
+    color: colors.WHITE,
+    marginHorizontal: 10
+  },
+  textSignup:{
+    fontSize: 16,
+    color: colors.RED,
+    marginHorizontal: 10
+  }
 });
 
 export default styles;
