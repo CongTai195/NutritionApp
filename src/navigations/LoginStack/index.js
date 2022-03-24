@@ -7,7 +7,6 @@ import SignupScreen from '../../screens/SignupScreen';
 const LoginStack = () => {
   const Stack = createStackNavigator();
   return (
-    <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="LoginScreen"
@@ -20,7 +19,6 @@ const LoginStack = () => {
           options={{headerShown: false}}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
 

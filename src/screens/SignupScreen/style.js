@@ -10,57 +10,6 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     flex: 1
   },
-  heading: {
-    marginLeft: 30,
-    marginTop: 10,
-  },
-  textHeading: {
-    color: colors.WHITE,
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  inputPart: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 30,
-    height: 40,
-    margin: 12,
-    borderWidth: 1.5,
-    paddingHorizontal: 10,
-    borderColor: colors.RED,
-    borderRadius: 20,
-  },
-  input: {
-    flex: 1,
-    color: colors.WHITE,
-    fontSize: 16,
-    height: 40,
-    margin: 10,
-  },
-  buttonPart: {
-    marginHorizontal: 15,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.RED,
-    padding: 10,
-    height: 40,
-    borderRadius: 20,
-    margin: 12,
-  },
-  textButton: {
-    color: colors.WHITE,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  errorPart: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorText: {
-    fontSize: 16,
-    color: colors.RED,
-  },
   logo: {
     marginTop: 30,
     alignItems: 'center',
@@ -71,11 +20,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 50,
   },
-  textAppName: {
-    fontSize: 30,
-    color: colors.WHITE,
-    fontWeight: 'bold',
-  },
   hidePassword: {
     backgroundColor: colors.BACK_GROUND_COLOR,
     marginHorizontal: 5,
@@ -85,6 +29,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  toLogin:{
+    flexDirection: 'row',
+    margin: 20,
+    justifyContent: "center"
+  },
+  textToLogin:{
+    fontSize: 16,
+    color: colors.WHITE,
+    marginHorizontal: 10,
+    fontWeight: "600"
+  },
+  textLogin:{
+    fontSize: 16,
+    color: colors.RED,
+    marginHorizontal: 10,
+    fontWeight: "600"
+  }
 });
 
 export default styles;

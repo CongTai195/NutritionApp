@@ -16,47 +16,47 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
+import Heading from '../../components/Heading';
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [isUserNameInputEmpty, setIsUserNameInputEmpty] = useState(false);
-  const [isPasswordInputEmpty, setIsPasswordInputEmpty] = useState(false);
-  const [data, setData] = useState({
-    username: '',
-    password: '',
-  });
+  const [data, setData] = useState({});
   const [initialPlaceholder, setInitialPlaceholder] = useState({
     username: 'Username',
     password: 'Password',
   });
   const [secureTextEntry, setSecurityTextEntry] = useState(true);
 
+  const [error, setError] = useState({});
+
   const changeSecureTextEntry = () => {
     setSecurityTextEntry(prev => !prev);
   };
+
+  const onChange = ({name, value}) => {
+    setData({...data, [name]: value})
+
+    if (value !== '') {
+      setError((prev) => {
+        return{...prev, [name]: null}
+      })
+    } else {
+      setError((prev) => {
+        return{...prev, [name]: "This field is required"}
+      })
+    }
+  }
   const onPress = () => {
-    if (data.username === '' || data.password === '') {
-      if (data.username === '') {
-        if (isUserNameInputEmpty === false) {
-          setIsUserNameInputEmpty(true);
-        }
-      }
-      if (data.password === '') {
-        if (isPasswordInputEmpty === false) {
-          setIsPasswordInputEmpty(true);
-        }
-      }
-    }
-    if (data.username !== '') {
-      if (isUserNameInputEmpty === true) {
-        setIsUserNameInputEmpty(false);
-      }
-    }
-    if (data.password !== '') {
-      if (isPasswordInputEmpty === true) {
-        setIsPasswordInputEmpty(false);
-      }
-    }
-    if (data.username !== '' && data.password !== '') {
+    if (!data.username) {
+      setError((prev) => {
+        return{...prev, username: "Please input your username"}
+      })
+    } 
+    if (!data.password) {
+      setError((prev) => {
+        return{...prev, password: "Please input your password"}
+      })
+    } 
+    if (data.username && data.password ) {
       alert(`Username: ${data.username} Password: ${data.password}`);
     }
   };
@@ -70,18 +70,12 @@ const LoginScreen = () => {
       </View>
     );
   };
-  const RenderHeading = () => {
-    return (
-      <View style={styles.heading}>
-        <Text style={styles.textHeading}>Log In</Text>
-      </View>
-    );
-  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior={'height'}>
       <View style={styles.inner}>
         {RenderLogo()}
-        {RenderHeading()}
+        <Heading name="Log In" />
         <Input
           name="Username"
           icon="user"
@@ -94,8 +88,8 @@ const LoginScreen = () => {
           onBlur={() =>
             setInitialPlaceholder({...initialPlaceholder, username: 'Username'})
           }
-          onChangeText={text => setData({...data, username: text})}
-          error={isUserNameInputEmpty === false ? '' : 'username'}
+          onChangeText={value => onChange({name: 'username', value})}
+          error={error.username}
         />
         <Input
           name="Password"
@@ -109,7 +103,7 @@ const LoginScreen = () => {
           onBlur={() =>
             setInitialPlaceholder({...initialPlaceholder, password: 'Password'})
           }
-          onChangeText={text => setData({...data, password: text})}
+          onChangeText={value => onChange({name: 'password', value})}
           pressable={
             <Pressable
               style={styles.hidePassword}
@@ -119,11 +113,11 @@ const LoginScreen = () => {
               </Text>
             </Pressable>
           }
-          error={isPasswordInputEmpty === false ? '' : 'password'}
+          error={error.password}
         />
         <Button onPress={onPress} text={'LOG IN'} />
         <View style={styles.toSignup}>
-          <Text style={styles.textToSignup}>Don't have account?</Text>
+          <Text style={styles.textToSignup}>Don't have an account?</Text>
           <Text
             style={styles.textSignup}
             onPress={() => {

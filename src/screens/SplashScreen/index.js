@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Image, Text} from 'react-native';
 import styles from './style';
+import LottieView from 'lottie-react-native';
 const SplashScreen = () => {
   return (
     <View style={[styles.logo, {flex: 1}]}>

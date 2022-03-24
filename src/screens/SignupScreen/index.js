@@ -16,114 +16,94 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
+import Heading from '../../components/Heading';
 
 const SignupScreen = () => {
   const navigation = useNavigation();
-  const [isUserNameInputEmpty, setIsUserNameInputEmpty] = useState(false);
-  const [isPasswordInputEmpty, setIsPasswordInputEmpty] = useState(false);
-  const [isYourNameInputEmpty, setIsYourNameInputEmpty] = useState(false);
-  const [isConfirmPasswordInputEmpty, setIsConfirmPasswordInputEmpty] = useState(false);
-  const [data, setData] = useState({
-      yourName: "",
-      username: "",
-      password: "",
-      confirmPassword: ""
-  });
-  const [initialUsernamePlaceholder, setInitialUsernamePlaceholder] =
-    useState('Username');
-  const [initialPasswordPlaceholder, setInitialPasswordPlaceholder] =
-    useState('Password');
-    const [initialYourNamePlaceholder, setInitialYourNamePlaceholder] =
-    useState('Your name');
-  const [initialConfirmPasswordPlaceholder, setInitialConfirmPasswordPlaceholder] =
-    useState('Confirm Password');
   const [secureTextEntry, setSecurityTextEntry] = useState(true);
+  const [data, setData] = useState({});
+  const [initialPlaceholder, setInitialPlaceholder] = useState({
+    yourName: "Your Name",
+    username: 'Username',
+    password: 'Password',
+    confirmPassword: "Confirm Password"
+  });
+  const [error, setError] = useState({});
+  const onChange = ({name, value}) => {
+    setData({...data, [name]: value})
+
+    if (value !== '') {
+      setError((prev) => {
+        return{...prev, [name]: null}
+      })
+    } else {
+      setError((prev) => {
+        return{...prev, [name]: "This field is required"}
+      })
+    }
+  };
+  const onPress = () => {
+    if (!data.yourName) {
+      setError((prev) => {
+        return{...prev, yourName: "Please input your name"}
+      })
+    } 
+    if (!data.username) {
+      setError((prev) => {
+        return{...prev, username: "Please input your username"}
+      })
+    } 
+    if (!data.password) {
+      setError((prev) => {
+        return{...prev, password: "Please input your password"}
+      })
+    } 
+    if (!data.confirmPassword) {
+      setError((prev) => {
+        return{...prev, confirmPassword: "Please confirm your password"}
+      })
+    } 
+    if (data.username && data.password && data.yourName && data.confirmPassword ) {
+      alert(data);
+    }
+  };
 
   const changeSecureTextEntry = () => {
     setSecurityTextEntry(prev => !prev);
   };
-  const onPress = () => {
-    if (username === '' || password === '') {
-      if (username === '') {
-        if (isUserNameInputEmpty === false) {
-          setIsUserNameInputEmpty(true);
-        }
-      }
-      if (password === '') {
-        if (isPasswordInputEmpty === false) {
-          setIsPasswordInputEmpty(true);
-        }
-      }
-    }
-    if (username !== '') {
-      if (isUserNameInputEmpty === true) {
-        setIsUserNameInputEmpty(false);
-      }
-    }
-    if (password !== '') {
-      if (isPasswordInputEmpty === true) {
-        setIsPasswordInputEmpty(false);
-      }
-    }
-    if (username !== '' && password !== '') {
-      alert(`Username: ${username} Password: ${password}`);
-    }
-  };
-  const RenderHeading = () => {
-    return (
-      <View style={styles.heading}>
-        <Text style={styles.textHeading}>Sign Up</Text>
-      </View>
-    );
-  };
-  const RenderErrorText = name => {
-    if (name === 'username') {
-      if (isUserNameInputEmpty === false) return null;
-      else
-        return (
-          <View style={styles.errorPart}>
-            <Text style={styles.errorText}>Please input your {name}.</Text>
-          </View>
-        );
-    }
-    if (name === 'password') {
-      if (isPasswordInputEmpty === false) return null;
-      else
-        return (
-          <View style={styles.errorPart}>
-            <Text style={styles.errorText}>Please input your {name}.</Text>
-          </View>
-        );
-    }
-  };
+ 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={'height'}>
       <View style={styles.inner}>
-        {RenderHeading()}
+        <Heading name="Sign Up"/>
         <Input
             name="Your name"
             secureText={false}
             value={data.yourName}
-            initialPlaceholder={initialYourNamePlaceholder}
-            setPlaceholder={setInitialYourNamePlaceholder}
-            onChangeText={setData}
+            initialPlaceholder={initialPlaceholder.yourName}
+            onFocus= {() => setInitialPlaceholder({...initialPlaceholder, yourName: ""})}
+            onBlur = {() => setInitialPlaceholder({...initialPlaceholder, yourName: "Your Name"})}
+            onChangeText={value => onChange({name: "yourName", value})}
+            error={error.yourName}
           />
         <Input
           name="Username"
           secureText={false}
           value={data.username}
-          initialPlaceholder={initialUsernamePlaceholder}
-          setPlaceholder={setInitialUsernamePlaceholder}
-          onChangeText={setData}
+          initialPlaceholder={initialPlaceholder.username}
+          onFocus= {() => setInitialPlaceholder({...initialPlaceholder, username: ""})}
+          onBlur = {() => setInitialPlaceholder({...initialPlaceholder, username: "Username"})}
+          onChangeText={value => onChange({name: "username", value})}
+          error={error.username}
         />
-        {RenderErrorText('username')}
         <Input
           name="Password"
           secureText={secureTextEntry}
           value={data.password}
-          initialPlaceholder={initialPasswordPlaceholder}
-          setPlaceholder={setInitialPasswordPlaceholder}
-          onChangeText={setData}
+          initialPlaceholder={initialPlaceholder.password}
+          onFocus= {() => setInitialPlaceholder({...initialPlaceholder, password: ""})}
+          onBlur = {() => setInitialPlaceholder({...initialPlaceholder, password: "Password"})}
+          onChangeText={value => onChange({name: "password", value})}
           pressable={
             <Pressable
               style={styles.hidePassword}
@@ -133,14 +113,16 @@ const SignupScreen = () => {
               </Text>
             </Pressable>
           }
+          error={error.password}
         />
         <Input
           name="Confirm Password"
           secureText={secureTextEntry}
           value={data.confirmPassword}
-          initialPlaceholder={initialConfirmPasswordPlaceholder}
-          setPlaceholder={setInitialConfirmPasswordPlaceholder}
-          onChangeText={setData}
+          initialPlaceholder={initialPlaceholder.confirmPassword}
+          onFocus= {() => setInitialPlaceholder({...initialPlaceholder, confirmPassword: ""})}
+          onBlur = {() => setInitialPlaceholder({...initialPlaceholder, confirmPassword: "Confirm Password"})}
+          onChangeText={value => onChange({name: "confirmPassword", value})}
           pressable={
             <Pressable
               style={styles.hidePassword}
@@ -150,17 +132,17 @@ const SignupScreen = () => {
               </Text>
             </Pressable>
           }
+          error={error.confirmPassword}
         />
-        {RenderErrorText('password')}
-        <Button onPress={onPress} text={'LOG IN'} />
-        <View style={styles.toSignup}>
-          <Text style={styles.textToSignup}>Don't have account?</Text>
+        <Button onPress={onPress} text={'SIGN UP'} />
+        <View style={styles.toLogin}>
+          <Text style={styles.textToLogin}>Already have an account?</Text>
           <Text
-            style={styles.textSignup}
+            style={styles.textLogin}
             onPress={() => {
-              navigation.navigate('SignupScreen');
+              navigation.goBack();
             }}>
-            Sign Up
+            Log In
           </Text>
         </View>
       </View>

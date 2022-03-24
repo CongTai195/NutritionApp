@@ -10,23 +10,6 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     flex: 1
   },
-  heading: {
-    marginLeft: 30,
-    marginTop: 10,
-  },
-  textHeading: {
-    color: colors.WHITE,
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  errorPart: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorText: {
-    fontSize: 16,
-    color: colors.RED,
-  },
   logo: {
     marginTop: 30,
     alignItems: 'center',
@@ -36,11 +19,6 @@ const styles = StyleSheet.create({
     width: 200,
     resizeMode: 'cover',
     borderRadius: 50,
-  },
-  textAppName: {
-    fontSize: 30,
-    color: colors.WHITE,
-    fontWeight: 'bold',
   },
   hidePassword: {
     backgroundColor: colors.BACK_GROUND_COLOR,
@@ -59,12 +37,14 @@ const styles = StyleSheet.create({
   textToSignup:{
     fontSize: 16,
     color: colors.WHITE,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    fontWeight: "600"
   },
   textSignup:{
     fontSize: 16,
     color: colors.RED,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    fontWeight: "600"
   }
 });
 
