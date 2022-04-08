@@ -13,6 +13,8 @@ import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import CaloriesRemaining from '../../components/CaloriesRemaining';
+import font from '../../assets/fonts/font';
 
 const HomeScreen = () => {
   const [isLoading, setLoading] = useState(true);
@@ -24,10 +26,11 @@ const HomeScreen = () => {
       headerTitle: 'Nutritious',
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTitleStyle:{fontWeight: "700", fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerLeft: () => (
         <View style={styles.iconNotification} >
-          <TouchableOpacity onPress={() => {navigation.navigate("NotificationScreen")}}>
+          <TouchableOpacity onPress={() => {navigation.navigate("LoginScreen")}}>
             <Ionicons
               name="notifications"
               size={25}
@@ -70,48 +73,16 @@ const HomeScreen = () => {
   useEffect(() => {
     axiosFetch();
   }, []);
+  const goal = 2090;
+  const food = 0;
+  const exercise = 0;
 
   return (
     <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <View style={styles.counter}>
-          <Text style={{fontSize: 16, color: 'black', fontWeight: '500'}}>
-            Calories Remaining
-          </Text>
-          <View style={styles.calculator}>
-            <View style={styles.childCalculator}>
-              <Text style={styles.textChild}>2.090</Text>
-              <Text style={[styles.textChild, {fontWeight: '300'}]}>Goal</Text>
-            </View>
-            <View style={styles.childCalculator}>
-              <Ionicons name="remove-outline" size={24} color={'black'} />
-            </View>
-            <View style={styles.childCalculator}>
-              <Text style={styles.textChild}>0</Text>
-              <Text style={[styles.textChild, {fontWeight: '300'}]}>Food</Text>
-            </View>
-            <View style={styles.childCalculator}>
-              <Ionicons name="add-outline" size={24} color={'black'} />
-            </View>
-            <View style={styles.childCalculator}>
-              <Text style={styles.textChild}>0</Text>
-              <Text style={[styles.textChild, {fontWeight: '300'}]}>
-                Exercise
-              </Text>
-            </View>
-            <View style={styles.childCalculator}>
-              <Ionicons name="reorder-two-outline" size={24} color={'black'} />
-            </View>
-            <View style={styles.childCalculator}>
-              <Text style={[styles.textChild, {color: "blue", fontSize: 16, fontWeight: "700"}]}>2.090</Text>
-              <Text style={[styles.textChild, {fontWeight: '300'}]}>
-                Remaining
-              </Text>
-            </View>
-          </View>
-        </View>
+        <CaloriesRemaining goal={goal} food={food} exercise={exercise} />
       )}
     </View>
   );

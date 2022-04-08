@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import colors from '../../assets/colors/colors';
+import font from '../../assets/fonts/font';
 
 const styles = StyleSheet.create({
     container:{
@@ -8,8 +9,10 @@ const styles = StyleSheet.create({
     },
     headerSection: {
         flexDirection: "row",
-        borderBottomWidth: 0.5,
-        backgroundColor: colors.PURE_WHITE
+        backgroundColor: colors.PURE_WHITE,
+        width: "95%",
+        marginTop: 10,
+        borderRadius: 20
     },
     avatar:{
         height: 100,
@@ -24,31 +27,46 @@ const styles = StyleSheet.create({
         margin: 10,
         marginTop: 20,
         justifyContent: "flex-start",
-        alignItems: "flex-start"
+        alignItems: "flex-start",
     },
     lightText:{
         fontSize: 16,
         color: "black",
-        fontWeight: "400"
+        fontWeight: "400",
+        fontFamily: font.DEFAULT_FONT,
     },
     progressSection:{
         flexDirection:"row",
-        borderBottomWidth: 0.5,
-        backgroundColor: colors.PURE_WHITE
+        backgroundColor: colors.PURE_WHITE,
+        width: "95%",
+        marginTop: 10,
+        borderRadius: 20,
+        height: 50,
+        justifyContent: "center",
+        alignItems: "center",
     },
     child :{
         flexDirection: "row",
-        borderBottomWidth: 0.5,
+        //borderBottomWidth: 0.5,
         justifyContent: "center",
         alignItems: "center",
         height: 50,
-        backgroundColor: colors.PURE_WHITE
+        marginBottom: 0.5,
+        width: "100%",
     },
     textChild:{
         margin: 10,
         fontSize: 15,
         fontWeight: "400",
-        color: "black"
+        color: "black",
+        fontFamily: font.DEFAULT_FONT,
+    },
+    infoSection: {
+        width: "95%",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+        backgroundColor: colors.PURE_WHITE
     }
 })
 

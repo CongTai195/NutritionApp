@@ -5,7 +5,7 @@ import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import LoginStack from '../LoginStack';
 import HomeStack from '../HomeStack';
-import DiaryScreen from '../../screens/DiaryScreen';
+import DiaryStack from '../../navigations/DiaryStack';
 import ProgressScreen from '../../screens/ProgressScreen';
 import MoreStack from '../MoreStack/';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,7 +21,14 @@ const BottomTab = () => {
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === 'ProfileScreen' || routeName === 'NotificationScreen') {
+    if (
+      routeName === 'ProfileScreen' ||
+      routeName === 'NotificationScreen' ||
+      routeName === 'SignupScreen' ||
+      routeName === 'LoginScreen' ||
+      routeName === 'AddFoodScreen' ||
+      routeName === 'DetailFoodScreen'
+    ) {
       return 'none';
     } else {
       return 'flex';
@@ -70,13 +77,24 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Diary"
-          component={DiaryScreen}
-          options={{
-            headerShown: true,
+          component={DiaryStack}
+          options={({route}) => ({
+            headerShown: false,
             tabBarIcon: ({color}) => (
               <Ionicons name="reader" size={25} color={color} />
             ),
-          }}
+            tabBarStyle: {
+              display: getTabBarVisibility(route),
+              backgroundColor: colors.BACK_GROUND_COLOR,
+              position: 'absolute',
+              left: 10,
+              right: 10,
+              bottom: 10,
+              elevation: 0,
+              borderRadius: 15,
+              ...styles.shadow,
+            },
+          })}
         />
         <Tab.Screen
           name="Progress"

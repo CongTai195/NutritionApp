@@ -12,11 +12,12 @@ import {
   Keyboard,
 } from 'react-native';
 import styles from './style';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../../components/Heading';
+import colors from '../../assets/colors/colors';
 
 const SignupScreen = () => {
   const navigation = useNavigation();
@@ -108,9 +109,9 @@ const SignupScreen = () => {
             <Pressable
               style={styles.hidePassword}
               onPress={() => changeSecureTextEntry()}>
-              <Text style={styles.textHidePassword}>
-                {secureTextEntry === false ? 'Hide' : 'Show'}
-              </Text>
+              {secureTextEntry === false ? (
+                <Ionicons name='eye-off-outline' size={24} color={colors.PURE_WHITE}/>
+              ) : (<Ionicons name='eye-outline' size={24} color={colors.PURE_WHITE}/>)}
             </Pressable>
           }
           error={error.password}
@@ -127,9 +128,9 @@ const SignupScreen = () => {
             <Pressable
               style={styles.hidePassword}
               onPress={() => changeSecureTextEntry()}>
-              <Text style={styles.textHidePassword}>
-                {secureTextEntry === false ? 'Hide' : 'Show'}
-              </Text>
+              {secureTextEntry === false ? (
+                <Ionicons name='eye-off-outline' size={24} color={colors.PURE_WHITE}/>
+              ) : (<Ionicons name='eye-outline' size={24} color={colors.PURE_WHITE}/>)}
             </Pressable>
           }
           error={error.confirmPassword}

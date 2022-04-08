@@ -2,10 +2,15 @@ import { StyleSheet} from 'react-native';
 import colors from '../../assets/colors/colors';
 
 const styles = StyleSheet.create({
-    container:{
+    root: {
         flex: 1,
         backgroundColor: colors.LIGHT_GREY,
-        width: "100%"
+    },
+    container:{
+        flex: 1,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
     },
     iconNotification: {
         marginLeft: 10
@@ -34,25 +39,13 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     addingSection:{
-        marginTop: 70,
+        flex: 1,
+        marginTop: 10,
         marginBottom: 70,
+        width: "95%",
+        borderRadius: 20,
         backgroundColor: colors.PURE_WHITE
     },
-    childAdding:{
-    },
-    headerText:{
-        fontSize: 16,
-        fontWeight: "500",
-        color: "black",
-        margin: 10,
-    },
-    separator: {
-        borderBottomWidth: 0.2,
-        borderBottomColor: colors.LIGHT_GREY
-    },
-    addFood:{
-        margin: 10
-    }
 })
 
 export default styles;

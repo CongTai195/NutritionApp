@@ -4,6 +4,7 @@ import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import font from '../../assets/fonts/font';
 
 const MoreScreen = () => {
   const navigation = useNavigation();
@@ -12,12 +13,13 @@ const MoreScreen = () => {
       headerTitle: 'More',
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTitleStyle:{fontWeight: "700", fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
   }, [navigation]);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{justifyContent:"center", alignItems:"center"}}>
       <View style={styles.profileSection}>
         <View style={styles.streak}>
           <Text style={styles.lightText}>Streak</Text>
@@ -27,7 +29,7 @@ const MoreScreen = () => {
         <View style={styles.profile}>
           <Image
             style={styles.avatar}
-            source={require('../../assets/images/defaultAvatar.jpg')}
+            source={require('../../assets/images/defaultAvatar.png')}
           />
           <Text style={styles.boldText}>LKTGamingDUT</Text>
         </View>
