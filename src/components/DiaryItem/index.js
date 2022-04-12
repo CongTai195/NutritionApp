@@ -12,33 +12,29 @@ import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const DiaryItem = ({meal}) => {
+const DiaryItem = ({meal, listFood}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.childAdding}>
       <Text style={styles.headerText}>{meal}</Text>
       <View style={styles.separator}></View>
       {/* <SafeAreaView>
-        <FlatList
-            data={item.listFood}
-            keyExtractor={item => item.id}  
-            renderItem={({item}) => (
-                <View>
-                    <Text>{item.name}</Text>
-                </View>
-            )}
-            />
+        {Object.values(listFood).map(food => (
+          <View>
+            <Text>{food.name}</Text>
+          </View>
+        ))}
       </SafeAreaView> */}
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={() => navigation.navigate('AddFoodScreen', {meal: meal})}>
         <View style={styles.addFood}>
-          <Ionicons name="add-outline" size={20} color="blue" />
+          <Ionicons name="add-outline" size={16} color={"black"} />
           <Text
             style={{
-              fontSize: 16,
-              color: 'blue',
-              fontWeight: '900',
+              fontSize: 14,
+              color: "black",
+              fontWeight: '500',
               fontFamily: font.DEFAULT_FONT,
             }}>
             {meal === 'Water'

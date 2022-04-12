@@ -1,4 +1,4 @@
-import {Text, ScrollView, View, Image, TouchableOpacity} from 'react-native';
+import {Text, SafeAreaView, ScrollView, View, Image, TouchableOpacity} from 'react-native';
 import React, {useLayoutEffect} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
@@ -19,6 +19,7 @@ const MoreScreen = () => {
   }, [navigation]);
 
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.LIGHT_GREY}}>
     <ScrollView style={styles.container} contentContainerStyle={{justifyContent:"center", alignItems:"center"}}>
       <View style={styles.profileSection}>
         <View style={styles.streak}>
@@ -276,6 +277,7 @@ const MoreScreen = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

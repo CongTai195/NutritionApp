@@ -11,7 +11,7 @@ const MoreStack = () => {
         <Stack.Screen
           name="MoreScreen"
           component={MoreScreen}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="ProfileScreen"

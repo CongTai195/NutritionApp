@@ -41,18 +41,18 @@ const BottomTab = () => {
         screenOptions={{
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: colors.BACK_GROUND_COLOR,
+            backgroundColor: colors.PURE_WHITE,
             position: 'absolute',
             left: 10,
             right: 10,
             bottom: 10,
             elevation: 0,
-            borderRadius: 15,
+            borderRadius: 20,
             ...styles.shadow,
           },
           tabBarLabelStyle: {fontSize: 16, fontWeight: '700'},
-          tabBarActiveTintColor: colors.PURE_WHITE,
-          tabBarInactiveTintColor: colors.GREY,
+          tabBarActiveTintColor: colors.ACTIVE_BUTTON_BOTTOM_TAB,
+          tabBarInactiveTintColor: colors.INACTIVE_BUTTON_BOTTOM_TAB,
         }}>
         <Tab.Screen
           name="Home"
@@ -60,17 +60,17 @@ const BottomTab = () => {
           options={({route}) => ({
             headerShown: false,
             tabBarIcon: ({color}) => (
-              <Ionicons name="home" size={25} color={color} />
+              <Ionicons name="home" size={30} color={color} />
             ),
             tabBarStyle: {
               display: getTabBarVisibility(route),
-              backgroundColor: colors.BACK_GROUND_COLOR,
+              backgroundColor: colors.PURE_WHITE,
               position: 'absolute',
               left: 10,
               right: 10,
               bottom: 10,
               elevation: 0,
-              borderRadius: 15,
+              borderRadius: 20,
               ...styles.shadow,
             },
           })}
@@ -81,17 +81,17 @@ const BottomTab = () => {
           options={({route}) => ({
             headerShown: false,
             tabBarIcon: ({color}) => (
-              <Ionicons name="reader" size={25} color={color} />
+              <Ionicons name="reader" size={30} color={color} />
             ),
             tabBarStyle: {
               display: getTabBarVisibility(route),
-              backgroundColor: colors.BACK_GROUND_COLOR,
+              backgroundColor: colors.PURE_WHITE,
               position: 'absolute',
               left: 10,
               right: 10,
               bottom: 10,
               elevation: 0,
-              borderRadius: 15,
+              borderRadius: 20,
               ...styles.shadow,
             },
           })}
@@ -100,9 +100,9 @@ const BottomTab = () => {
           name="Progress"
           component={ProgressScreen}
           options={{
-            headerShown: true,
+            headerShown: false,
             tabBarIcon: ({color}) => (
-              <Ionicons name="cellular" size={25} color={color} />
+              <Ionicons name="cellular" size={30} color={color} />
             ),
           }}
         />
@@ -112,17 +112,17 @@ const BottomTab = () => {
           options={({route}) => ({
             headerShown: false,
             tabBarIcon: ({color}) => (
-              <Ionicons name="ellipsis-horizontal" size={25} color={color} />
+              <Ionicons name="ellipsis-horizontal" size={30} color={color} />
             ),
             tabBarStyle: {
               display: getTabBarVisibility(route),
-              backgroundColor: colors.BACK_GROUND_COLOR,
+              backgroundColor: colors.PURE_WHITE,
               position: 'absolute',
               left: 10,
               right: 10,
               bottom: 10,
               elevation: 0,
-              borderRadius: 15,
+              borderRadius: 20,
               ...styles.shadow,
             },
           })}

@@ -14,13 +14,13 @@ const QuantitySelector = ({quantity, setQuantity}) => {
   return (
     <View style={styles.root}>
       <TouchableOpacity onPress={onMinus}>
-        <Ionicons name="remove-outline" size={25} color={'blue'} />
+        <Ionicons name="remove-outline" size={25} color={'black'} />
       </TouchableOpacity>
 
       <Text style={styles.quantity}>{quantity}</Text>
 
       <TouchableOpacity onPress={onPlus}>
-        <Ionicons name="add-outline" size={25} color={'blue'} />
+        <Ionicons name="add-outline" size={25} color={'black'} />
       </TouchableOpacity>
     </View>
   );

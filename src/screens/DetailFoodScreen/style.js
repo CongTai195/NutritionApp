@@ -5,7 +5,8 @@ import font from '../../assets/fonts/font';
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.LIGHT_GREY
+        backgroundColor: colors.LIGHT_GREY,
+        marginBottom: 10
     },
     header:{
         backgroundColor: colors.PURE_WHITE,
@@ -85,11 +86,34 @@ const styles = StyleSheet.create({
         marginHorizontal: 10
     }, 
     amountText:{
-        color: "blue",
+        color: "black",
         fontSize: 16,
         fontFamily: font.DEFAULT_FONT,
         fontWeight: "500",
         marginHorizontal: 15
+    },
+    percent: {
+        flexDirection: "column",
+        //borderBottomWidth: 0.5,
+        height: 90,
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        marginBottom: 0.5,
+        width: "100%",
+        marginTop: 10
+    },
+    progressBar:{
+        flex: 1,
+        margin: 10,
+    },
+    nutritionFacts: {
+        backgroundColor: colors.PURE_WHITE,
+        width: "95%",
+        alignSelf: "center",
+        marginTop: 10,
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center"
     }
 });
 

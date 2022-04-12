@@ -1,6 +1,7 @@
 import { StyleSheet} from 'react-native'
 import React from 'react'
 import colors from '../../assets/colors/colors';
+import font from '../../assets/fonts/font';
 
 
 const styles = StyleSheet.create({
@@ -24,7 +25,8 @@ const styles = StyleSheet.create({
     },
     quantity:{
         marginHorizontal: 15,
-        color: "blue"
+        color: "black",
+        fontFamily: font.DEFAULT_FONT
     }
 });
 

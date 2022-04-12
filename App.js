@@ -13,6 +13,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import BottomTab from './src/navigations/BottomTab';
 import {NavigationContainer} from '@react-navigation/native';
 import MyDrawer from './src/navigations/Drawer';
+import colors from './src/assets/colors/colors';
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -39,7 +40,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#24253c',
+    backgroundColor: colors.BACK_GROUND_COLOR,
   },
 });
 

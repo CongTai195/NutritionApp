@@ -13,7 +13,7 @@ const DiaryStack = () => {
         <Stack.Screen
           name="DiaryScreen"
           component={DiaryScreen}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="AddFoodScreen"

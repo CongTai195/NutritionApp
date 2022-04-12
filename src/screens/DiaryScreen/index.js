@@ -16,46 +16,8 @@ import moment from 'moment';
 import DiaryItem from '../../components/DiaryItem';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
+import Diaries from '../../data/Diaries';
 
-
-const CALORIES_DATA = [
-  {
-    id: '1',
-    date: '4/4/2022',
-    calories: {
-      goal: 2090,
-      food: 1500,
-      exercise: 500,
-    },
-  },
-  {
-    id: '0',
-    date: '5/4/2022',
-    calories: {
-      goal: 2090,
-      food: 1500,
-      exercise: 500,
-    },
-  },
-  {
-    id: '2',
-    date: '6/4/2022',
-    calories: {
-      goal: 2090,
-      food: 0,
-      exercise: 0,
-    },
-  },
-  {
-    id: '3',
-    date: '7/4/2022',
-    calories: {
-      goal: 2090,
-      food: 3000,
-      exercise: 1000,
-    },
-  },
-];
 const DiaryScreen = () => {
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -69,27 +31,28 @@ const DiaryScreen = () => {
   }, [navigation]);
   const today = moment();
   const [isLoading, setIsLoading] = useState(true);
+  
   const [date, setDate] = useState(
     `${today.toDate().getDate()}/${today.toDate().getMonth() + 1}/${today
       .toDate()
       .getFullYear()}`,
   );
 
-  let calories_data = CALORIES_DATA.filter(e => {
+  let calories_data = Diaries.filter(e => {
     return e.date === date;
   });
   const [calories, setCalories] = useState({
     goal: calories_data[0].calories.goal,
-    food: calories_data[0].calories.food,
+    food:  calories_data[0].calories.food,
     exercise: calories_data[0].calories.exercise,
   });
 
   useEffect(() => {
     setTimeout(() => {
       setCalories({
-        goal: calories_data[0].calories.goal,
-        food: calories_data[0].calories.food,
-        exercise: calories_data[0].calories.exercise,
+        goal:  calories_data[0].calories.goal ,
+        food:  calories_data[0].calories.food ,
+        exercise:  calories_data[0].calories.exercise ,
       });
       setIsLoading(false);
     }, 2000);
@@ -105,8 +68,8 @@ const DiaryScreen = () => {
         calendarHeaderStyle={{color: colors.PURE_WHITE}}
         dateNumberStyle={{color: colors.GREY, fontSize: 18, fontFamily: font.DEFAULT_FONT}}
         dateNameStyle={{color: colors.GREY, fontSize: 12, fontFamily: font.DEFAULT_FONT}}
-        highlightDateNameStyle={{color: 'black', fontSize: 14, fontFamily: font.DEFAULT_FONT, fontWeight: "900"}}
-        highlightDateNumberStyle={{color: 'black', fontSize: 20, fontFamily: font.DEFAULT_FONT, fontWeight: "900"}}
+        highlightDateNameStyle={{color: colors.BACK_GROUND_COLOR, fontSize: 14, fontFamily: font.DEFAULT_FONT, fontWeight: "900"}}
+        highlightDateNumberStyle={{color: colors.BACK_GROUND_COLOR, fontSize: 20, fontFamily: font.DEFAULT_FONT, fontWeight: "900"}}
         iconContainer={{flex: 0.1}}
         iconStyle={{tintColor: 'black'}}
         selectedDate={today}
@@ -147,7 +110,7 @@ const DiaryScreen = () => {
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
               /> */}
-              <ScrollView>
+              <ScrollView showsVerticalScrollIndicator={false} >
                 <DiaryItem meal={"Breakfast"} />
                 <DiaryItem meal={"Lunch"} />
                 <DiaryItem meal={"Dinner"} />

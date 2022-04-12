@@ -1,13 +1,20 @@
 export default {
     BACK_GROUND_COLOR: "#24253c",
+    THEME: "#7C5695",
     RED: "#E73752",
     WHITE: "#E6EBEC",
     GREY: "#999999",
     PURE_WHITE: "#FFFFFF",
     LIGHT_GREY: "#ededed",
     BLACK: "#000",
-    PURPLE: "#7a05f7",
-    YELLOW: "#f7bb05",
+    PURPLE: "#8860a2",
+    YELLOW: "#fac5a4",
     GREEN: "#05f78e",
-    BLUE: "#05dff7"
+    BLUE: "#aceafc",
+    BOTTOM_TAB: "#EDEDED",
+    //ACTIVE_BUTTON_BOTTOM_TAB: "#8860a2",
+    ACTIVE_BUTTON_BOTTOM_TAB: "#24253c",
+    INACTIVE_BUTTON_BOTTOM_TAB: "#AFADB0",
+    ORANGE: "#F8AE38",
+    PINK: "#FCE4EC"
 }

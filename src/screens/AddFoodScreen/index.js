@@ -7,98 +7,15 @@ import SearchInput from '../../components/SearchInput';
 import AddFoodItem from '../../components/AddFoodItem';
 import AnimatedLottieView from 'lottie-react-native';
 import font from '../../assets/fonts/font';
+import Foods from '../../data/Foods';
 
-const DATA = [
-  {
-    id: 1,
-    name: 'Beef',
-    calories: {
-      calories: 170,
-      fromCarbs: {
-        mass: 0,
-        percentage: 0
-      },
-      fromFat:{
-        mass: 8,
-        percentage: 44
-      },
-      fromProtein:{
-        mass: 23,
-        percentage: 56
-      },
-    },
-    servingSize: 112,
-    detail: '93% lean beef',
-  },
-  {
-    id: 2,
-    name: 'Chicken',
-    calories: {
-      calories: 100,
-      fromCarbs: {
-        mass: 1,
-        percentage: 4
-      },
-      fromFat:{
-        mass: 2,
-        percentage: 16
-      },
-      fromProtein:{
-        mass: 22,
-        percentage: 80
-      },
-    },
-    servingSize: 112,
-    detail: 'Grilled chicken',
-  },
-  {
-    id: 3,
-    name: 'Egg',
-    calories: {
-      calories: 70,
-      fromCarbs: {
-        mass: 0,
-        percentage: 0
-      },
-      fromFat:{
-        mass: 5,
-        percentage: 65
-      },
-      fromProtein:{
-        mass: 6,
-        percentage: 35
-      },
-    },
-    servingSize: 50,
-    detail: 'Egg',
-  },
-  {
-    id: 4,
-    name: 'Brocolini',
-    calories: {
-      calories: 33,
-      fromCarbs: {
-        mass: 6.4,
-        percentage: 64
-      },
-      fromFat:{
-        mass: 0.4,
-        percentage: 8
-      },
-      fromProtein:{
-        mass: 2.8,
-        percentage: 28
-      },
-    },
-    servingSize: 100,
-    detail: 'Generic',
-  },
-];
+
 const AddFoodScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const meal = route.params.meal;
   const [isSearching, SetIsSearching] = useState(false);
+  const [isSearched, setIsSearched] = useState(false);
 
   const [search, setSearch] = useState('');
   const [foods, setFoods] = useState('');
@@ -108,16 +25,19 @@ const AddFoodScreen = () => {
       headerTitle: `${meal}`,
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
-      headerTitleStyle:{fontWeight: "700", fontFamily: font.DEFAULT_FONT},
+      headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
   }, [navigation]);
 
   const handleSearch = searchValue => {
+    setIsSearched(true);
     SetIsSearching(true);
     setFoods([]);
     setTimeout(() => {
-      const result = DATA.filter(e => e.name.toLowerCase().includes(searchValue));
+      const result = Foods.filter(e =>
+        e.name.toLowerCase().includes(searchValue),
+      );
       setFoods(result);
       SetIsSearching(false);
     }, 2000);
@@ -131,7 +51,9 @@ const AddFoodScreen = () => {
         value={search}
         onSubmitEditing={() => handleSearch(search)}
       />
-      {isSearching === true ? (
+      {isSearched === false ? (
+        <Text style={styles.textHeader}></Text>
+      ) : isSearching === true ? (
         <View>
           <Text style={styles.textHeader}>Searching ...</Text>
           <AnimatedLottieView
@@ -145,7 +67,14 @@ const AddFoodScreen = () => {
       <View>
         <FlatList
           data={foods}
-          renderItem={({item}) => <AddFoodItem onPress={() => navigation.navigate("DetailFoodScreen", {food: item})} item={item} />}
+          renderItem={({item}) => (
+            <AddFoodItem
+              onPress={() =>
+                navigation.navigate('DetailFoodScreen', {food: item})
+              }
+              item={item}
+            />
+          )}
           keyExtractor={item => item.id}
         />
       </View>

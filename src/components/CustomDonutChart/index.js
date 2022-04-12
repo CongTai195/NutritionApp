@@ -48,7 +48,7 @@ const CustomDonutChart = ({calories, carbs, fat, protein}) => {
                   cx="50%"
                   cy="50%"
                   r={radius}
-                  stroke={colors.GREEN}
+                  stroke={colors.YELLOW}
                   fill="transparent"
                   strokeWidth="10"
                   strokeDasharray={circleCircumference}
@@ -76,7 +76,7 @@ const CustomDonutChart = ({calories, carbs, fat, protein}) => {
                   cx="50%"
                   cy="50%"
                   r={radius}
-                  stroke={colors.YELLOW}
+                  stroke={colors.BLUE}
                   fill="transparent"
                   strokeWidth="10"
                   strokeDasharray={circleCircumference}

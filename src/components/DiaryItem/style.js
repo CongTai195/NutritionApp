@@ -5,18 +5,18 @@ import font from '../../assets/fonts/font';
 const styles = StyleSheet.create({
     childAdding:{
         borderBottomWidth: 2,
-        borderBottomColor: colors.LIGHT_GREY
+        borderBottomColor: colors.BACK_GROUND_COLOR
     },
     headerText:{
         fontSize: 16,
         fontWeight: "900",
-        color: "black",
+        color: colors.BLACK,
         margin: 10,
         fontFamily: font.DEFAULT_FONT
     },
     separator: {
         borderBottomWidth: 0.2,
-        borderBottomColor: colors.LIGHT_GREY
+        borderBottomColor: colors.BACK_GROUND_COLOR
     },
     addFood:{
         flexDirection: "row",

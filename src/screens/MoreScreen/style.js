@@ -4,7 +4,6 @@ import font from '../../assets/fonts/font';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         marginBottom: 70,
         backgroundColor: colors.LIGHT_GREY,
     },
