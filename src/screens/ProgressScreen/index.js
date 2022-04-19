@@ -96,7 +96,7 @@ const ProgressScreen = () => {
         bezier
         style={{
           marginVertical: 8,
-          borderRadius: 20,
+          borderRadius: 10,
         }}
       />
     </View>

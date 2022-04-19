@@ -16,6 +16,7 @@ import font from '../../assets/fonts/font';
 import CustomDonutChart from '../../components/CustomDonutChart';
 import QuantitySelector from '../../components/QuantitySelector';
 import * as Progress from 'react-native-progress';
+import {Picker} from '@react-native-picker/picker';
 
 const DetailFoodScreen = () => {
   const screenWidth = Dimensions.get('window').width;
@@ -24,6 +25,20 @@ const DetailFoodScreen = () => {
   const food = route.params.food;
   const [quantity, setQuantity] = useState(1);
   const [showNutritionFacts, setShowNutritionFacts] = useState(false);
+  const nutrition_facts_array = food.nutrition_facts;
+  const daily_calories = 2800;
+  const daily_carbs = 335;
+  const daily_fat = 89;
+  const daily_protein = 134;
+
+  const [selectedServingSize, setSelectedServingSize] = useState(
+    nutrition_facts_array[0].serving_size,
+  );
+
+  const nutrition_facts = nutrition_facts_array.find(e => {
+    return e.serving_size == selectedServingSize;
+  });
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `Add Food`,
@@ -49,28 +64,28 @@ const DetailFoodScreen = () => {
       <View style={styles.header}>
         <Text style={styles.name}>{food.name}</Text>
         <Text style={styles.information}>
-          {food.detail}, {food.servingSize} g
+          {food.detail}, {selectedServingSize}
         </Text>
       </View>
       <View style={styles.nutrition}>
         <View style={styles.chart}>
           <CustomDonutChart
-            calories={food.calories.calories * quantity}
-            carbs={food.calories.fromCarbs.percentage}
-            fat={food.calories.fromFat.percentage}
-            protein={food.calories.fromProtein.percentage}
+            calories={nutrition_facts.calories * quantity}
+            carbs={food.fromCarbs}
+            fat={food.fromFat}
+            protein={food.fromProtein}
           />
         </View>
         <View style={styles.nutritionDetail}>
           <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-            {food.calories.fromCarbs.percentage}%
+            {food.fromCarbs}%
           </Text>
           <Text
             style={[
               {fontSize: 16, color: 'black'},
               styles.textNutritionDetail,
             ]}>
-            {food.calories.fromCarbs.mass * quantity} g
+            {nutrition_facts.carbs * quantity} g
           </Text>
           <Text
             style={[
@@ -80,16 +95,17 @@ const DetailFoodScreen = () => {
             Carbs
           </Text>
         </View>
+
         <View style={styles.nutritionDetail}>
           <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-            {food.calories.fromFat.percentage}%
+            {food.fromFat}%
           </Text>
           <Text
             style={[
               {fontSize: 16, color: 'black'},
               styles.textNutritionDetail,
             ]}>
-            {food.calories.fromFat.mass * quantity} g
+            {nutrition_facts.fat * quantity} g
           </Text>
           <Text
             style={[
@@ -99,16 +115,17 @@ const DetailFoodScreen = () => {
             Fat
           </Text>
         </View>
+
         <View style={styles.nutritionDetail}>
           <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-            {food.calories.fromProtein.percentage}%
+            {food.fromProtein}%
           </Text>
           <Text
             style={[
               {fontSize: 16, color: 'black'},
               styles.textNutritionDetail,
             ]}>
-            {food.calories.fromProtein.mass * quantity} g
+            {nutrition_facts.protein * quantity} g
           </Text>
           <Text
             style={[
@@ -119,21 +136,31 @@ const DetailFoodScreen = () => {
           </Text>
         </View>
       </View>
+
       <View style={styles.others}>
-        <TouchableOpacity activeOpacity={0.5}>
-          <View style={styles.childOthers}>
-            <Text style={styles.labelText}>Serving Size</Text>
-            <Text style={styles.amountText}>{food.servingSize} g</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5}>
-          <View style={styles.childOthers}>
-            <Text style={styles.labelText}>Number of Servings</Text>
-            {/* <TextInput value={quantity.toString()} onChangeText={quantity => setQuantity(quantity)} /> */}
-            {/* <Text style={styles.amountText}>{quantity}</Text> */}
-            <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-          </View>
-        </TouchableOpacity>
+        {/* <TouchableOpacity activeOpacity={0.5}> */}
+        <View style={styles.childOthers}>
+          <Text style={styles.labelText}>Serving Size</Text>
+          <Text style={styles.servingSizeText}>{selectedServingSize}</Text>
+          <Picker
+            style={{height: 50, width: 50}}
+            useNativeAndroidPickerStyle={false}
+            selectedValue={selectedServingSize}
+            onValueChange={itemValue => setSelectedServingSize(itemValue)}>
+            {nutrition_facts_array.map((element, index) => (
+              <Picker.Item
+                key={index}
+                label={element.serving_size.toString()}
+                value={element.serving_size.toString()}
+              />
+            ))}
+          </Picker>
+        </View>
+        {/* </TouchableOpacity> */}
+        <View style={styles.childOthers}>
+          <Text style={styles.labelText}>Number of Servings</Text>
+          <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
+        </View>
         <View style={styles.percent}>
           <Text style={styles.labelText}>Percent of Daily Goals</Text>
           <View style={{flexDirection: 'row'}}>
@@ -141,7 +168,9 @@ const DetailFoodScreen = () => {
               <Progress.Bar
                 borderColor={colors.GREY}
                 color={colors.GREEN}
-                progress={0.13}
+                progress={
+                  (nutrition_facts.calories * quantity) / daily_calories
+                }
                 width={null}
               />
               <View
@@ -151,7 +180,11 @@ const DetailFoodScreen = () => {
                   marginTop: 5,
                 }}>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  13%
+                  {Math.round(
+                    ((nutrition_facts.calories * quantity) / daily_calories) *
+                      100,
+                  )}
+                  %
                 </Text>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
                   Calories
@@ -163,7 +196,7 @@ const DetailFoodScreen = () => {
               <Progress.Bar
                 borderColor={colors.GREY}
                 color={colors.YELLOW}
-                progress={0.0}
+                progress={(nutrition_facts.carbs * quantity) / daily_carbs}
                 width={null}
               />
               <View
@@ -173,7 +206,10 @@ const DetailFoodScreen = () => {
                   marginTop: 5,
                 }}>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  0%
+                  {Math.round(
+                    ((nutrition_facts.carbs * quantity) / daily_carbs) * 100,
+                  )}
+                  %
                 </Text>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
                   Carbs
@@ -185,7 +221,7 @@ const DetailFoodScreen = () => {
               <Progress.Bar
                 borderColor={colors.GREY}
                 color={colors.PURPLE}
-                progress={0.09}
+                progress={(nutrition_facts.fat * quantity) / daily_fat}
                 width={null}
               />
               <View
@@ -195,7 +231,10 @@ const DetailFoodScreen = () => {
                   marginTop: 5,
                 }}>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  9%
+                  {Math.round(
+                    ((nutrition_facts.fat * quantity) / daily_fat) * 100,
+                  )}
+                  %
                 </Text>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
                   Fat
@@ -207,7 +246,7 @@ const DetailFoodScreen = () => {
               <Progress.Bar
                 borderColor={colors.GREY}
                 color={colors.BLUE}
-                progress={0.17}
+                progress={(nutrition_facts.protein * quantity) / daily_protein}
                 width={null}
               />
               <View
@@ -217,7 +256,11 @@ const DetailFoodScreen = () => {
                   marginTop: 5,
                 }}>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  17%
+                  {Math.round(
+                    ((nutrition_facts.protein * quantity) / daily_protein) *
+                      100,
+                  )}
+                  %
                 </Text>
                 <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
                   Protein
@@ -233,13 +276,17 @@ const DetailFoodScreen = () => {
         {showNutritionFacts ? (
           <View
             style={{flexDirection: 'row', alignSelf: 'center', marginTop: 10}}>
-            <Text style={{color: 'black', marginHorizontal: 5}}>Hide Nutrition Facts</Text>
+            <Text style={{color: 'black', marginHorizontal: 5}}>
+              Hide Nutrition Facts
+            </Text>
             <Ionicons name="chevron-up-outline" size={20} color="black" />
           </View>
         ) : (
           <View
             style={{flexDirection: 'row', alignSelf: 'center', marginTop: 10}}>
-            <Text style={{color: 'black', marginHorizontal: 5}}>Show Nutrition Facts</Text>
+            <Text style={{color: 'black', marginHorizontal: 5}}>
+              Show Nutrition Facts
+            </Text>
             <Ionicons name="chevron-down-outline" size={20} color="black" />
           </View>
         )}
@@ -248,62 +295,86 @@ const DetailFoodScreen = () => {
         <View style={styles.others}>
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Calories</Text>
-            <Text style={styles.amountText}>170</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.calories * quantity} cal
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Total Fat</Text>
-            <Text style={styles.amountText}>8 g</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.fat * quantity} g
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Cholesterol</Text>
-            <Text style={styles.amountText}>70 mg</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.cholesterol * quantity} mg
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Sodium</Text>
-            <Text style={styles.amountText}>75 mg</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.sodium * quantity} mg
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Total Carbohydrates</Text>
-            <Text style={styles.amountText}>0 g</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.carbs * quantity} g
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Protein</Text>
-            <Text style={styles.amountText}>23 g</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.protein * quantity} g
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Vitamin D</Text>
-            <Text style={styles.amountText}>-</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.vitamin_D * quantity}
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Calcium</Text>
-            <Text style={styles.amountText}>0 %</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.calcium * quantity} %
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Iron</Text>
-            <Text style={styles.amountText}>15 %</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.iron * quantity} %
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Potassium</Text>
-            <Text style={styles.amountText}>0 mg</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.potassium * quantity} mg
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Vitamin A</Text>
-            <Text style={styles.amountText}>0 %</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.vitamin_A * quantity} %
+            </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Vitamin C</Text>
-            <Text style={styles.amountText}>0 %</Text>
+            <Text style={styles.amountText}>
+              {nutrition_facts.vitamin_C * quantity} %
+            </Text>
           </View>
         </View>
       ) : null}

@@ -13,7 +13,7 @@ const AddFoodItem = ({item, onPress}) => {
           </Text>
           <View numberOfLines={1} style={{flexDirection: 'row'}}>
             <Text numberOfLines={1} style={styles.textInfo}>
-              {item.calories.calories} cal, {item.servingSize} g, {item.detail}
+              {item.nutrition_facts[0].calories} cal, {item.nutrition_facts[0].serving_size}, {item.detail}
             </Text>
           </View>
         </TouchableOpacity>

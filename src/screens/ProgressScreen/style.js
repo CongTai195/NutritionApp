@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     header:{
         flexDirection: "row",
         backgroundColor: colors.PURE_WHITE,
-        borderRadius: 20,
+        borderRadius: 10,
         marginBottom: 10,
         marginTop: 10,
         width: "95%"

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         width: "95%",
         backgroundColor: colors.PURE_WHITE,
         marginTop: 10,
-        borderRadius: 20
+        borderRadius: 10
     },
     profile:{
         margin: 10,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         width: "95%",
         backgroundColor: colors.PURE_WHITE,
         marginTop: 10,
-        borderRadius: 20
+        borderRadius: 10
     },
     textChild: {
         fontSize: 16,

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Alert} from 'react-native';
 import React, {useLayoutEffect, useState, useEffect} from 'react';
 import styles from './style';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -8,6 +8,7 @@ import AddFoodItem from '../../components/AddFoodItem';
 import AnimatedLottieView from 'lottie-react-native';
 import font from '../../assets/fonts/font';
 import Foods from '../../data/Foods';
+import BASE_URL from '../../data/ENV';
 
 
 const AddFoodScreen = () => {
@@ -30,17 +31,34 @@ const AddFoodScreen = () => {
     });
   }, [navigation]);
 
-  const handleSearch = searchValue => {
-    setIsSearched(true);
-    SetIsSearching(true);
-    setFoods([]);
-    setTimeout(() => {
-      const result = Foods.filter(e =>
-        e.name.toLowerCase().includes(searchValue),
-      );
-      setFoods(result);
-      SetIsSearching(false);
-    }, 2000);
+  const handleSearch = async searchValue => {
+    if (searchValue.length < 2) {
+      Alert.alert(
+        "Search term too short",
+        "Please enter a search term that is at least 2 characters long.",
+        [
+          { text: "Dismiss", onPress: () => {} }
+        ]
+      )
+      //alert('Please input something with at least 2 characters!');
+    } else {
+      setIsSearched(true);
+      SetIsSearching(true);
+      setFoods([]);
+      try {
+        const response = await fetch(`${BASE_URL}food/search/${searchValue}`);
+        const result = await response.json();
+        setTimeout(() => {
+          setFoods(result.results);
+          SetIsSearching(false);
+        }, 1500);
+      } catch (error) {
+        console.error(error);
+      }
+      //  finally {
+      //   SetIsSearching(false);
+      // }
+    }
   };
   return (
     <View style={styles.container}>

@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
   },
   title: {paddingHorizontal: 10, flex: 1, justifyContent: 'center'},
   bigTitle: {
-    fontSize: 16,
+    fontSize: 20,
     color: colors.BLACK,
     fontWeight: '900',
     fontFamily: font.DEFAULT_FONT,
   },
   smallTitle: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: font.DEFAULT_FONT,
     color: colors.BLACK,
   },

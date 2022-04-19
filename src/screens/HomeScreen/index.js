@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useLayoutEffect} from 'react';
+import moment from 'moment';
 import {
   ActivityIndicator,
   TouchableOpacity,
@@ -106,9 +107,9 @@ const HomeScreen = () => {
           <View style={{marginHorizontal: '3%'}}>
             <Label>Your Nutrients</Label>
             <View style={{flexDirection: 'row'}}>
-              <Card name={"Carbs"} mass={100} status={80} image={carbs} lightColor="#f8e4d9" color="#fcf1ea" darkColor="#fac5a4" />
-              <Card name={"Fat"} mass={100} status={80} image={fat} lightColor="#dad5fe" color="#e7e3ff" darkColor="#8860a2" />
-              <Card name={"Protein"} mass={100} status={80} image={meat} lightColor="#d7f0f7" color="#e8f7fc" darkColor="#aceafc" />
+              <Card name={"Carbs"} mass={100} status={40} image={carbs} lightColor="#f8e4d9" color="#fcf1ea" darkColor="#fac5a4" />
+              <Card name={"Fat"} mass={100} status={50} image={fat} lightColor="#dad5fe" color="#e7e3ff" darkColor="#8860a2" />
+              <Card name={"Protein"} mass={100} status={60} image={meat} lightColor="#d7f0f7" color="#e8f7fc" darkColor="#aceafc" />
             </View>
           </View>
         </SafeAreaView>
@@ -146,7 +147,6 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
         <Progress.Circle
           size={50}
           progress={status / 100}
-          //progress={0.1}
           showsText
           unfilledColor="#ededed"
           borderColor="#ededed"
@@ -168,14 +168,6 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
           }}
         />
       </View>
-      {/* <View>
-        <Text style={{fontSize: 10, fontFamily: 'Poppins-Light'}}>
-          {'Day     1'}
-        </Text>
-        <Text style={{fontSize: 10, fontFamily: 'Poppins-Light'}}>
-          {'Time   20 min'}
-        </Text>
-      </View> */}
       <View
         style={{
           flexDirection: 'row',
@@ -185,21 +177,6 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
         <Text style={{fontFamily: font.DEFAULT_FONT, fontSize: 16, color: "black", fontWeight: '100'}}>
           {name}
         </Text>
-        {/* <View
-          style={{
-            backgroundColor: data.lightColor,
-            padding: 2,
-            borderRadius: 10,
-          }}>
-          <Image
-            source={next}
-            style={{
-              height: 12,
-              width: 12,
-              resizeMode: 'contain',
-            }}
-          />
-        </View> */}
       </View>
     </View>
   );
@@ -232,7 +209,9 @@ const ImageContainer = ({image, height = '100%', width = '100%'}) => (
 const HeaderTitle = () => (
   <View style={styles.title}>
     <Text style={styles.bigTitle}>Hi, lkt</Text>
-    <Text style={styles.smallTitle}>Apr 12, 2022</Text>
+    <Text style={styles.smallTitle}>{`${moment().toDate().getDate()}/${moment().toDate().getMonth() + 1}/${moment()
+      .toDate()
+      .getFullYear()}`}</Text>
   </View>
 );
 

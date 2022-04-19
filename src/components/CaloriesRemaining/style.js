@@ -6,9 +6,9 @@ const styles = StyleSheet.create({
   counter: {
     backgroundColor: colors.BACK_GROUND_COLOR,
     //height: "20%",
-    padding: 15,
+    padding: 10,
     width: '95%',
-    borderRadius: 20,
+    borderRadius: 10,
     marginTop: 10,
     alignSelf: 'center',
     shadowColor: '#7F5DF0',
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   childCalculator: {
-    margin: 5,
+    marginVertical: 5,
+    margin: 3,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',

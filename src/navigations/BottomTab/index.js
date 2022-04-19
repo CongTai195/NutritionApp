@@ -47,7 +47,7 @@ const BottomTab = () => {
             right: 10,
             bottom: 10,
             elevation: 0,
-            borderRadius: 20,
+            borderRadius: 10,
             ...styles.shadow,
           },
           tabBarLabelStyle: {fontSize: 16, fontWeight: '700'},
@@ -70,7 +70,7 @@ const BottomTab = () => {
               right: 10,
               bottom: 10,
               elevation: 0,
-              borderRadius: 20,
+              borderRadius: 10,
               ...styles.shadow,
             },
           })}
@@ -91,7 +91,7 @@ const BottomTab = () => {
               right: 10,
               bottom: 10,
               elevation: 0,
-              borderRadius: 20,
+              borderRadius: 10,
               ...styles.shadow,
             },
           })}
@@ -122,7 +122,7 @@ const BottomTab = () => {
               right: 10,
               bottom: 10,
               elevation: 0,
-              borderRadius: 20,
+              borderRadius: 10,
               ...styles.shadow,
             },
           })}

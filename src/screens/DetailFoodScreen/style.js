@@ -84,13 +84,19 @@ const styles = StyleSheet.create({
         fontFamily: font.DEFAULT_FONT,
         fontWeight: "500",
         marginHorizontal: 10
-    }, 
+    },
     amountText:{
         color: "black",
         fontSize: 16,
         fontFamily: font.DEFAULT_FONT,
         fontWeight: "500",
-        marginHorizontal: 15
+        marginRight: 10
+    },
+    servingSizeText:{
+        color: "black",
+        fontSize: 16,
+        fontFamily: font.DEFAULT_FONT,
+        fontWeight: "500",
     },
     percent: {
         flexDirection: "column",

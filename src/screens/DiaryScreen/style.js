@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 70,
         width: "95%",
-        borderRadius: 20,
+        borderRadius: 10,
         backgroundColor: colors.PURE_WHITE
     },
 })
