@@ -10,11 +10,11 @@ import font from '../../assets/fonts/font';
 import Foods from '../../data/Foods';
 import BASE_URL from '../../data/ENV';
 
-
 const AddFoodScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const meal = route.params.meal;
+  const diaryId = route.params.diaryId;
   const [isSearching, SetIsSearching] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
 
@@ -34,19 +34,17 @@ const AddFoodScreen = () => {
   const handleSearch = async searchValue => {
     if (searchValue.length < 2) {
       Alert.alert(
-        "Search term too short",
-        "Please enter a search term that is at least 2 characters long.",
-        [
-          { text: "Dismiss", onPress: () => {} }
-        ]
-      )
+        'Search term too short',
+        'Please enter a search term that is at least 2 characters long.',
+        [{text: 'Dismiss', onPress: () => {}}],
+      );
       //alert('Please input something with at least 2 characters!');
     } else {
       setIsSearched(true);
       SetIsSearching(true);
       setFoods([]);
       try {
-        const response = await fetch(`${BASE_URL}food/search/${searchValue}`);
+        const response = await fetch(`${BASE_URL}search?name=${searchValue}`);
         const result = await response.json();
         setTimeout(() => {
           setFoods(result.results);
@@ -60,6 +58,33 @@ const AddFoodScreen = () => {
       // }
     }
   };
+
+  const addFood = async item => {
+    try {
+      const response = await fetch(`${BASE_URL}diary/food`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          diary_id: diaryId,
+          serving_size_food_id: item.nutrition_facts[0].id,
+          quantity: 1,
+          meal: meal,
+        }),
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        navigation.goBack();
+      } else {
+        alert('Error adding food');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <SearchInput
@@ -88,9 +113,16 @@ const AddFoodScreen = () => {
           renderItem={({item}) => (
             <AddFoodItem
               onPress={() =>
-                navigation.navigate('DetailFoodScreen', {food: item})
+                navigation.navigate('DetailFoodScreen', {
+                  food: item,
+                  diaryId: diaryId,
+                  meal: meal,
+                })
               }
               item={item}
+              addFood={() => {
+                addFood(item);
+              }}
             />
           )}
           keyExtractor={item => item.id}

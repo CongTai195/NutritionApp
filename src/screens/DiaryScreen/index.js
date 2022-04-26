@@ -16,7 +16,7 @@ import moment from 'moment';
 import DiaryItem from '../../components/DiaryItem';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
-import Diaries from '../../data/Diaries';
+//import Diaries from '../../data/Diaries';
 
 const DiaryScreen = () => {
   const navigation = useNavigation();
@@ -25,38 +25,49 @@ const DiaryScreen = () => {
       headerTitle: 'Diary',
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
-      headerTitleStyle:{fontWeight: "700", fontFamily: font.DEFAULT_FONT},
+      headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
   }, [navigation]);
   const today = moment();
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const [date, setDate] = useState(
     `${today.toDate().getDate()}/${today.toDate().getMonth() + 1}/${today
       .toDate()
       .getFullYear()}`,
   );
 
-  let calories_data = Diaries.filter(e => {
-    return e.date === date;
-  });
-  const [calories, setCalories] = useState({
-    goal: calories_data[0].calories.goal,
-    food:  calories_data[0].calories.food,
-    exercise: calories_data[0].calories.exercise,
-  });
+  const [diary, setDiary] = useState({});
+
+  // const [calories, setCalories] = useState({
+  //   goal: calories_data[0].calories.goal,
+  //   food:  calories_data[0].calories.food,
+  //   exercise: calories_data[0].calories.exercise,
+  // });
+  const getDiary = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}diary/detail?date=${date}&user_id=1`,
+      );
+      const result = await response.json();
+      setDiary(result.results);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     setTimeout(() => {
-      setCalories({
-        goal:  calories_data[0].calories.goal ,
-        food:  calories_data[0].calories.food ,
-        exercise:  calories_data[0].calories.exercise ,
-      });
+      // setCalories({
+      //   goal: calories_data[0].calories.goal,
+      //   food: calories_data[0].calories.food,
+      //   exercise: calories_data[0].calories.exercise,
+      // });
+      getDiary();
       setIsLoading(false);
     }, 2000);
-  }, [date]);
+  }, [date, navigation]);
 
   return (
     <View style={styles.root}>
@@ -66,10 +77,28 @@ const DiaryScreen = () => {
         style={{height: 70}}
         calendarColor={colors.PURE_WHITE}
         calendarHeaderStyle={{color: colors.PURE_WHITE}}
-        dateNumberStyle={{color: colors.GREY, fontSize: 18, fontFamily: font.DEFAULT_FONT}}
-        dateNameStyle={{color: colors.GREY, fontSize: 12, fontFamily: font.DEFAULT_FONT}}
-        highlightDateNameStyle={{color: colors.BACK_GROUND_COLOR, fontSize: 14, fontFamily: font.DEFAULT_FONT, fontWeight: "900"}}
-        highlightDateNumberStyle={{color: colors.BACK_GROUND_COLOR, fontSize: 20, fontFamily: font.DEFAULT_FONT, fontWeight: "900"}}
+        dateNumberStyle={{
+          color: colors.GREY,
+          fontSize: 18,
+          fontFamily: font.DEFAULT_FONT,
+        }}
+        dateNameStyle={{
+          color: colors.GREY,
+          fontSize: 12,
+          fontFamily: font.DEFAULT_FONT,
+        }}
+        highlightDateNameStyle={{
+          color: colors.BACK_GROUND_COLOR,
+          fontSize: 14,
+          fontFamily: font.DEFAULT_FONT,
+          fontWeight: '900',
+        }}
+        highlightDateNumberStyle={{
+          color: colors.BACK_GROUND_COLOR,
+          fontSize: 20,
+          fontFamily: font.DEFAULT_FONT,
+          fontWeight: '900',
+        }}
         iconContainer={{flex: 0.1}}
         iconStyle={{tintColor: 'black'}}
         selectedDate={today}
@@ -96,13 +125,9 @@ const DiaryScreen = () => {
             color={colors.BACK_GROUND_COLOR}
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
           />
-        ) : (
+        ) : diary.length > 0 ? (
           <>
-            <CaloriesRemaining
-              goal={calories.goal}
-              food={calories.food}
-              exercise={calories.exercise}
-            />
+            <CaloriesRemaining goal={0} food={0} exercise={0} />
             <SafeAreaView style={styles.addingSection}>
               {/* <FlatList
                 data={DATA}
@@ -110,17 +135,17 @@ const DiaryScreen = () => {
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
               /> */}
-              <ScrollView showsVerticalScrollIndicator={false} >
-                <DiaryItem meal={"Breakfast"} />
-                <DiaryItem meal={"Lunch"} />
-                <DiaryItem meal={"Dinner"} />
-                <DiaryItem meal={"Snacks"} />
-                <DiaryItem meal={"Exercise"} />
-                <DiaryItem meal={"Water"} />
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <DiaryItem meal={'Breakfast'} diaryId={diary[0].id} />
+                <DiaryItem meal={'Lunch'} diaryId={diary[0].id} />
+                <DiaryItem meal={'Dinner'} diaryId={diary[0].id} />
+                <DiaryItem meal={'Snacks'} diaryId={diary[0].id} />
+                <DiaryItem meal={'Exercise'} diaryId={diary[0].id} />
+                <DiaryItem meal={'Water'} diaryId={diary[0].id} />
               </ScrollView>
             </SafeAreaView>
           </>
-        )}
+        ) : null}
       </View>
     </View>
   );

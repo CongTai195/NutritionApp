@@ -54,4 +54,13 @@ export default Diaries = [
         exercise: 0,
       },
     },
+    {
+      id: '6',
+      date: '20/4/2022',
+      calories: {
+        goal: 2090,
+        food: 0,
+        exercise: 0,
+      },
+    },
   ];

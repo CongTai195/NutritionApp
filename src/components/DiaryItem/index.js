@@ -12,8 +12,9 @@ import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const DiaryItem = ({meal, listFood}) => {
+const DiaryItem = ({meal, listFood, diaryId}) => {
   const navigation = useNavigation();
+
   return (
     <View style={styles.childAdding}>
       <Text style={styles.headerText}>{meal}</Text>
@@ -27,13 +28,15 @@ const DiaryItem = ({meal, listFood}) => {
       </SafeAreaView> */}
       <TouchableOpacity
         activeOpacity={0.5}
-        onPress={() => navigation.navigate('AddFoodScreen', {meal: meal})}>
+        onPress={() =>
+          navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
+        }>
         <View style={styles.addFood}>
-          <Ionicons name="add-outline" size={16} color={"black"} />
+          <Ionicons name="add-outline" size={16} color={'black'} />
           <Text
             style={{
               fontSize: 14,
-              color: "black",
+              color: 'black',
               fontWeight: '500',
               fontFamily: font.DEFAULT_FONT,
             }}>

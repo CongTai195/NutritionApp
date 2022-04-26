@@ -23,6 +23,8 @@ const DetailFoodScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const food = route.params.food;
+  const diaryId = route.params.diaryId;
+  const meal = route.params.meal;
   const [quantity, setQuantity] = useState(1);
   const [showNutritionFacts, setShowNutritionFacts] = useState(false);
   const nutrition_facts_array = food.nutrition_facts;
@@ -35,10 +37,6 @@ const DetailFoodScreen = () => {
     nutrition_facts_array[0].serving_size,
   );
 
-  const nutrition_facts = nutrition_facts_array.find(e => {
-    return e.serving_size == selectedServingSize;
-  });
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `Add Food`,
@@ -48,7 +46,7 @@ const DetailFoodScreen = () => {
       headerTitleAlign: 'center',
       headerRight: () => (
         <View style={{marginRight: 15}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => addFood()}>
             <Ionicons
               name="checkmark-outline"
               size={25}
@@ -59,6 +57,44 @@ const DetailFoodScreen = () => {
       ),
     });
   }, [navigation]);
+
+  const nutrition_facts = nutrition_facts_array.find(e => {
+    return e.serving_size == selectedServingSize;
+  });
+
+  const addFood = async () => {
+    // try {
+    //   const response = await fetch(`${BASE_URL}diary/food`, {
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //       diary_id: diaryId,
+    //       serving_size_food_id: nutrition_facts.id,
+    //       quantity: quantity,
+    //       meal: meal,
+    //     }),
+    //   });
+    //   const result = await response.json();
+    //   if (result.status === 'OK') {
+    //     navigation.goBack();
+    //   } else {
+    //     alert('Error adding food');
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    console.log(
+      JSON.stringify({
+        diary_id: diaryId,
+        serving_size_food_id: nutrition_facts.id,
+        quantity: quantity,
+        meal: meal,
+      }),
+    );
+  };
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.header}>
@@ -85,7 +121,7 @@ const DetailFoodScreen = () => {
               {fontSize: 16, color: 'black'},
               styles.textNutritionDetail,
             ]}>
-            {nutrition_facts.carbs * quantity} g
+            {Math.round(nutrition_facts.carbs * quantity * 10) / 10} g
           </Text>
           <Text
             style={[
@@ -105,7 +141,7 @@ const DetailFoodScreen = () => {
               {fontSize: 16, color: 'black'},
               styles.textNutritionDetail,
             ]}>
-            {nutrition_facts.fat * quantity} g
+            {Math.round(nutrition_facts.fat * quantity * 10) / 10} g
           </Text>
           <Text
             style={[
@@ -125,7 +161,7 @@ const DetailFoodScreen = () => {
               {fontSize: 16, color: 'black'},
               styles.textNutritionDetail,
             ]}>
-            {nutrition_facts.protein * quantity} g
+            {Math.round(nutrition_facts.protein * quantity * 10) / 10} g
           </Text>
           <Text
             style={[
@@ -271,7 +307,10 @@ const DetailFoodScreen = () => {
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => setShowNutritionFacts(!showNutritionFacts)}
+        onPress={
+          // () => setShowNutritionFacts(!showNutritionFacts)
+          () => addFood()
+        }
         activeOpacity={0.5}>
         {showNutritionFacts ? (
           <View
@@ -296,84 +335,84 @@ const DetailFoodScreen = () => {
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Calories</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.calories * quantity} cal
+              {Math.round(nutrition_facts.calories * quantity * 10) / 10} cal
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Total Fat</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.fat * quantity} g
+              {Math.round(nutrition_facts.fat * quantity * 10) / 10} g
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Cholesterol</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.cholesterol * quantity} mg
+              {Math.round(nutrition_facts.cholesterol * quantity * 10) / 10} mg
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Sodium</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.sodium * quantity} mg
+              {Math.round(nutrition_facts.sodium * quantity * 10) / 10} mg
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Total Carbohydrates</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.carbs * quantity} g
+              {Math.round(nutrition_facts.carbs * quantity * 10) / 10} g
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Protein</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.protein * quantity} g
+              {Math.round(nutrition_facts.protein * quantity * 10) / 10} g
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Vitamin D</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.vitamin_D * quantity}
+              {Math.round(nutrition_facts.vitamin_D * quantity * 10) / 10}
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Calcium</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.calcium * quantity} %
+              {Math.round(nutrition_facts.calcium * quantity * 10) / 10} %
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Iron</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.iron * quantity} %
+              {Math.round(nutrition_facts.iron * quantity * 10) / 10} %
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Potassium</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.potassium * quantity} mg
+              {Math.round(nutrition_facts.potassium * quantity * 10) / 10} mg
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Vitamin A</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.vitamin_A * quantity} %
+              {Math.round(nutrition_facts.vitamin_A * quantity * 10) / 10} %
             </Text>
           </View>
 
           <View style={styles.childOthers}>
             <Text style={styles.labelText}>Vitamin C</Text>
             <Text style={styles.amountText}>
-              {nutrition_facts.vitamin_C * quantity} %
+              {Math.round(nutrition_facts.vitamin_C * quantity * 10) / 10} %
             </Text>
           </View>
         </View>
