@@ -17,6 +17,7 @@ const AddFoodScreen = () => {
   const diaryId = route.params.diaryId;
   const [isSearching, SetIsSearching] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
 
   const [search, setSearch] = useState('');
   const [foods, setFoods] = useState('');
@@ -76,7 +77,11 @@ const AddFoodScreen = () => {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        navigation.goBack();
+        setIsAdded(true);
+        const time = setTimeout(() => {
+          navigation.goBack();
+        }, 1700);
+        return () => clearTimeout(time);
       } else {
         alert('Error adding food');
       }
@@ -86,49 +91,68 @@ const AddFoodScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <SearchInput
-        icon="search"
-        initialPlaceholder="Search for a food"
-        onChangeText={setSearch}
-        value={search}
-        onSubmitEditing={() => handleSearch(search)}
-      />
-      {isSearched === false ? (
-        <Text style={styles.textHeader}></Text>
-      ) : isSearching === true ? (
-        <View>
-          <Text style={styles.textHeader}>Searching ...</Text>
-          <AnimatedLottieView
-            autoPlay
-            source={require('../../assets/lottie/14427-simple-dot-loading-ver02.json')}
-          />
-        </View>
-      ) : (
-        <Text style={styles.textHeader}>Search Result</Text>
-      )}
-      <View>
-        <FlatList
-          data={foods}
-          renderItem={({item}) => (
-            <AddFoodItem
-              onPress={() =>
-                navigation.navigate('DetailFoodScreen', {
-                  food: item,
-                  diaryId: diaryId,
-                  meal: meal,
-                })
-              }
-              item={item}
-              addFood={() => {
-                addFood(item);
-              }}
+    <>
+      {isAdded === false ? (
+        <>
+          <View style={styles.container}>
+            <SearchInput
+              icon="search"
+              initialPlaceholder="Search for a food"
+              onChangeText={setSearch}
+              value={search}
+              onSubmitEditing={() => handleSearch(search)}
             />
-          )}
-          keyExtractor={item => item.id}
-        />
-      </View>
-    </View>
+            {isSearched === false ? (
+              <Text style={styles.textHeader}></Text>
+            ) : isSearching === true ? (
+              <View>
+                <Text style={styles.textHeader}>Searching ...</Text>
+                <AnimatedLottieView
+                  autoPlay
+                  source={require('../../assets/lottie/14427-simple-dot-loading-ver02.json')}
+                />
+              </View>
+            ) : (
+              <Text style={styles.textHeader}>Search Result</Text>
+            )}
+            <View>
+              <FlatList
+                data={foods}
+                renderItem={({item}) => (
+                  <AddFoodItem
+                    onPress={() =>
+                      navigation.navigate('DetailFoodScreen', {
+                        food: item,
+                        diaryId: diaryId,
+                        meal: meal,
+                      })
+                    }
+                    item={item}
+                    addFood={() => {
+                      addFood(item);
+                    }}
+                  />
+                )}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </View>
+        </>
+      ) : (
+        <>
+          <View style={{flex: 1}}>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <AnimatedLottieView
+                style={{height: 100, alignSelf: 'center'}}
+                autoPlay
+                source={require('../../assets/lottie/91001-success.json')}
+              />
+            </View>
+          </View>
+        </>
+      )}
+    </>
   );
 };
 

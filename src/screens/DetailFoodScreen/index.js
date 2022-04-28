@@ -37,6 +37,10 @@ const DetailFoodScreen = () => {
     nutrition_facts_array[0].serving_size,
   );
 
+  const nutrition_facts = nutrition_facts_array.find(e => {
+    return e.serving_size == selectedServingSize;
+  });
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `Add Food`,
@@ -56,44 +60,32 @@ const DetailFoodScreen = () => {
         </View>
       ),
     });
-  }, [navigation]);
-
-  const nutrition_facts = nutrition_facts_array.find(e => {
-    return e.serving_size == selectedServingSize;
-  });
+  }, [navigation, quantity, nutrition_facts]);
 
   const addFood = async () => {
-    // try {
-    //   const response = await fetch(`${BASE_URL}diary/food`, {
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json',
-    //     },
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //       diary_id: diaryId,
-    //       serving_size_food_id: nutrition_facts.id,
-    //       quantity: quantity,
-    //       meal: meal,
-    //     }),
-    //   });
-    //   const result = await response.json();
-    //   if (result.status === 'OK') {
-    //     navigation.goBack();
-    //   } else {
-    //     alert('Error adding food');
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    console.log(
-      JSON.stringify({
-        diary_id: diaryId,
-        serving_size_food_id: nutrition_facts.id,
-        quantity: quantity,
-        meal: meal,
-      }),
-    );
+    try {
+      const response = await fetch(`${BASE_URL}diary/food`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          diary_id: diaryId,
+          serving_size_food_id: nutrition_facts.id,
+          quantity: quantity,
+          meal: meal,
+        }),
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        navigation.navigate('DiaryScreen');
+      } else {
+        alert('Error adding food');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -195,7 +187,10 @@ const DetailFoodScreen = () => {
         {/* </TouchableOpacity> */}
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Number of Servings</Text>
-          <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
+          <QuantitySelector
+            quantity={quantity}
+            setQuantity={value => setQuantity(value)}
+          />
         </View>
         <View style={styles.percent}>
           <Text style={styles.labelText}>Percent of Daily Goals</Text>
@@ -307,10 +302,7 @@ const DetailFoodScreen = () => {
         </View>
       </View>
       <TouchableOpacity
-        onPress={
-          // () => setShowNutritionFacts(!showNutritionFacts)
-          () => addFood()
-        }
+        onPress={() => setShowNutritionFacts(!showNutritionFacts)}
         activeOpacity={0.5}>
         {showNutritionFacts ? (
           <View

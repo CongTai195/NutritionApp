@@ -8,9 +8,9 @@ import {
 import React from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
-import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MealItem from '../MealItem';
 
 const DiaryItem = ({meal, listFood, diaryId}) => {
   const navigation = useNavigation();
@@ -19,13 +19,13 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
     <View style={styles.childAdding}>
       <Text style={styles.headerText}>{meal}</Text>
       <View style={styles.separator}></View>
-      {/* <SafeAreaView>
-        {Object.values(listFood).map(food => (
-          <View>
-            <Text>{food.name}</Text>
-          </View>
-        ))}
-      </SafeAreaView> */}
+      <SafeAreaView>
+        {listFood.length > 0
+          ? listFood.map((food, index, array) => (
+              <MealItem key={index} item={food} />
+            ))
+          : null}
+      </SafeAreaView>
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={() =>
