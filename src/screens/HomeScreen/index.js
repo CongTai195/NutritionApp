@@ -19,18 +19,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
 import * as Progress from 'react-native-progress';
+import {useFocusEffect} from '@react-navigation/native';
+import Token from '../../data/Token';
 
 const headerImage = require('../../assets/images/defaultAvatar.png');
 const notification = require('../../assets/images/Notification.png');
 const next = require('../../assets/images/next.png');
-const carbs = require('../../assets/images/carbs.png');
+const carbs_image = require('../../assets/images/carbs.png');
 const meat = require('../../assets/images/meat.png');
-const fat = require('../../assets/images/fat.png');
+const fat_image = require('../../assets/images/fat.png');
 
 const HomeScreen = () => {
   const [isLoading, setLoading] = useState(false);
+  const [food, setFood] = useState({});
   //const [data, setData] = useState([]);
   const navigation = useNavigation();
+  const date = `${moment().toDate().getDate()}/${
+    moment().toDate().getMonth() + 1
+  }/${moment().toDate().getFullYear()}`;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,39 +62,86 @@ const HomeScreen = () => {
     });
   }, [navigation]);
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'https://shop-adidas.herokuapp.com/api/product',
-  //     );
-  //     const json = await response.json();
-  //     console.table(json.results);
-  //     setData(json.results);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const calories =
+    food.length > 0
+      ? food.reduce((total, food) => {
+          return total + parseFloat(food.calories);
+        }, 0)
+      : 0;
+  const carbs =
+    food.length > 0
+      ? food.reduce((total, food) => {
+          return total + parseFloat(food.carbs);
+        }, 0)
+      : 0;
+  const fat =
+    food.length > 0
+      ? food.reduce((total, food) => {
+          return total + parseFloat(food.fat);
+        }, 0)
+      : 0;
+  const protein =
+    food.length > 0
+      ? food.reduce((total, food) => {
+          return total + parseFloat(food.protein);
+        }, 0)
+      : 0;
 
-  // const axiosFetch = () => {
-  //   axios
-  //     .get(`${ENV.BASE_URL}product`)
-  //     .then(res => {
-  //       console.log('Data: ', res.data.results.length);
-  //       setData(res.data.results);
-  //       setLoading(false);
-  //     })
-  //     .catch(error => {
-  //       console.warn(error);
-  //     });
-  // };
+  const creatDiary = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}diary`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer` + Token,
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          date: date,
+        }),
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        setFood({});
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  useEffect(() => {
-    //axiosFetch();
-  }, []);
-  const goal = 2090;
-  const food = 0;
+  const getDiary = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}diary/detail?date=${date}&user_id=1`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer` + Token,
+          },
+        },
+      );
+      const result = await response.json();
+      if (result.status === 'OK') {
+        setFood(result.results.food);
+      }
+      if (result.status === 'NG') {
+        creatDiary();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //console.log(diary.length);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getDiary();
+    }, [date, navigation]),
+  );
+  const goal = 3000;
+  //const food = 0;
   const exercise = 0;
 
   return (
@@ -98,18 +151,48 @@ const HomeScreen = () => {
       ) : (
         <SafeAreaView style={styles.container}>
           <View style={styles.screen}>
-            <Header onPress={() => {
-              navigation.navigate('LoginScreen');
-            }} />
+            <Header
+              onPress={() => {
+                navigation.navigate('LoginScreen');
+              }}
+            />
             {/* <Banner /> */}
-            <CaloriesRemaining goal={goal} food={food} exercise={exercise} />
+            <CaloriesRemaining
+              goal={goal}
+              food={calories}
+              exercise={exercise}
+            />
           </View>
           <View style={{marginHorizontal: '3%'}}>
             <Label>Your Nutrients</Label>
             <View style={{flexDirection: 'row'}}>
-              <Card name={"Carbs"} mass={100} status={40} image={carbs} lightColor="#f8e4d9" color="#fcf1ea" darkColor="#fac5a4" />
-              <Card name={"Fat"} mass={100} status={50} image={fat} lightColor="#dad5fe" color="#e7e3ff" darkColor="#8860a2" />
-              <Card name={"Protein"} mass={100} status={60} image={meat} lightColor="#d7f0f7" color="#e8f7fc" darkColor="#aceafc" />
+              <Card
+                name={'Carbs'}
+                mass={100}
+                status={carbs}
+                image={carbs_image}
+                lightColor="#f8e4d9"
+                color="#fcf1ea"
+                darkColor="#fac5a4"
+              />
+              <Card
+                name={'Fat'}
+                mass={100}
+                status={fat}
+                image={fat_image}
+                lightColor="#dad5fe"
+                color="#e7e3ff"
+                darkColor="#8860a2"
+              />
+              <Card
+                name={'Protein'}
+                mass={100}
+                status={protein}
+                image={meat}
+                lightColor="#d7f0f7"
+                color="#e8f7fc"
+                darkColor="#aceafc"
+              />
             </View>
           </View>
         </SafeAreaView>
@@ -137,9 +220,19 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
         shadowOpacity: 0.5,
         shadowRadius: 2,
       }}>
-      <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-      <Image source={image} style={{height: 25, width: 25}} />
-      <Text style={{color: colors.BLACK, fontFamily: font.DEFAULT_FONT, fontWeight: '500'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <Image source={image} style={{height: 25, width: 25}} />
+        <Text
+          style={{
+            color: colors.BLACK,
+            fontFamily: font.DEFAULT_FONT,
+            fontWeight: '500',
+          }}>
           {mass} g
         </Text>
       </View>
@@ -174,7 +267,13 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text style={{fontFamily: font.DEFAULT_FONT, fontSize: 16, color: "black", fontWeight: '100'}}>
+        <Text
+          style={{
+            fontFamily: font.DEFAULT_FONT,
+            fontSize: 16,
+            color: 'black',
+            fontWeight: '100',
+          }}>
           {name}
         </Text>
       </View>
@@ -189,15 +288,10 @@ const Header = ({onPress}) => (
     <ImageContainer image={headerImage} />
     <HeaderTitle />
     <View style={styles.iconNotification}>
-          <TouchableOpacity
-            onPress={onPress}>
-            <Ionicons
-              name="notifications-outline"
-              size={25}
-              color={colors.BLACK}
-            />
-          </TouchableOpacity>
-        </View>
+      <TouchableOpacity onPress={onPress}>
+        <Ionicons name="notifications-outline" size={25} color={colors.BLACK} />
+      </TouchableOpacity>
+    </View>
   </View>
 );
 const ImageContainer = ({image, height = '100%', width = '100%'}) => (
@@ -208,10 +302,10 @@ const ImageContainer = ({image, height = '100%', width = '100%'}) => (
 
 const HeaderTitle = () => (
   <View style={styles.title}>
-    <Text style={styles.bigTitle}>Hi, lkt</Text>
-    <Text style={styles.smallTitle}>{`${moment().toDate().getDate()}/${moment().toDate().getMonth() + 1}/${moment()
-      .toDate()
-      .getFullYear()}`}</Text>
+    <Text style={styles.bigTitle}>Hi, Brad</Text>
+    <Text style={styles.smallTitle}>{`${moment().toDate().getDate()}/${
+      moment().toDate().getMonth() + 1
+    }/${moment().toDate().getFullYear()}`}</Text>
   </View>
 );
 

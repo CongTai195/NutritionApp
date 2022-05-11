@@ -15,9 +15,25 @@ import MealItem from '../MealItem';
 const DiaryItem = ({meal, listFood, diaryId}) => {
   const navigation = useNavigation();
 
+  const calories =
+    listFood.length > 0
+      ? listFood.reduce((total, food) => {
+          return total + parseFloat(food.calories);
+        }, 0)
+      : 0;
+
   return (
     <View style={styles.childAdding}>
-      <Text style={styles.headerText}>{meal}</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={[styles.headerText, {flex: 1}]}>{meal}</Text>
+        <>
+          {calories === 0 ? null : (
+            <>
+              <Text style={styles.headerText}>{calories} cal</Text>
+            </>
+          )}
+        </>
+      </View>
       <View style={styles.separator}></View>
       <SafeAreaView>
         {listFood.length > 0
@@ -26,6 +42,7 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
             ))
           : null}
       </SafeAreaView>
+      <View style={styles.separator}></View>
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={() =>

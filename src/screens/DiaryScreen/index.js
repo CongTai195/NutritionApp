@@ -17,6 +17,7 @@ import DiaryItem from '../../components/DiaryItem';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
 import {useFocusEffect} from '@react-navigation/native';
+import Token from '../../data/Token';
 //import Diaries from '../../data/Diaries';
 
 const DiaryScreen = () => {
@@ -33,6 +34,7 @@ const DiaryScreen = () => {
   const today = moment();
   const [isLoading, setIsLoading] = useState(true);
 
+  const [food, setFood] = useState([]);
   const [breakfast, setBreakfast] = useState({});
   const [lunch, setLunch] = useState({});
   const [dinner, setDinner] = useState({});
@@ -45,88 +47,74 @@ const DiaryScreen = () => {
 
   const [diary, setDiary] = useState({});
 
-  // const [calories, setCalories] = useState({
-  //   goal: calories_data[0].calories.goal,
-  //   food:  calories_data[0].calories.food,
-  //   exercise: calories_data[0].calories.exercise,
-  // });
-  const creatDiary = async ({date, user_id}) => {
+  const calories =
+    food.length > 0
+      ? food.reduce((total, food) => {
+          return total + parseFloat(food.calories);
+        }, 0)
+      : 0;
+
+  const creatDiary = async () => {
     try {
       const response = await fetch(`${BASE_URL}diary`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer` + Token,
         },
         method: 'POST',
         body: JSON.stringify({
           date: date,
-          user_id: user_id,
+          user_id: 1,
         }),
       });
       const result = await response.json();
       if (result.status === 'OK') {
         setDiary(result.results);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const getDiary = async () => {
-    try {
-      const response = await fetch(
-        `${BASE_URL}diary/detail?date=${date}&user_id=1`,
-      );
-      const result = await response.json();
-      // if (result.results.length === 0) {
-      //   creatDiary(date, 1);
-      // } else {
-      //   setDiary(result.results);
-      // }
-      if (result.status === 'OK') {
-        setDiary(result.results);
-        setBreakfast(
-          result.results[0].food.filter(e => e.meal === 'Breakfast'),
-        );
-        setLunch(result.results[0].food.filter(e => e.meal === 'Lunch'));
-        setDinner(result.results[0].food.filter(e => e.meal === 'Dinner'));
+        setFood({});
+        setBreakfast({});
+        setLunch({});
+        setDinner({});
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  // useFocusEffect(() => {
-  //   // React.useCallback(() => {
-  //   //   setTimeout(() => {
-  //   //     // setCalories({
-  //   //     //   goal: calories_data[0].calories.goal,
-  //   //     //   food: calories_data[0].calories.food,
-  //   //     //   exercise: calories_data[0].calories.exercise,
-  //   //     // });
-  //   //     getDiary();
-  //   //     setIsLoading(false);
-  //   //   }, 2000);
-  //   // }, [date, navigation]);
-  //   setTimeout(() => {
-  //     // setCalories({
-  //     //   goal: calories_data[0].calories.goal,
-  //     //   food: calories_data[0].calories.food,
-  //     //   exercise: calories_data[0].calories.exercise,
-  //     // });
-  //     getDiary();
-  //     setIsLoading(false);
-  //   }, 2000);
-  // }, [date]);
+  const getDiary = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}diary/detail?date=${date}&user_id=1`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer` + Token,
+          },
+        },
+      );
+      const result = await response.json();
+      if (result.status === 'OK') {
+        setDiary(result.results);
+        setFood(result.results.food);
+        setBreakfast(result.results.food.filter(e => e.meal === 'Breakfast'));
+        setLunch(result.results.food.filter(e => e.meal === 'Lunch'));
+        setDinner(result.results.food.filter(e => e.meal === 'Dinner'));
+      }
+      if (result.status === 'NG') {
+        creatDiary();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //console.log(diary.length);
 
   useFocusEffect(
     React.useCallback(() => {
       getDiary();
       setTimeout(() => {
-        // setCalories({
-        //   goal: calories_data[0].calories.goal,
-        //   food: calories_data[0].calories.food,
-        //   exercise: calories_data[0].calories.exercise,
-        // });
         setIsLoading(false);
       }, 2000);
     }, [date, navigation]),
@@ -188,9 +176,9 @@ const DiaryScreen = () => {
             color={colors.BACK_GROUND_COLOR}
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
           />
-        ) : diary.length > 0 ? (
+        ) : Object.values(diary).length > 0 ? (
           <>
-            <CaloriesRemaining goal={0} food={0} exercise={0} />
+            <CaloriesRemaining goal={3000} food={calories} exercise={0} />
             <SafeAreaView style={styles.addingSection}>
               {/* <FlatList
                 data={DATA}
@@ -202,17 +190,13 @@ const DiaryScreen = () => {
                 <DiaryItem
                   meal={'Breakfast'}
                   listFood={breakfast}
-                  diaryId={diary[0].id}
+                  diaryId={diary.id}
                 />
-                <DiaryItem
-                  meal={'Lunch'}
-                  listFood={lunch}
-                  diaryId={diary[0].id}
-                />
+                <DiaryItem meal={'Lunch'} listFood={lunch} diaryId={diary.id} />
                 <DiaryItem
                   meal={'Dinner'}
                   listFood={dinner}
-                  diaryId={diary[0].id}
+                  diaryId={diary.id}
                 />
                 {/* <DiaryItem meal={'Snacks'} diaryId={diary[0].id} />
                 <DiaryItem meal={'Exercise'} diaryId={diary[0].id} />

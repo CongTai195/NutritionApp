@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PURE_WHITE,
     width: '95%',
     alignSelf: 'center',
-    marginBottom: 10,
+    //marginBottom: 10,
     borderRadius: 20,
   },
   information: {

@@ -1,4 +1,12 @@
-import {StyleSheet, Text, View, FlatList, Alert} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Alert,
+  Modal,
+  Pressable,
+} from 'react-native';
 import React, {useLayoutEffect, useState, useEffect} from 'react';
 import styles from './style';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -7,7 +15,7 @@ import SearchInput from '../../components/SearchInput';
 import AddFoodItem from '../../components/AddFoodItem';
 import AnimatedLottieView from 'lottie-react-native';
 import font from '../../assets/fonts/font';
-import Foods from '../../data/Foods';
+import Token from '../../data/Token';
 import BASE_URL from '../../data/ENV';
 
 const AddFoodScreen = () => {
@@ -45,7 +53,13 @@ const AddFoodScreen = () => {
       SetIsSearching(true);
       setFoods([]);
       try {
-        const response = await fetch(`${BASE_URL}search?name=${searchValue}`);
+        const response = await fetch(`${BASE_URL}search?name=${searchValue}`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer` + Token,
+          },
+        });
         const result = await response.json();
         setTimeout(() => {
           setFoods(result.results);
@@ -66,6 +80,7 @@ const AddFoodScreen = () => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: 'Bearer' + Token,
         },
         method: 'POST',
         body: JSON.stringify({
@@ -78,10 +93,10 @@ const AddFoodScreen = () => {
       const result = await response.json();
       if (result.status === 'OK') {
         setIsAdded(true);
-        const time = setTimeout(() => {
+        setTimeout(() => {
           navigation.goBack();
         }, 1700);
-        return () => clearTimeout(time);
+        // return () => clearTimeout(time);
       } else {
         alert('Error adding food');
       }
@@ -91,67 +106,157 @@ const AddFoodScreen = () => {
   };
 
   return (
+    // <>
+    //   {isAdded === false ? (
+    //     <>
+    //       <View style={styles.container}>
+    //         <SearchInput
+    //           icon="search"
+    //           initialPlaceholder="Search for a food"
+    //           onChangeText={setSearch}
+    //           value={search}
+    //           onSubmitEditing={() => handleSearch(search)}
+    //         />
+    //         {isSearched === false ? (
+    //           <Text style={styles.textHeader}></Text>
+    //         ) : isSearching === true ? (
+    //           <View>
+    //             <Text style={styles.textHeader}>Searching ...</Text>
+    //             <AnimatedLottieView
+    //               autoPlay
+    //               source={require('../../assets/lottie/14427-simple-dot-loading-ver02.json')}
+    //             />
+    //           </View>
+    //         ) : (
+    //           <Text style={styles.textHeader}>Search Result</Text>
+    //         )}
+    //         <View>
+    //           <FlatList
+    //             data={foods}
+    //             renderItem={({item}) => (
+    //               <AddFoodItem
+    //                 onPress={() =>
+    //                   navigation.navigate('DetailFoodScreen', {
+    //                     food: item,
+    //                     diaryId: diaryId,
+    //                     meal: meal,
+    //                   })
+    //                 }
+    //                 item={item}
+    //                 addFood={() => {
+    //                   addFood(item);
+    //                 }}
+    //               />
+    //             )}
+    //             keyExtractor={item => item.id}
+    //           />
+    //         </View>
+    //         <Modal
+    //           animationType="slide"
+    //           transparent={true}
+    //           visible={isAdded}
+    //           onRequestClose={() => {
+    //             Alert.alert('Modal has been closed.');
+    //             setModalVisible(!modalVisible);
+    //           }}>
+    //           <View style={styles.centeredView}>
+    //             <View style={styles.modalView}>
+    //               <Text style={styles.modalText}>Hello World!</Text>
+    //               <Pressable
+    //                 style={[styles.button, styles.buttonClose]}
+    //                 onPress={() => setModalVisible(!modalVisible)}>
+    //                 <Text style={styles.textStyle}>Hide Modal</Text>
+    //               </Pressable>
+    //             </View>
+    //           </View>
+    //         </Modal>
+    //       </View>
+    //     </>
+    //   ) : (
+    //     <>
+    //       <View style={{flex: 1}}>
+    //         <View
+    //           style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <AnimatedLottieView
+    //             style={{height: 100, alignSelf: 'center'}}
+    //             autoPlay
+    //             source={require('../../assets/lottie/91001-success.json')}
+    //           />
+    //         </View>
+    //       </View>
+    //     </>
+    //   )}
+    // </>
     <>
-      {isAdded === false ? (
-        <>
-          <View style={styles.container}>
-            <SearchInput
-              icon="search"
-              initialPlaceholder="Search for a food"
-              onChangeText={setSearch}
-              value={search}
-              onSubmitEditing={() => handleSearch(search)}
+      <View style={styles.container}>
+        <SearchInput
+          icon="search"
+          initialPlaceholder="Search for a food"
+          onChangeText={setSearch}
+          value={search}
+          onSubmitEditing={() => handleSearch(search)}
+        />
+        {isSearched === false ? (
+          <Text style={styles.textHeader}></Text>
+        ) : isSearching === true ? (
+          <View>
+            <Text style={styles.textHeader}>Searching ...</Text>
+            <AnimatedLottieView
+              autoPlay
+              source={require('../../assets/lottie/14427-simple-dot-loading-ver02.json')}
             />
-            {isSearched === false ? (
-              <Text style={styles.textHeader}></Text>
-            ) : isSearching === true ? (
-              <View>
-                <Text style={styles.textHeader}>Searching ...</Text>
-                <AnimatedLottieView
-                  autoPlay
-                  source={require('../../assets/lottie/14427-simple-dot-loading-ver02.json')}
-                />
-              </View>
-            ) : (
-              <Text style={styles.textHeader}>Search Result</Text>
+          </View>
+        ) : (
+          <Text style={styles.textHeader}>Search Result</Text>
+        )}
+        <View>
+          <FlatList
+            data={foods}
+            renderItem={({item}) => (
+              <AddFoodItem
+                onPress={() =>
+                  navigation.navigate('DetailFoodScreen', {
+                    food: item,
+                    diaryId: diaryId,
+                    meal: meal,
+                  })
+                }
+                item={item}
+                addFood={() => {
+                  addFood(item);
+                }}
+              />
             )}
-            <View>
-              <FlatList
-                data={foods}
-                renderItem={({item}) => (
-                  <AddFoodItem
-                    onPress={() =>
-                      navigation.navigate('DetailFoodScreen', {
-                        food: item,
-                        diaryId: diaryId,
-                        meal: meal,
-                      })
-                    }
-                    item={item}
-                    addFood={() => {
-                      addFood(item);
-                    }}
-                  />
-                )}
-                keyExtractor={item => item.id}
-              />
+            keyExtractor={item => item.id}
+          />
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isAdded}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <>
+            <View style={{flex: 1}}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <AnimatedLottieView
+                  style={{height: 100, alignSelf: 'center'}}
+                  autoPlay
+                  source={require('../../assets/lottie/91001-success.json')}
+                />
+                <Text>Added</Text>
+              </View>
             </View>
-          </View>
-        </>
-      ) : (
-        <>
-          <View style={{flex: 1}}>
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <AnimatedLottieView
-                style={{height: 100, alignSelf: 'center'}}
-                autoPlay
-                source={require('../../assets/lottie/91001-success.json')}
-              />
-            </View>
-          </View>
-        </>
-      )}
+          </>
+        </Modal>
+      </View>
     </>
   );
 };
