@@ -111,16 +111,13 @@ const HomeScreen = () => {
 
   const getDiary = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}diary/detail?date=${date}&user_id=1`,
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer` + Token,
-          },
+      const response = await fetch(`${BASE_URL}diary/detail?date=${date}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer` + Token,
         },
-      );
+      });
       const result = await response.json();
       if (result.status === 'OK') {
         setFood(result.results.food);

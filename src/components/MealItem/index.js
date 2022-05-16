@@ -2,6 +2,12 @@ import {Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import styles from './style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Animated from 'react-native-reanimated';
+import {
+  PanGestureHandler,
+  State,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 
 const MealItem = ({item, onPress, addFood}) => {
   const name = item.name;
@@ -17,7 +23,9 @@ const MealItem = ({item, onPress, addFood}) => {
       ? ' ' + item.serving_size.split(' ')[3]
       : '');
   const detail = item.detail;
+
   return (
+    // <Animated.View>
     <View style={styles.container}>
       <View style={styles.information}>
         <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
@@ -31,12 +39,8 @@ const MealItem = ({item, onPress, addFood}) => {
           </View>
         </TouchableOpacity>
       </View>
-      {/* <View style={styles.add}>
-        <TouchableOpacity onPress={addFood}>
-          <Ionicons name="add-outline" size={25} color="blue" />
-        </TouchableOpacity>
-      </View> */}
     </View>
+    // </Animated.View>
   );
 };
 

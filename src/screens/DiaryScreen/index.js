@@ -65,7 +65,6 @@ const DiaryScreen = () => {
         method: 'POST',
         body: JSON.stringify({
           date: date,
-          user_id: 1,
         }),
       });
       const result = await response.json();
@@ -75,6 +74,8 @@ const DiaryScreen = () => {
         setBreakfast({});
         setLunch({});
         setDinner({});
+      } else {
+        console.log(result);
       }
     } catch (error) {
       console.error(error);
@@ -83,16 +84,13 @@ const DiaryScreen = () => {
 
   const getDiary = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}diary/detail?date=${date}&user_id=1`,
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer` + Token,
-          },
+      const response = await fetch(`${BASE_URL}diary/detail?date=${date}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer` + Token,
         },
-      );
+      });
       const result = await response.json();
       if (result.status === 'OK') {
         setDiary(result.results);
@@ -108,8 +106,6 @@ const DiaryScreen = () => {
       console.error(error);
     }
   };
-
-  //console.log(diary.length);
 
   useFocusEffect(
     React.useCallback(() => {

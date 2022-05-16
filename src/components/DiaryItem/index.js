@@ -1,26 +1,146 @@
 import {
   TouchableOpacity,
+  TouchableHighlight,
+  Animated,
   SafeAreaView,
   FlatList,
   Text,
   View,
+  StatusBar,
 } from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import font from '../../assets/fonts/font';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MealItem from '../MealItem';
+import Token from '../../data/Token';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 const DiaryItem = ({meal, listFood, diaryId}) => {
+  const [foods, setFoods] = useState({});
   const navigation = useNavigation();
 
   const calories =
-    listFood.length > 0
-      ? listFood.reduce((total, food) => {
+    foods.length > 0
+      ? foods.reduce((total, food) => {
           return total + parseFloat(food.calories);
         }, 0)
       : 0;
+  // const calories =
+  //   listFood.length > 0
+  //     ? listFood.reduce((total, food) => {
+  //         return total + parseFloat(food.calories);
+  //       }, 0)
+  //     : 0;
+  const closeRow = (rowMap, rowKey) => {
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
+  };
+  const deleteRow = async (rowMap, rowKey) => {
+    try {
+      const response = await fetch(`${BASE_URL}diary/food/${rowKey}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer` + Token,
+        },
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        const newFoods = foods.filter(food => food.id != rowKey);
+        setFoods(newFoods);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const HiddenItemWithActions = props => {
+    const {swipeAnimatedValue, onClose, onDelete} = props;
+    return (
+      <View style={styles.rowBack}>
+        <Text>Left</Text>
+        <TouchableOpacity
+          onPress={onDelete}
+          style={[styles.backRightBtn, styles.backRightBtnRight]}>
+          <Animated.View
+            style={{
+              transform: [
+                {
+                  scale: swipeAnimatedValue.interpolate({
+                    inputRange: [-75, -0],
+                    outputRange: [1, 0],
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
+            }}>
+            <Ionicons
+              name="trash-outline"
+              size={25}
+              color={'white'}
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  const VisibleItem = props => {
+    const {data} = props;
+    const name = data.item.name;
+    const calories = data.item.calories;
+    const serving_size =
+      data.item.serving_size.split(' ')[0] * data.item.quantity +
+      ' ' +
+      data.item.serving_size.split(' ')[1] +
+      (data.item.serving_size.split(' ')[2]
+        ? ' ' + data.item.serving_size.split(' ')[2]
+        : '') +
+      (data.item.serving_size.split(' ')[3]
+        ? ' ' + data.item.serving_size.split(' ')[3]
+        : '');
+    const detail = data.item.detail;
+    return (
+      <View style={styles.rowFront}>
+        <TouchableHighlight style={styles.rowFrontVisible}>
+          <View>
+            <Text style={styles.textHeader} numberOfLines={1}>
+              {name}{' '}
+            </Text>
+            <View numberOfLines={1} style={{flexDirection: 'row'}}>
+              <Text numberOfLines={1} style={styles.textInfo}>
+                {calories} cal, {serving_size}, {detail}
+              </Text>
+            </View>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+  };
+  const renderItem = (data, rowMap) => {
+    return <VisibleItem data={data} />;
+  };
+
+  const renderHiddenItem = (data, rowMap) => {
+    return (
+      <HiddenItemWithActions
+        data={data}
+        rowMap={rowMap}
+        onClose={() => closeRow(rowMap, data.item.id)}
+        onDelete={() => deleteRow(rowMap, data.item.id)}
+      />
+    );
+  };
+
+  useEffect(() => {
+    setFoods(listFood);
+  }, [listFood]);
 
   return (
     <View style={styles.childAdding}>
@@ -35,12 +155,20 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
         </>
       </View>
       <View style={styles.separator}></View>
-      <SafeAreaView>
-        {listFood.length > 0
-          ? listFood.map((food, index, array) => (
-              <MealItem key={index} item={food} />
+      <SafeAreaView style={styles.container}>
+        {/* {foods.length > 0
+          ? foods.map((food, index, array) => (
+              <MealItem onPress={() => onPress(food)} key={index} item={food} />
             ))
-          : null}
+          : null} */}
+        <SwipeListView
+          data={foods}
+          renderItem={renderItem}
+          renderHiddenItem={renderHiddenItem}
+          leftOpenValue={75}
+          rightOpenValue={-75}
+          disableRightSwipe
+        />
       </SafeAreaView>
       <View style={styles.separator}></View>
       <TouchableOpacity
