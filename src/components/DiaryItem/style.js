@@ -4,8 +4,9 @@ import font from '../../assets/fonts/font';
 
 const styles = StyleSheet.create({
   childAdding: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.BACK_GROUND_COLOR,
+    borderRadius: 10,
+    backgroundColor: colors.PURE_WHITE,
+    marginBottom: 10,
   },
   headerText: {
     fontSize: 16,
@@ -25,7 +26,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   container: {
-    backgroundColor: '#f4f4f4',
+    //backgroundColor: '#f4f4f4',
+    backgroundColor: colors.LIGHT_GREY,
     flex: 1,
   },
   backTextWhite: {
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
   },
   rowFront: {
     backgroundColor: '#FFF',
-    borderRadius: 10,
+    borderRadius: 5,
     height: 60,
     margin: 5,
     shadowColor: '#999',
@@ -41,12 +43,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+    padding: 10,
   },
   rowFrontVisible: {
     backgroundColor: '#FFF',
     borderRadius: 5,
     height: 60,
     padding: 10,
+    //margin: 5,
   },
   rowBack: {
     alignItems: 'center',
@@ -54,10 +58,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15,
+    //paddingLeft: 15,
     margin: 5,
-    marginBottom: 15,
-    borderRadius: 5,
+    height: 60,
+    borderRadius: 10,
   },
   backRightBtn: {
     alignItems: 'center',

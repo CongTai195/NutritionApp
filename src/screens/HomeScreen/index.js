@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useLayoutEffect} from 'react';
+import React, {useEffect, useState, useLayoutEffect, useContext} from 'react';
 import moment from 'moment';
 import {
   ActivityIndicator,
@@ -21,6 +21,9 @@ import font from '../../assets/fonts/font';
 import * as Progress from 'react-native-progress';
 import {useFocusEffect} from '@react-navigation/native';
 import Token from '../../data/Token';
+import Month from '../../data/Months';
+import {DataContext} from '../../context/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const headerImage = require('../../assets/images/defaultAvatar.png');
 const notification = require('../../assets/images/Notification.png');
@@ -30,8 +33,11 @@ const meat = require('../../assets/images/meat.png');
 const fat_image = require('../../assets/images/fat.png');
 
 const HomeScreen = () => {
+  const context = useContext(DataContext);
+  const user = context.user;
   const [isLoading, setLoading] = useState(false);
-  const [food, setFood] = useState({});
+  //const [food, setFood] = useState({});
+  const food = context.food_diary_today;
   //const [data, setData] = useState([]);
   const navigation = useNavigation();
   const date = `${moment().toDate().getDate()}/${
@@ -76,7 +82,7 @@ const HomeScreen = () => {
       : 0;
   const fat =
     food.length > 0
-      ? food.reduce((total, food) => {
+      ? food?.reduce((total, food) => {
           return total + parseFloat(food.fat);
         }, 0)
       : 0;
@@ -93,7 +99,8 @@ const HomeScreen = () => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer` + Token,
+          Authorization:
+            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
         },
         method: 'POST',
         body: JSON.stringify({
@@ -115,7 +122,8 @@ const HomeScreen = () => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer` + Token,
+          Authorization:
+            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
         },
       });
       const result = await response.json();
@@ -130,13 +138,16 @@ const HomeScreen = () => {
     }
   };
 
-  //console.log(diary.length);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getDiary();
-    }, [date, navigation]),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log('call');
+  //     context.getDiary(date);
+  //   }, []),
+  // );
+  useEffect(() => {
+    console.log('call');
+    context.getDiary(date);
+  }, [user]);
   const goal = 3000;
   //const food = 0;
   const exercise = 0;
@@ -150,14 +161,21 @@ const HomeScreen = () => {
           <View style={styles.screen}>
             <Header
               onPress={() => {
-                navigation.navigate('LoginScreen');
+                navigation.navigate('More');
               }}
+              onBellPress={() => {
+                navigation.navigate('NotificationScreen');
+              }}
+              name={user.name}
             />
             {/* <Banner /> */}
             <CaloriesRemaining
               goal={goal}
               food={calories}
               exercise={exercise}
+              onPress={() => {
+                navigation.navigate('Diary');
+              }}
             />
           </View>
           <View style={{marginHorizontal: '3%'}}>
@@ -191,6 +209,9 @@ const HomeScreen = () => {
                 darkColor="#aceafc"
               />
             </View>
+          </View>
+          <View style={{marginHorizontal: '3%'}}>
+            <Label>Your Water</Label>
           </View>
         </SafeAreaView>
       )}
@@ -280,29 +301,44 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
 
 const Label = ({children}) => <Text style={styles.label}>{children}</Text>;
 
-const Header = ({onPress}) => (
+const Header = ({onPress, onBellPress, name}) => (
   <View style={styles.header}>
-    <ImageContainer image={headerImage} />
-    <HeaderTitle />
+    <TouchableOpacity onPress={onPress}>
+      <ImageContainer image={headerImage} />
+    </TouchableOpacity>
+    <HeaderTitle name={name} />
     <View style={styles.iconNotification}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onBellPress}>
         <Ionicons name="notifications-outline" size={25} color={colors.BLACK} />
       </TouchableOpacity>
     </View>
   </View>
 );
+
 const ImageContainer = ({image, height = '100%', width = '100%'}) => (
   <View style={styles.imageContainer}>
     <Image source={image} style={[{height, width}]} />
   </View>
 );
 
-const HeaderTitle = () => (
+const HeaderTitle = ({name}) => (
   <View style={styles.title}>
-    <Text style={styles.bigTitle}>Hi, Brad</Text>
-    <Text style={styles.smallTitle}>{`${moment().toDate().getDate()}/${
-      moment().toDate().getMonth() + 1
-    }/${moment().toDate().getFullYear()}`}</Text>
+    <Text style={styles.bigTitle}>Hi, {name}</Text>
+    <View style={{flexDirection: 'row'}}>
+      <Text style={styles.smallTitle}>{`${
+        Month[moment().toDate().getMonth()]
+      }`}</Text>
+      <Text style={styles.smallTitle}>{` ${moment().toDate().getDate()}`}</Text>
+      <Text style={styles.smallerTitle}>
+        {moment().toDate().getDate() === 1
+          ? 'st'
+          : moment().toDate().getDate() === 2
+          ? 'nd'
+          : moment().toDate().getDate() === 3
+          ? 'rd'
+          : 'th'}
+      </Text>
+    </View>
   </View>
 );
 

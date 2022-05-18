@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -18,11 +18,14 @@ import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../../components/Heading';
 import colors from '../../assets/colors/colors';
+import {DataContext} from '../../context/Context';
+
 const LoginScreen = () => {
+  const context = useContext(DataContext);
   const navigation = useNavigation();
   const [data, setData] = useState({});
   const [initialPlaceholder, setInitialPlaceholder] = useState({
-    username: 'Username',
+    username: 'Email',
     password: 'Password',
   });
   const [secureTextEntry, setSecurityTextEntry] = useState(true);
@@ -34,33 +37,34 @@ const LoginScreen = () => {
   };
 
   const onChange = ({name, value}) => {
-    setData({...data, [name]: value})
+    setData({...data, [name]: value});
 
     if (value !== '') {
-      setError((prev) => {
-        return{...prev, [name]: null}
-      })
+      setError(prev => {
+        return {...prev, [name]: null};
+      });
     } else {
-      setError((prev) => {
-        return{...prev, [name]: "This field is required"}
-      })
-    }
-  }
-  const onPress = () => {
-    if (!data.username) {
-      setError((prev) => {
-        return{...prev, username: "Please input your username"}
-      })
-    } 
-    if (!data.password) {
-      setError((prev) => {
-        return{...prev, password: "Please input your password"}
-      })
-    } 
-    if (data.username && data.password ) {
-      alert(`Username: ${data.username} Password: ${data.password}`);
+      setError(prev => {
+        return {...prev, [name]: 'This field is required'};
+      });
     }
   };
+  const onPress = () => {
+    if (!data.username) {
+      setError(prev => {
+        return {...prev, username: 'Please input your email'};
+      });
+    }
+    if (!data.password) {
+      setError(prev => {
+        return {...prev, password: 'Please input your password'};
+      });
+    }
+    if (data.username && data.password) {
+      context.login(data.username, data.password);
+    }
+  };
+
   const RenderLogo = () => {
     return (
       <View style={styles.logo}>
@@ -113,8 +117,18 @@ const LoginScreen = () => {
                 {secureTextEntry === false ? 'Hide' : 'Show'}
               </Text> */}
               {secureTextEntry === false ? (
-                <Ionicons name='eye-off-outline' size={24} color={colors.PURE_WHITE}/>
-              ) : (<Ionicons name='eye-outline' size={24} color={colors.PURE_WHITE}/>)}
+                <Ionicons
+                  name="eye-off-outline"
+                  size={24}
+                  color={colors.PURE_WHITE}
+                />
+              ) : (
+                <Ionicons
+                  name="eye-outline"
+                  size={24}
+                  color={colors.PURE_WHITE}
+                />
+              )}
             </Pressable>
           }
           error={error.password}

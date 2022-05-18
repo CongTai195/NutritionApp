@@ -5,15 +5,20 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import font from '../../assets/fonts/font';
+import {DataContext} from '../../context/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MoreScreen = () => {
+  const context = useContext(DataContext);
+  const user = context.user;
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,6 +29,24 @@ const MoreScreen = () => {
       headerTitleAlign: 'center',
     });
   }, [navigation]);
+
+  const logOut = async () => {
+    Alert.alert('', 'Do you really want to leave us?', [
+      // The "Yes" button
+      {
+        text: 'Yes',
+        onPress: async () => {
+          const token = await AsyncStorage.getItem('@storage_Key');
+          context.logout(token);
+        },
+      },
+      // The "No" button
+      // Does nothing but dismiss the dialog when tapped
+      {
+        text: 'No',
+      },
+    ]);
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.LIGHT_GREY}}>
@@ -44,7 +67,7 @@ const MoreScreen = () => {
               style={styles.avatar}
               source={require('../../assets/images/defaultAvatar.png')}
             />
-            <Text style={styles.boldText}>LKTGamingDUT</Text>
+            <Text style={styles.boldText}>{user.name}</Text>
           </View>
           <View style={styles.progress}>
             <Text style={styles.lightText}>Progress</Text>
@@ -281,6 +304,24 @@ const MoreScreen = () => {
               />
               <View style={{flex: 1}}>
                 <Text style={styles.textChild}>Help</Text>
+              </View>
+              <Ionicons
+                name="chevron-forward-outline"
+                size={24}
+                color={'black'}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => logOut()} activeOpacity={0.5}>
+            <View style={styles.child}>
+              <Ionicons
+                name="log-out-outline"
+                size={24}
+                color={'black'}
+                style={{marginRight: 10}}
+              />
+              <View style={{flex: 1}}>
+                <Text style={styles.textChild}>Log Out</Text>
               </View>
               <Ionicons
                 name="chevron-forward-outline"

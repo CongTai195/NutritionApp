@@ -7,7 +7,7 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native';
-import React, {useLayoutEffect, useState, useEffect} from 'react';
+import React, {useLayoutEffect, useState, useEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -18,9 +18,11 @@ import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
 import {useFocusEffect} from '@react-navigation/native';
 import Token from '../../data/Token';
-//import Diaries from '../../data/Diaries';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {DataContext} from '../../context/Context';
 
 const DiaryScreen = () => {
+  const context = useContext(DataContext);
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,10 +36,11 @@ const DiaryScreen = () => {
   const today = moment();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [food, setFood] = useState([]);
-  const [breakfast, setBreakfast] = useState({});
-  const [lunch, setLunch] = useState({});
-  const [dinner, setDinner] = useState({});
+  const diary = context.diary;
+  const food = context.food_diary;
+  const breakfast = context.breakfast_diary;
+  const lunch = context.lunch_diary;
+  const dinner = context.dinner_diary;
 
   const [date, setDate] = useState(
     `${today.toDate().getDate()}/${today.toDate().getMonth() + 1}/${today
@@ -45,71 +48,13 @@ const DiaryScreen = () => {
       .getFullYear()}`,
   );
 
-  const [diary, setDiary] = useState({});
-
-  const calories =
-    food.length > 0
-      ? food.reduce((total, food) => {
-          return total + parseFloat(food.calories);
-        }, 0)
-      : 0;
-
-  const creatDiary = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}diary`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer` + Token,
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          date: date,
-        }),
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setDiary(result.results);
-        setFood({});
-        setBreakfast({});
-        setLunch({});
-        setDinner({});
-      } else {
-        console.log(result);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getDiary = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}diary/detail?date=${date}`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer` + Token,
-        },
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setDiary(result.results);
-        setFood(result.results.food);
-        setBreakfast(result.results.food.filter(e => e.meal === 'Breakfast'));
-        setLunch(result.results.food.filter(e => e.meal === 'Lunch'));
-        setDinner(result.results.food.filter(e => e.meal === 'Dinner'));
-      }
-      if (result.status === 'NG') {
-        creatDiary();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const calories = food.reduce((total, food) => {
+    return total + parseFloat(food.calories);
+  }, 0);
 
   useFocusEffect(
     React.useCallback(() => {
-      getDiary();
+      context.getDiary(date);
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -119,7 +64,7 @@ const DiaryScreen = () => {
   return (
     <View style={styles.root}>
       <CalendarStrip
-        showMonth={false}
+        showMonth
         scrollable
         style={{height: 70}}
         calendarColor={colors.PURE_WHITE}
@@ -187,12 +132,19 @@ const DiaryScreen = () => {
                   meal={'Breakfast'}
                   listFood={breakfast}
                   diaryId={diary.id}
+                  date={date}
                 />
-                <DiaryItem meal={'Lunch'} listFood={lunch} diaryId={diary.id} />
+                <DiaryItem
+                  meal={'Lunch'}
+                  listFood={lunch}
+                  diaryId={diary.id}
+                  date={date}
+                />
                 <DiaryItem
                   meal={'Dinner'}
                   listFood={dinner}
                   diaryId={diary.id}
+                  date={date}
                 />
                 {/* <DiaryItem meal={'Snacks'} diaryId={diary[0].id} />
                 <DiaryItem meal={'Exercise'} diaryId={diary[0].id} />

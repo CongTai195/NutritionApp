@@ -12,6 +12,13 @@ const styles = StyleSheet.create({
     shadowRadius: 3.5,
     elevation: 5,
   },
+  container: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 0,
+  },
 });
 
 export default styles;

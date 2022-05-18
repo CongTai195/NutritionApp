@@ -7,7 +7,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useLayoutEffect, useState, useEffect} from 'react';
+import React, {useLayoutEffect, useState, useEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -17,18 +17,21 @@ import AnimatedLottieView from 'lottie-react-native';
 import font from '../../assets/fonts/font';
 import Token from '../../data/Token';
 import BASE_URL from '../../data/ENV';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {DataContext} from '../../context/Context';
 
 const AddFoodScreen = () => {
+  const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
   const meal = route.params.meal;
   const diaryId = route.params.diaryId;
-  const [isSearching, SetIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+  const [food, setFood] = useState([]);
 
   const [search, setSearch] = useState('');
-  const [foods, setFoods] = useState('');
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -50,27 +53,32 @@ const AddFoodScreen = () => {
       //alert('Please input something with at least 2 characters!');
     } else {
       setIsSearched(true);
-      SetIsSearching(true);
-      setFoods([]);
+      setIsSearching(true);
+      setFood([]);
       try {
         const response = await fetch(`${BASE_URL}search?name=${searchValue}`, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer` + Token,
+            Authorization:
+              `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
           },
         });
         const result = await response.json();
         setTimeout(() => {
-          setFoods(result.results);
-          SetIsSearching(false);
+          setFood(result.results);
+          setIsSearching(false);
         }, 1500);
       } catch (error) {
         console.error(error);
       }
-      //  finally {
-      //   SetIsSearching(false);
+      // } finally {
+      //   setIsSearching(false);
       // }
+      // setTimeout(() => {
+      //   context.searchFood(searchValue);
+      //   setIsSearching(false);
+      // }, 1500);
     }
   };
 
@@ -80,7 +88,8 @@ const AddFoodScreen = () => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: 'Bearer' + Token,
+          Authorization:
+            'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
         },
         method: 'POST',
         body: JSON.stringify({
@@ -211,7 +220,7 @@ const AddFoodScreen = () => {
         )}
         <View>
           <FlatList
-            data={foods}
+            data={food}
             renderItem={({item}) => (
               <AddFoodItem
                 onPress={() =>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import 'react-native-gesture-handler';
 import {
   View,
@@ -14,27 +14,19 @@ import BottomTab from './src/navigations/BottomTab';
 import {NavigationContainer} from '@react-navigation/native';
 import MyDrawer from './src/navigations/Drawer';
 import colors from './src/assets/colors/colors';
+import {DataProvider} from './src/context/Context';
+
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-  if (isLoading === true) {
-    return (
+  useEffect(() => {});
+  return (
+    // <NavigationContainer>
+    <DataProvider>
       <View style={styles.container}>
-        <SplashScreen />
+        <BottomTab />
       </View>
-    );
-  } else
-    return (
-      // <NavigationContainer>
-        <View style={styles.container}>
-          <BottomTab />
-        </View>
-      //</NavigationContainer>
-    );
+    </DataProvider>
+    //</NavigationContainer>
+  );
 };
 
 const styles = StyleSheet.create({

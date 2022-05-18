@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.PURE_WHITE,
-    marginBottom: 70
+    marginBottom: 70,
     // width: '100%',
     // justifyContent: 'flex-start',
     // alignItems: 'center',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
   },
   smallTitle: {
-    fontSize: 11,
+    fontSize: 14,
     fontFamily: font.DEFAULT_FONT,
     color: colors.BLACK,
   },
@@ -70,6 +70,11 @@ const styles = StyleSheet.create({
     color: colors.BLACK,
     fontSize: 20,
     marginVertical: 10,
+  },
+  smallerTitle: {
+    fontSize: 12,
+    fontFamily: font.DEFAULT_FONT,
+    color: colors.BLACK,
   },
   //screen: {margin: '3%'},
 });

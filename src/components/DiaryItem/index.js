@@ -7,8 +7,9 @@ import {
   Text,
   View,
   StatusBar,
+  LogBox,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import font from '../../assets/fonts/font';
@@ -16,8 +17,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MealItem from '../MealItem';
 import Token from '../../data/Token';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {DataContext} from '../../context/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DiaryItem = ({meal, listFood, diaryId}) => {
+const DiaryItem = ({meal, listFood, diaryId, date}) => {
+  const context = useContext(DataContext);
   const [foods, setFoods] = useState({});
   const navigation = useNavigation();
 
@@ -44,14 +48,17 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer` + Token,
+          Authorization:
+            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
         },
         method: 'DELETE',
       });
       const result = await response.json();
+      console.log(result);
       if (result.status === 'OK') {
         const newFoods = foods.filter(food => food.id != rowKey);
         setFoods(newFoods);
+        context.getDiary(date);
       }
     } catch (error) {
       console.error(error);
@@ -86,6 +93,7 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
                 alignItems: 'center',
               }}
             />
+            {/* <Text>Delete</Text> */}
           </Animated.View>
         </TouchableOpacity>
       </View>
@@ -107,8 +115,8 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
         : '');
     const detail = data.item.detail;
     return (
-      <View style={styles.rowFront}>
-        <TouchableHighlight style={styles.rowFrontVisible}>
+      <View>
+        <TouchableHighlight style={styles.rowFront}>
           <View>
             <Text style={styles.textHeader} numberOfLines={1}>
               {name}{' '}
@@ -139,6 +147,7 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
   };
 
   useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     setFoods(listFood);
   }, [listFood]);
 
@@ -154,7 +163,11 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
           )}
         </>
       </View>
-      <View style={styles.separator}></View>
+      {foods.length === 0 ? (
+        <>
+          <View style={styles.separator}></View>
+        </>
+      ) : null}
       <SafeAreaView style={styles.container}>
         {/* {foods.length > 0
           ? foods.map((food, index, array) => (
@@ -168,9 +181,9 @@ const DiaryItem = ({meal, listFood, diaryId}) => {
           leftOpenValue={75}
           rightOpenValue={-75}
           disableRightSwipe
+          scrollEnabled={false}
         />
       </SafeAreaView>
-      <View style={styles.separator}></View>
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={() =>
