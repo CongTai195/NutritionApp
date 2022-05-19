@@ -2,6 +2,7 @@ import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
 
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
     fontWeight: '500',
+    marginRight: 15,
   },
   percent: {
     flexDirection: 'column',

@@ -41,6 +41,7 @@ const DiaryScreen = () => {
   const breakfast = context.breakfast_diary;
   const lunch = context.lunch_diary;
   const dinner = context.dinner_diary;
+  const exercise = context.exercise_diary;
 
   const [date, setDate] = useState(
     `${today.toDate().getDate()}/${today.toDate().getMonth() + 1}/${today
@@ -48,9 +49,19 @@ const DiaryScreen = () => {
       .getFullYear()}`,
   );
 
-  const calories = food.reduce((total, food) => {
-    return total + parseFloat(food.calories);
-  }, 0);
+  const calories_in =
+    food.length > 0
+      ? food.reduce((total, food) => {
+          return total + parseFloat(food.calories);
+        }, 0)
+      : 0;
+
+  const calories_out =
+    exercise.length > 0
+      ? exercise.reduce((total, exercise) => {
+          return total + parseFloat(exercise.calories);
+        }, 0)
+      : 0;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -119,7 +130,11 @@ const DiaryScreen = () => {
           />
         ) : Object.values(diary).length > 0 ? (
           <>
-            <CaloriesRemaining goal={3000} food={calories} exercise={0} />
+            <CaloriesRemaining
+              goal={3000}
+              food={calories_in}
+              exercise={calories_out}
+            />
             <SafeAreaView style={styles.addingSection}>
               {/* <FlatList
                 data={DATA}
@@ -130,25 +145,52 @@ const DiaryScreen = () => {
               <ScrollView showsVerticalScrollIndicator={false}>
                 <DiaryItem
                   meal={'Breakfast'}
-                  listFood={breakfast}
+                  listItem={breakfast}
                   diaryId={diary.id}
                   date={date}
+                  onPress={() =>
+                    navigation.navigate('AddFoodScreen', {
+                      meal: 'Breakfast',
+                      diaryId: diary.id,
+                    })
+                  }
                 />
                 <DiaryItem
                   meal={'Lunch'}
-                  listFood={lunch}
+                  listItem={lunch}
                   diaryId={diary.id}
                   date={date}
+                  onPress={() =>
+                    navigation.navigate('AddFoodScreen', {
+                      meal: 'Lunch',
+                      diaryId: diary.id,
+                    })
+                  }
                 />
                 <DiaryItem
                   meal={'Dinner'}
-                  listFood={dinner}
+                  listItem={dinner}
                   diaryId={diary.id}
                   date={date}
+                  onPress={() =>
+                    navigation.navigate('AddFoodScreen', {
+                      meal: 'Dinner',
+                      diaryId: diary.id,
+                    })
+                  }
                 />
-                {/* <DiaryItem meal={'Snacks'} diaryId={diary[0].id} />
-                <DiaryItem meal={'Exercise'} diaryId={diary[0].id} />
-                <DiaryItem meal={'Water'} diaryId={diary[0].id} /> */}
+                <DiaryItem
+                  meal={'Exercise'}
+                  listItem={exercise}
+                  diaryId={diary.id}
+                  date={date}
+                  onPress={() =>
+                    navigation.navigate('AddExerciseScreen', {
+                      meal: 'Exercise',
+                      diaryId: diary.id,
+                    })
+                  }
+                />
               </ScrollView>
             </SafeAreaView>
           </>

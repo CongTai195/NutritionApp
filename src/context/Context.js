@@ -15,6 +15,7 @@ export class DataProvider extends Component {
       breakfast_diary: [],
       lunch_diary: [],
       dinner_diary: [],
+      exercise_diary: [],
       food: [],
 
       today: `${moment().toDate().getDate()}/${
@@ -24,6 +25,8 @@ export class DataProvider extends Component {
       exercise_diary_today: [],
 
       isLoading: false,
+
+      BASE_URL: 'http://10.0.2.2:8000',
     };
   }
 
@@ -37,7 +40,7 @@ export class DataProvider extends Component {
 
   getUser = async () => {
     try {
-      const response = await fetch(`${BASE_URL}getUser`, {
+      const response = await fetch(`${this.state.BASE_URL}/api/getUser`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -67,7 +70,7 @@ export class DataProvider extends Component {
 
   login = async (userName, password) => {
     try {
-      const response = await fetch(`${BASE_URL}login`, {
+      const response = await fetch(`${this.state.BASE_URL}/api/login`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -97,7 +100,7 @@ export class DataProvider extends Component {
 
   logout = async token => {
     try {
-      const response = await fetch(`${BASE_URL}logout`, {
+      const response = await fetch(`${this.state.BASE_URL}/api/logout`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -124,19 +127,23 @@ export class DataProvider extends Component {
 
   getDiary = async date => {
     try {
-      const response = await fetch(`${BASE_URL}diary/detail?date=${date}`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
+      const response = await fetch(
+        `${this.state.BASE_URL}/api/diary/detail?date=${date}`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:
+              `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
+          },
         },
-      });
+      );
       const result = await response.json();
       if (result.status === 'OK') {
         if (date === this.state.today) {
           this.setState({exercise_diary_today: result.results.exercise});
           this.setState({food_diary_today: result.results.food});
+          this.setState({exercise_diary_today: result.results.exercise});
         }
         this.setState({diary: result.results});
         this.setState({food_diary: result.results.food});
@@ -151,6 +158,7 @@ export class DataProvider extends Component {
         this.setState({
           dinner_diary: result.results.food.filter(e => e.meal === 'Dinner'),
         });
+        this.setState({exercise_diary: result.results.exercise});
       }
       if (result.status === 'NG') {
         this.creatDiary(date);
@@ -162,7 +170,7 @@ export class DataProvider extends Component {
 
   creatDiary = async date => {
     try {
-      const response = await fetch(`${BASE_URL}diary`, {
+      const response = await fetch(`${this.state.BASE_URL}/api/diary`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -181,6 +189,7 @@ export class DataProvider extends Component {
         this.setState({breakfast_diary: {}});
         this.setState({lunch_diary: {}});
         this.setState({dinner_diary: {}});
+        this.setState({exercise_diary: {}});
       } else {
         console.log(result);
       }
@@ -220,7 +229,9 @@ export class DataProvider extends Component {
       breakfast_diary,
       food_diary_today,
       exercise_diary_today,
+      exercise_diary,
       food,
+      BASE_URL,
       isLoading,
     } = this.state;
     const {login, logout, addUser, getDiary, searchFood, setIsLoading} = this;
@@ -237,6 +248,8 @@ export class DataProvider extends Component {
           isLoading,
           food_diary_today,
           exercise_diary_today,
+          exercise_diary,
+          BASE_URL,
           setIsLoading,
           searchFood,
           getDiary,

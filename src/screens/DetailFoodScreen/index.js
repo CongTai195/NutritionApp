@@ -6,8 +6,9 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
+  Image,
 } from 'react-native';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useState, useContext} from 'react';
 import styles from './style';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -18,10 +19,11 @@ import QuantitySelector from '../../components/QuantitySelector';
 import * as Progress from 'react-native-progress';
 import {Picker} from '@react-native-picker/picker';
 import AnimatedLottieView from 'lottie-react-native';
-import Token from '../../data/Token';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {DataContext} from '../../context/Context';
 
 const DetailFoodScreen = () => {
-  const screenWidth = Dimensions.get('window').width;
+  const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
   const food = route.params.food;
@@ -67,11 +69,12 @@ const DetailFoodScreen = () => {
 
   const addFood = async () => {
     try {
-      const response = await fetch(`${BASE_URL}diary/food`, {
+      const response = await fetch(`${context.BASE_URL}/api/diary/food`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: 'Bearer' + Token,
+          Authorization:
+            'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
         },
         method: 'POST',
         body: JSON.stringify({
@@ -82,13 +85,14 @@ const DetailFoodScreen = () => {
         }),
       });
       const result = await response.json();
-      if (true) {
+      if (result.status === 'OK') {
         setIsAdded(!isAdded);
         const time = setTimeout(() => {
           navigation.navigate('DiaryScreen');
         }, 1700);
         return () => clearTimeout(time);
       } else {
+        console.log(result);
         alert('Error adding food');
       }
     } catch (error) {
@@ -102,6 +106,9 @@ const DetailFoodScreen = () => {
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={styles.container}>
+            <View style={styles.imageSection}>
+              <Image style={styles.image} source={{uri: `${food.imageURL}`}} />
+            </View>
             <View style={styles.header}>
               <Text style={styles.name}>{food.name}</Text>
               <Text style={styles.information}>

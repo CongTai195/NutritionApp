@@ -38,6 +38,7 @@ const HomeScreen = () => {
   const [isLoading, setLoading] = useState(false);
   //const [food, setFood] = useState({});
   const food = context.food_diary_today;
+  const exercise = context.exercise_diary_today;
   //const [data, setData] = useState([]);
   const navigation = useNavigation();
   const date = `${moment().toDate().getDate()}/${
@@ -68,10 +69,16 @@ const HomeScreen = () => {
     });
   }, [navigation]);
 
-  const calories =
+  const calories_in =
     food.length > 0
       ? food.reduce((total, food) => {
           return total + parseFloat(food.calories);
+        }, 0)
+      : 0;
+  const calories_out =
+    exercise.length > 0
+      ? exercise.reduce((total, exercise) => {
+          return total + parseFloat(exercise.calories);
         }, 0)
       : 0;
   const carbs =
@@ -150,7 +157,6 @@ const HomeScreen = () => {
   }, [user]);
   const goal = 3000;
   //const food = 0;
-  const exercise = 0;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -171,8 +177,8 @@ const HomeScreen = () => {
             {/* <Banner /> */}
             <CaloriesRemaining
               goal={goal}
-              food={calories}
-              exercise={exercise}
+              food={calories_in}
+              exercise={calories_out}
               onPress={() => {
                 navigation.navigate('Diary');
               }}

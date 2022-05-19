@@ -31,14 +31,14 @@ const CaloriesRemaining = ({goal, food, exercise, onPress}) => {
             />
           </View>
           <View style={styles.childCalculator}>
-            <Text style={styles.textChild}>{food}</Text>
+            <Text style={styles.textChild}>{Math.round(food)}</Text>
             <Text style={[styles.textChild, {fontWeight: '700'}]}>Food</Text>
           </View>
           <View style={styles.childCalculator}>
             <Ionicons name="add-outline" size={24} color={colors.PURE_WHITE} />
           </View>
           <View style={styles.childCalculator}>
-            <Text style={styles.textChild}>{exercise}</Text>
+            <Text style={styles.textChild}>{Math.round(exercise)}</Text>
             <Text style={[styles.textChild, {fontWeight: '700'}]}>
               Exercise
             </Text>
@@ -56,7 +56,7 @@ const CaloriesRemaining = ({goal, food, exercise, onPress}) => {
                 styles.textChild,
                 {color: colors.ORANGE, fontSize: 16, fontWeight: '700'},
               ]}>
-              {goal - food + exercise}
+              {Math.round(goal - food + exercise)}
             </Text>
             <Text style={[styles.textChild, {fontWeight: '700'}]}>
               Remaining

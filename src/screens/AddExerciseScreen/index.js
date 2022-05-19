@@ -19,8 +19,9 @@ import Token from '../../data/Token';
 import BASE_URL from '../../data/ENV';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
+import AddExerciseItem from '../../components/AddExerciseItem';
 
-const AddFoodScreen = () => {
+const AddExerciseScreen = () => {
   const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
@@ -29,7 +30,7 @@ const AddFoodScreen = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
-  const [food, setFood] = useState([]);
+  const [exercise, setExercise] = useState([]);
 
   const [search, setSearch] = useState('');
 
@@ -54,10 +55,10 @@ const AddFoodScreen = () => {
     } else {
       setIsSearched(true);
       setIsSearching(true);
-      setFood([]);
+      setExercise([]);
       try {
         const response = await fetch(
-          `${context.BASE_URL}/api/food/search/search?name=${searchValue}`,
+          `${context.BASE_URL}/api/exercise/search/search?name=${searchValue}`,
           {
             headers: {
               Accept: 'application/json',
@@ -69,7 +70,7 @@ const AddFoodScreen = () => {
         );
         const result = await response.json();
         setTimeout(() => {
-          setFood(result.results);
+          setExercise(result.results);
           setIsSearching(false);
         }, 1500);
       } catch (error) {
@@ -85,44 +86,12 @@ const AddFoodScreen = () => {
     }
   };
 
-  const addFood = async item => {
-    try {
-      const response = await fetch(`${context.BASE_URL}/api/diary/food`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          diary_id: diaryId,
-          serving_size_food_id: item.nutrition_facts[0].id,
-          quantity: 1,
-          meal: meal,
-        }),
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setIsAdded(true);
-        setTimeout(() => {
-          navigation.goBack();
-        }, 1700);
-        // return () => clearTimeout(time);
-      } else {
-        alert('Error adding food');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <>
       <View style={styles.container}>
         <SearchInput
           icon="search"
-          initialPlaceholder="Search for a food"
+          initialPlaceholder="Search for a exercise"
           onChangeText={setSearch}
           value={search}
           onSubmitEditing={() => handleSearch(search)}
@@ -140,56 +109,26 @@ const AddFoodScreen = () => {
         ) : (
           <Text style={styles.textHeader}>Search Result</Text>
         )}
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, bottom: 5}}>
           <FlatList
-            data={food}
+            data={exercise}
             renderItem={({item}) => (
-              <AddFoodItem
+              <AddExerciseItem
                 onPress={() =>
-                  navigation.navigate('DetailFoodScreen', {
-                    food: item,
+                  navigation.navigate('DetailExerciseScreen', {
+                    exercise: item,
                     diaryId: diaryId,
-                    meal: meal,
                   })
                 }
                 item={item}
-                addFood={() => {
-                  addFood(item);
-                }}
               />
             )}
             keyExtractor={item => item.id}
           />
         </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isAdded}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <>
-            <View style={{flex: 1}}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <AnimatedLottieView
-                  style={{height: 100, alignSelf: 'center'}}
-                  autoPlay
-                  source={require('../../assets/lottie/91001-success.json')}
-                />
-                <Text>Added</Text>
-              </View>
-            </View>
-          </>
-        </Modal>
       </View>
     </>
   );
 };
 
-export default AddFoodScreen;
+export default AddExerciseScreen;

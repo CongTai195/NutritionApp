@@ -20,15 +20,15 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DiaryItem = ({meal, listFood, diaryId, date}) => {
+const DiaryItem = ({meal, listItem, onPress, date}) => {
   const context = useContext(DataContext);
-  const [foods, setFoods] = useState({});
+  const [items, setItems] = useState({});
   const navigation = useNavigation();
 
   const calories =
-    foods.length > 0
-      ? foods.reduce((total, food) => {
-          return total + parseFloat(food.calories);
+    items.length > 0
+      ? items.reduce((total, item) => {
+          return total + parseFloat(item.calories);
         }, 0)
       : 0;
   // const calories =
@@ -43,25 +43,58 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
     }
   };
   const deleteRow = async (rowMap, rowKey) => {
-    try {
-      const response = await fetch(`${BASE_URL}diary/food/${rowKey}`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
-        },
-        method: 'DELETE',
-      });
-      const result = await response.json();
-      console.log(result);
-      if (result.status === 'OK') {
-        const newFoods = foods.filter(food => food.id != rowKey);
-        setFoods(newFoods);
-        context.getDiary(date);
+    if (meal === 'Exercise') {
+      try {
+        const response = await fetch(
+          `${context.BASE_URL}/api/diary/exercise/${rowKey}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization:
+                `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
+            },
+            method: 'DELETE',
+          },
+        );
+        const result = await response.json();
+        console.log(result);
+        if (result.status === 'OK') {
+          const newFoods = items.filter(item => item.id != rowKey);
+          setItems(newFoods);
+          context.getDiary(date);
+        } else {
+          console.log(result);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
+    } else {
+      try {
+        const response = await fetch(
+          `${context.BASE_URL}/api/diary/food/${rowKey}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization:
+                `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
+            },
+            method: 'DELETE',
+          },
+        );
+        const result = await response.json();
+        console.log(result);
+        if (result.status === 'OK') {
+          const newFoods = items.filter(item => item.id != rowKey);
+          setItems(newFoods);
+          context.getDiary(date);
+        } else {
+          console.log(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   const HiddenItemWithActions = props => {
@@ -104,16 +137,17 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
     const name = data.item.name;
     const calories = data.item.calories;
     const serving_size =
-      data.item.serving_size.split(' ')[0] * data.item.quantity +
+      data.item.serving_size?.split(' ')[0] * data.item.quantity +
       ' ' +
-      data.item.serving_size.split(' ')[1] +
-      (data.item.serving_size.split(' ')[2]
-        ? ' ' + data.item.serving_size.split(' ')[2]
+      data.item.serving_size?.split(' ')[1] +
+      (data.item.serving_size?.split(' ')[2]
+        ? ' ' + data.item.serving_size?.split(' ')[2]
         : '') +
-      (data.item.serving_size.split(' ')[3]
-        ? ' ' + data.item.serving_size.split(' ')[3]
+      (data.item.serving_size?.split(' ')[3]
+        ? ' ' + data.item.serving_size?.split(' ')[3]
         : '');
-    const detail = data.item.detail;
+    const detail = data.item?.detail;
+    const duration = data.item?.duration;
     return (
       <View>
         <TouchableHighlight style={styles.rowFront}>
@@ -122,9 +156,20 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
               {name}{' '}
             </Text>
             <View numberOfLines={1} style={{flexDirection: 'row'}}>
-              <Text numberOfLines={1} style={styles.textInfo}>
-                {calories} cal, {serving_size}, {detail}
-              </Text>
+              {meal === 'Exercise' ? (
+                <>
+                  <Text numberOfLines={1} style={styles.textInfo}>
+                    {duration} {duration > 1 ? 'minutes' : 'minute'}, {calories}{' '}
+                    cal
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text numberOfLines={1} style={styles.textInfo}>
+                    {calories} cal, {serving_size}, {detail}
+                  </Text>
+                </>
+              )}
             </View>
           </View>
         </TouchableHighlight>
@@ -148,8 +193,8 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    setFoods(listFood);
-  }, [listFood]);
+    setItems(listItem);
+  }, [listItem]);
 
   return (
     <View style={styles.childAdding}>
@@ -158,16 +203,14 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
         <>
           {calories === 0 ? null : (
             <>
-              <Text style={styles.headerText}>{calories} cal</Text>
+              <Text style={styles.headerText}>{Math.round(calories)} cal</Text>
             </>
           )}
         </>
       </View>
-      {foods.length === 0 ? (
-        <>
-          <View style={styles.separator}></View>
-        </>
-      ) : null}
+      <>
+        <View style={styles.separator}></View>
+      </>
       <SafeAreaView style={styles.container}>
         {/* {foods.length > 0
           ? foods.map((food, index, array) => (
@@ -175,7 +218,7 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
             ))
           : null} */}
         <SwipeListView
-          data={foods}
+          data={items}
           renderItem={renderItem}
           renderHiddenItem={renderHiddenItem}
           leftOpenValue={75}
@@ -184,10 +227,14 @@ const DiaryItem = ({meal, listFood, diaryId, date}) => {
           scrollEnabled={false}
         />
       </SafeAreaView>
+      <>
+        <View style={styles.separator}></View>
+      </>
       <TouchableOpacity
         activeOpacity={0.5}
-        onPress={() =>
-          navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
+        onPress={
+          onPress
+          // navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
         }>
         <View style={styles.addFood}>
           <Ionicons name="add-outline" size={16} color={'black'} />

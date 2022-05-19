@@ -35,9 +35,9 @@ const styles = StyleSheet.create({
   },
   rowFront: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
+    //borderRadius: 10,
     height: 60,
-    margin: 5,
+    //margin: 5,
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.8,
@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     //paddingLeft: 15,
-    margin: 5,
+    //margin: 5,
     height: 60,
-    borderRadius: 10,
+    //borderRadius: 10,
   },
   backRightBtn: {
     alignItems: 'center',

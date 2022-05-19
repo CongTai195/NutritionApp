@@ -32,7 +32,9 @@ const BottomTab = () => {
       routeName === 'SignupScreen' ||
       routeName === 'LoginScreen' ||
       routeName === 'AddFoodScreen' ||
-      routeName === 'DetailFoodScreen'
+      routeName === 'DetailFoodScreen' ||
+      routeName === 'DetailExerciseScreen' ||
+      routeName === 'AddExerciseScreen'
     ) {
       return 'none';
     } else {

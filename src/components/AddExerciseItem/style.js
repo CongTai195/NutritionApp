@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   add: {
-    //backgroundColor: colors.LIGHT_GREY,
-    //borderRadius: 50,
+    backgroundColor: colors.LIGHT_GREY,
+    borderRadius: 50,
     margin: 15,
     padding: 8,
   },

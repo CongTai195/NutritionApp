@@ -2,9 +2,7 @@ import {StyleSheet} from 'react-native';
 import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {flex: 1},
   textHeader: {
     color: colors.BLACK,
     fontSize: 18,
