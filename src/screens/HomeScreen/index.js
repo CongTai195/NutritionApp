@@ -3,34 +3,35 @@ import moment from 'moment';
 import {
   ActivityIndicator,
   TouchableOpacity,
-  SectionList,
-  FlatList,
   Text,
   View,
+  ScrollView,
+  ImageBackground,
   SafeAreaView,
+  FlatList,
+  Dimensions,
   Image,
 } from 'react-native';
-import axios from 'axios';
-import {ENV} from '../../constants/ENV';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
-import * as Progress from 'react-native-progress';
-import {useFocusEffect} from '@react-navigation/native';
 import Token from '../../data/Token';
 import Month from '../../data/Months';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Progress from 'react-native-progress';
+import ExerciseCard from '../../components/ExerciseCard';
 
 const headerImage = require('../../assets/images/defaultAvatar.png');
 const notification = require('../../assets/images/Notification.png');
-const next = require('../../assets/images/next.png');
-const carbs_image = require('../../assets/images/carbs.png');
-const meat = require('../../assets/images/meat.png');
-const fat_image = require('../../assets/images/fat.png');
+const carbs_image = require('../../assets/images/Carbon.jpg');
+const meat = require('../../assets/images/Beef.jpg');
+const fat_image = require('../../assets/images/fat.jpg');
+const banner = require('../../assets/images/BG.png');
+const fire = require('../../assets/images/fire.png');
 
 const HomeScreen = () => {
   const context = useContext(DataContext);
@@ -44,6 +45,7 @@ const HomeScreen = () => {
   const date = `${moment().toDate().getDate()}/${
     moment().toDate().getMonth() + 1
   }/${moment().toDate().getFullYear()}`;
+  const windowWidth = Dimensions.get('window').width;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -158,35 +160,55 @@ const HomeScreen = () => {
   const goal = 3000;
   //const food = 0;
 
+  console.log(exercise);
+
   return (
-    <SafeAreaView style={styles.container}>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <SafeAreaView style={styles.container}>
-          <View style={styles.screen}>
-            <Header
-              onPress={() => {
-                navigation.navigate('More');
-              }}
-              onBellPress={() => {
-                navigation.navigate('NotificationScreen');
-              }}
-              name={user.name}
-            />
-            {/* <Banner /> */}
-            <CaloriesRemaining
-              goal={goal}
-              food={calories_in}
-              exercise={calories_out}
-              onPress={() => {
-                navigation.navigate('Diary');
-              }}
-            />
-          </View>
-          <View style={{marginHorizontal: '3%'}}>
-            <Label>Your Nutrients</Label>
-            <View style={{flexDirection: 'row'}}>
+    <View style={styles.container}>
+      {/* <View style={styles.screen}> */}
+      <Header
+        onPress={() => {
+          navigation.navigate('More');
+        }}
+        onBellPress={() => {
+          navigation.navigate('NotificationScreen');
+        }}
+        name={user.name}
+      />
+      <ScrollView>
+        {/* <Banner /> */}
+        <CaloriesRemaining
+          goal={goal}
+          food={calories_in}
+          exercise={calories_out}
+          onPress={() => {
+            navigation.navigate('Diary');
+          }}
+        />
+        {/* </View> */}
+        <View style={{marginHorizontal: 10}}>
+          <Label>Your Nutrients</Label>
+        </View>
+        <View
+          style={{
+            margin: 5,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <ScrollView
+            snapToInterval={windowWidth - 6}
+            snapToAlignment="center"
+            horizontal
+            decelerationRate={'fast'}
+            view
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            style={styles.scrollView}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View>
               <Card
                 name={'Carbs'}
                 mass={100}
@@ -194,8 +216,10 @@ const HomeScreen = () => {
                 image={carbs_image}
                 lightColor="#f8e4d9"
                 color="#fcf1ea"
-                darkColor="#fac5a4"
+                darkColor={colors.ORANGE}
               />
+            </View>
+            <View>
               <Card
                 name={'Fat'}
                 mass={100}
@@ -203,8 +227,10 @@ const HomeScreen = () => {
                 image={fat_image}
                 lightColor="#dad5fe"
                 color="#e7e3ff"
-                darkColor="#8860a2"
+                darkColor="#644678"
               />
+            </View>
+            <View>
               <Card
                 name={'Protein'}
                 mass={100}
@@ -212,16 +238,55 @@ const HomeScreen = () => {
                 image={meat}
                 lightColor="#d7f0f7"
                 color="#e8f7fc"
-                darkColor="#aceafc"
+                darkColor={colors.RED_MEET}
               />
             </View>
-          </View>
-          <View style={{marginHorizontal: '3%'}}>
-            <Label>Your Water</Label>
-          </View>
-        </SafeAreaView>
-      )}
-    </SafeAreaView>
+          </ScrollView>
+        </View>
+        <View style={{marginHorizontal: 10}}>
+          <Label>Your Exercises</Label>
+        </View>
+        <View
+          style={{
+            margin: 5,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          {exercise?.length === 0 ? (
+            <>
+              <View>
+                <Banner />
+              </View>
+            </>
+          ) : (
+            <>
+              <ScrollView
+                snapToInterval={windowWidth - 6}
+                snapToAlignment="center"
+                horizontal
+                decelerationRate={'fast'}
+                view
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                style={styles.scrollView}
+                contentContainerStyle={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {exercise?.map((item, index) => (
+                  <>
+                    <View>
+                      <ExerciseCard exercise={item} key={index} />
+                    </View>
+                  </>
+                ))}
+              </ScrollView>
+            </>
+          )}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -229,62 +294,67 @@ export default HomeScreen;
 
 const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        height: 150,
-        padding: 10,
-        alignSelf: 'center',
-        backgroundColor: color,
-        justifyContent: 'space-between',
-        marginHorizontal: 8,
-        borderRadius: 10,
-        shadowColor: 'lightgrey',
-        shadowOffset: {width: -5, height: 5},
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-      }}>
+    <View style={styles.card}>
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
+          marginRight: 20,
         }}>
-        <Image source={image} style={{height: 25, width: 25}} />
+        {/* //
+          <Image source={image} style={{height: 25, width: 25}} /> */}
         <Text
           style={{
-            color: colors.BLACK,
+            color: darkColor,
             fontFamily: font.DEFAULT_FONT,
-            fontWeight: '500',
+            fontWeight: '900',
           }}>
-          {mass} g
+          {status} / {mass} g
         </Text>
       </View>
-      <View style={{alignSelf: 'center', margin: 5}}>
-        <Progress.Circle
-          size={50}
-          progress={status / 100}
-          showsText
-          unfilledColor="#ededed"
-          borderColor="#ededed"
-          color={darkColor}
-          direction="counter-clockwise"
-          fill="white"
-          strokeCap="round"
-          thickness={5}
-          style={{
-            shadowColor: 'grey',
-            shadowOffset: {width: 2, height: 2},
-            shadowOpacity: 0.1,
-            shadowRadius: 1,
-          }}
-          textStyle={{
-            fontSize: 16,
-            fontFamily: 'Poppins-Bold',
-            fontWeight: 'bold',
-          }}
-        />
-      </View>
+      <ImageBackground
+        imageStyle={{opacity: 0.6, borderRadius: 10}}
+        style={{
+          height: 150,
+          borderRadius: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        source={image}>
+        <View style={{alignSelf: 'center', margin: 5}}>
+          <Progress.Circle
+            size={75}
+            progress={status / 100}
+            showsText
+            text
+            //textStyle={{fontSize: 20}}
+            unfilledColor={'#fff'}
+            borderColor="#fff"
+            color={darkColor}
+            direction="counter-clockwise"
+            //fill={color}
+            strokeCap="round"
+            thickness={5}
+            style={{
+              shadowColor: 'grey',
+              shadowOffset: {width: 2, height: 2},
+              shadowOpacity: 0.1,
+              shadowRadius: 1,
+            }}
+            textStyle={{
+              fontSize: 22,
+              fontFamily: font.DEFAULT_FONT,
+              fontWeight: 'bold',
+              color: darkColor,
+              //textDecorationLine: 'underline',
+              // textShadowColor: '#000',
+              // textShadowOffset: {width: 3, height: 3},
+              // textShadowRadius: 10,
+            }}
+          />
+        </View>
+      </ImageBackground>
       <View
         style={{
           flexDirection: 'row',
@@ -295,8 +365,8 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
           style={{
             fontFamily: font.DEFAULT_FONT,
             fontSize: 16,
-            color: 'black',
-            fontWeight: '100',
+            color: darkColor,
+            fontWeight: '900',
           }}>
           {name}
         </Text>
@@ -375,24 +445,28 @@ const HeaderTitle = ({name}) => (
 //   },
 // ];
 
-// const Banner = () => (
-//   <>
-//     <ImageBackground style={styles.banner} source={banner}>
-//       <View style={styles.bannerContainer}>
-//         <View style={styles.rowLabel}>
-//           <View style={styles.fireContainer}>
-//             <Image
-//               source={fire}
-//               resizeMode="contain"
-//               style={styles.fireImage}
-//             />
-//           </View>
-//           <Text style={styles.offer}>limited offer</Text>
-//         </View>
-//         <OfferText>30% Discount</OfferText>
-//         <OfferText>Flash Sales</OfferText>
-//       </View>
-//     </ImageBackground>
-//     <Image source={model} style={styles.model} resizeMode="contain" />
-//   </>
-// );
+const Banner = () => (
+  <View style={styles.card}>
+    <ImageBackground
+      imageStyle={{opacity: 0.6, borderRadius: 10}}
+      style={{
+        height: 150,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      source={require('../../assets/images/Banner.jpg')}>
+      <View style={{alignSelf: 'center', margin: 5}}>
+        <Text
+          style={{
+            fontFamily: font.DEFAULT_FONT,
+            fontSize: 32,
+            color: '#8193C6',
+            fontWeight: '900',
+          }}>
+          Let's
+        </Text>
+      </View>
+    </ImageBackground>
+  </View>
+);

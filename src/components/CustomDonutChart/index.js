@@ -8,9 +8,9 @@ const CustomDonutChart = ({calories, carbs, fat, protein}) => {
   const radius = 70;
   const circleCircumference = 2 * Math.PI * radius;
 
-//   const carbs = 0;
-//   const fat = 44;
-//   const protein = 56;
+  //   const carbs = 0;
+  //   const fat = 44;
+  //   const protein = 56;
   const total = carbs + fat + protein;
 
   const carbsPercentage = (carbs / total) * 100;
@@ -48,7 +48,7 @@ const CustomDonutChart = ({calories, carbs, fat, protein}) => {
                   cx="50%"
                   cy="50%"
                   r={radius}
-                  stroke={colors.YELLOW}
+                  stroke={colors.ORANGE}
                   fill="transparent"
                   strokeWidth="10"
                   strokeDasharray={circleCircumference}
@@ -76,7 +76,7 @@ const CustomDonutChart = ({calories, carbs, fat, protein}) => {
                   cx="50%"
                   cy="50%"
                   r={radius}
-                  stroke={colors.BLUE}
+                  stroke={colors.RED_MEET}
                   fill="transparent"
                   strokeWidth="10"
                   strokeDasharray={circleCircumference}
@@ -90,9 +90,9 @@ const CustomDonutChart = ({calories, carbs, fat, protein}) => {
             )}
           </G>
         </Svg>
-        <View style={{position: "absolute"}}>
-        <Text style={styles.label}>{calories}</Text>
-        <Text style={styles.label1}>cal</Text>
+        <View style={{position: 'absolute'}}>
+          <Text style={styles.label}>{calories}</Text>
+          <Text style={styles.label1}>cal</Text>
         </View>
       </View>
     </View>

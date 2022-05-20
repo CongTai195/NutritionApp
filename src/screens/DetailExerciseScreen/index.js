@@ -113,7 +113,7 @@ const DetailExerciseScreen = () => {
               <View style={styles.childOthers}>
                 <Text style={styles.labelText}>Calories Burn</Text>
                 <Text style={styles.servingSizeText}>
-                  {exercise.calories * quantity}
+                  {Math.round(exercise.calories * quantity)}
                 </Text>
               </View>
               {/* </TouchableOpacity> */}

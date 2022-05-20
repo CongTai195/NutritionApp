@@ -54,7 +54,7 @@ const CaloriesRemaining = ({goal, food, exercise, onPress}) => {
             <Text
               style={[
                 styles.textChild,
-                {color: colors.ORANGE, fontSize: 16, fontWeight: '700'},
+                {color: colors.YELLOW, fontSize: 16, fontWeight: '700'},
               ]}>
               {Math.round(goal - food + exercise)}
             </Text>

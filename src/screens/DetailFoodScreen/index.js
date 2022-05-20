@@ -177,7 +177,7 @@ const DetailFoodScreen = () => {
                 </Text>
                 <Text
                   style={[
-                    {fontSize: 14, color: colors.BLUE},
+                    {fontSize: 14, color: colors.RED_MEET},
                     styles.textNutritionDetail,
                   ]}>
                   Protein
@@ -253,7 +253,7 @@ const DetailFoodScreen = () => {
                   <View style={styles.progressBar}>
                     <Progress.Bar
                       borderColor={colors.GREY}
-                      color={colors.YELLOW}
+                      color={colors.ORANGE}
                       progress={
                         (nutrition_facts.carbs * quantity) / daily_carbs
                       }
@@ -310,7 +310,7 @@ const DetailFoodScreen = () => {
                   <View style={styles.progressBar}>
                     <Progress.Bar
                       borderColor={colors.GREY}
-                      color={colors.BLUE}
+                      color={colors.RED_MEET}
                       progress={
                         (nutrition_facts.protein * quantity) / daily_protein
                       }
