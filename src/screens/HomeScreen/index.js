@@ -18,7 +18,6 @@ import colors from '../../assets/colors/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
-import Token from '../../data/Token';
 import Month from '../../data/Months';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,16 +35,20 @@ const fire = require('../../assets/images/fire.png');
 const HomeScreen = () => {
   const context = useContext(DataContext);
   const user = context.user;
-  const [isLoading, setLoading] = useState(false);
-  //const [food, setFood] = useState({});
-  const food = context.food_diary_today;
-  const exercise = context.exercise_diary_today;
-  //const [data, setData] = useState([]);
+  const diary = context.diary_today;
+  const food = diary.food;
+  const exercise = diary.exercise;
   const navigation = useNavigation();
   const date = `${moment().toDate().getDate()}/${
     moment().toDate().getMonth() + 1
   }/${moment().toDate().getFullYear()}`;
   const windowWidth = Dimensions.get('window').width;
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const onFlatListUpdate = React.useCallback(({viewableItems}) => {
+    if (viewableItems.length > 0) {
+      setActiveIndex(viewableItems[0].index || 0);
+    }
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -72,95 +75,40 @@ const HomeScreen = () => {
   }, [navigation]);
 
   const calories_in =
-    food.length > 0
+    food?.length > 0
       ? food.reduce((total, food) => {
           return total + parseFloat(food.calories);
         }, 0)
       : 0;
   const calories_out =
-    exercise.length > 0
+    exercise?.length > 0
       ? exercise.reduce((total, exercise) => {
           return total + parseFloat(exercise.calories);
         }, 0)
       : 0;
   const carbs =
-    food.length > 0
+    food?.length > 0
       ? food.reduce((total, food) => {
           return total + parseFloat(food.carbs);
         }, 0)
       : 0;
   const fat =
-    food.length > 0
+    food?.length > 0
       ? food?.reduce((total, food) => {
           return total + parseFloat(food.fat);
         }, 0)
       : 0;
   const protein =
-    food.length > 0
+    food?.length > 0
       ? food.reduce((total, food) => {
           return total + parseFloat(food.protein);
         }, 0)
       : 0;
 
-  const creatDiary = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}diary`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          date: date,
-        }),
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setFood({});
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getDiary = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}diary/detail?date=${date}`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
-        },
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setFood(result.results.food);
-      }
-      if (result.status === 'NG') {
-        creatDiary();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     console.log('call');
-  //     context.getDiary(date);
-  //   }, []),
-  // );
   useEffect(() => {
-    console.log('call');
     context.getDiary(date);
   }, [user]);
   const goal = 3000;
-  //const food = 0;
-
-  console.log(exercise);
 
   return (
     <View style={styles.container}>
@@ -174,7 +122,7 @@ const HomeScreen = () => {
         }}
         name={user.name}
       />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* <Banner /> */}
         <CaloriesRemaining
           goal={goal}
@@ -185,8 +133,22 @@ const HomeScreen = () => {
           }}
         />
         {/* </View> */}
-        <View style={{marginHorizontal: 10}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginLeft: 10,
+            marginTop: 10,
+            marginRight: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Label>Your Nutrients</Label>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('NutrientScreen');
+            }}>
+            <Ionicons name="arrow-forward-outline" size={25} color="black" />
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -243,8 +205,23 @@ const HomeScreen = () => {
             </View>
           </ScrollView>
         </View>
-        <View style={{marginHorizontal: 10}}>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            marginLeft: 10,
+            marginTop: 10,
+            marginRight: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Label>Your Exercises</Label>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Diary');
+            }}>
+            <Ionicons name="arrow-forward-outline" size={25} color="black" />
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -256,12 +233,31 @@ const HomeScreen = () => {
           {exercise?.length === 0 ? (
             <>
               <View>
-                <Banner />
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => {
+                    navigation.navigate('Diary');
+                  }}>
+                  <Banner />
+                </TouchableOpacity>
               </View>
             </>
           ) : (
             <>
-              <ScrollView
+              <FlatList
+                data={exercise}
+                renderItem={({item, index}) => (
+                  <ExerciseCard
+                    onPress={() => {
+                      navigation.navigate('DetailExerciseScreen', {
+                        exercise: item,
+                        action: 'Update',
+                      });
+                    }}
+                    exercise={item}
+                    key={index}
+                  />
+                )}
                 snapToInterval={windowWidth - 6}
                 snapToAlignment="center"
                 horizontal
@@ -273,15 +269,25 @@ const HomeScreen = () => {
                 contentContainerStyle={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}>
-                {exercise?.map((item, index) => (
-                  <>
-                    <View>
-                      <ExerciseCard exercise={item} key={index} />
-                    </View>
-                  </>
+                }}
+                viewabilityConfig={{
+                  viewAreaCoveragePercentThreshold: 6,
+                }}
+                onViewableItemsChanged={onFlatListUpdate}
+              />
+              <View style={styles.dots}>
+                {exercise?.map((exercise, index) => (
+                  <View
+                    style={[
+                      styles.dot,
+                      {
+                        backgroundColor:
+                          index == activeIndex ? '#000a7d' : colors.LIGHT_GREY,
+                      },
+                    ]}
+                  />
                 ))}
-              </ScrollView>
+              </View>
             </>
           )}
         </View>
@@ -301,11 +307,11 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
           alignItems: 'center',
           justifyContent: 'flex-end',
           marginRight: 20,
+          marginBottom: 5,
         }}>
-        {/* //
-          <Image source={image} style={{height: 25, width: 25}} /> */}
         <Text
           style={{
+            fontSize: 16,
             color: darkColor,
             fontFamily: font.DEFAULT_FONT,
             fontWeight: '900',
@@ -316,7 +322,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
       <ImageBackground
         imageStyle={{opacity: 0.6, borderRadius: 10}}
         style={{
-          height: 150,
+          height: 200,
           borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
@@ -324,7 +330,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
         source={image}>
         <View style={{alignSelf: 'center', margin: 5}}>
           <Progress.Circle
-            size={75}
+            size={150}
             progress={status / 100}
             showsText
             text
@@ -335,7 +341,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
             direction="counter-clockwise"
             //fill={color}
             strokeCap="round"
-            thickness={5}
+            thickness={10}
             style={{
               shadowColor: 'grey',
               shadowOffset: {width: 2, height: 2},
@@ -343,7 +349,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
               shadowRadius: 1,
             }}
             textStyle={{
-              fontSize: 22,
+              fontSize: 36,
               fontFamily: font.DEFAULT_FONT,
               fontWeight: 'bold',
               color: darkColor,
@@ -418,39 +424,12 @@ const HeaderTitle = ({name}) => (
   </View>
 );
 
-// const data = [
-//   {
-//     name: 'Carbs',
-//     status: 85,
-//     image: cycle,
-//     lightColor: '#f8e4d9',
-//     color: '#fcf1ea',
-//     darkColor: '#fac5a4',
-//   },
-//   {
-//     name: 'Protein',
-//     status: 36,
-//     image: walk,
-//     lightColor: '#d7f0f7',
-//     color: '#e8f7fc',
-//     darkColor: '#aceafc',
-//   },
-//   {
-//     name: 'Fat',
-//     status: 86,
-//     image: yoga,
-//     lightColor: '#dad5fe',
-//     color: '#e7e3ff',
-//     darkColor: '#8860a2',
-//   },
-// ];
-
 const Banner = () => (
-  <View style={styles.card}>
+  <View style={[styles.card, {marginVertical: 5}]}>
     <ImageBackground
-      imageStyle={{opacity: 0.6, borderRadius: 10}}
+      imageStyle={{opacity: 1, borderRadius: 10}}
       style={{
-        height: 150,
+        height: 200,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
@@ -460,7 +439,7 @@ const Banner = () => (
         <Text
           style={{
             fontFamily: font.DEFAULT_FONT,
-            fontSize: 32,
+            fontSize: 46,
             color: '#8193C6',
             fontWeight: '900',
           }}>

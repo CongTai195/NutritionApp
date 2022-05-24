@@ -23,7 +23,7 @@ import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
 
-const ExerciseCard = ({exercise}) => {
+const ExerciseCard = ({exercise, onPress}) => {
   return (
     <View style={styles.card}>
       <View
@@ -41,40 +41,43 @@ const ExerciseCard = ({exercise}) => {
             color: colors.BLACK,
             fontFamily: font.DEFAULT_FONT,
             fontWeight: '900',
+            marginBottom: 5,
           }}>
           {exercise?.duration} {exercise?.duration > 1 ? 'minutes' : 'minute'}
         </Text>
       </View>
-      <ImageBackground
-        imageStyle={{opacity: 0.5, borderRadius: 10}}
-        style={{
-          height: 150,
-          borderRadius: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        source={{uri: exercise?.imageURL}}>
-        <View style={{alignItems: 'center', margin: 5}}>
-          <Text
-            style={{
-              fontFamily: font.DEFAULT_FONT,
-              fontSize: 32,
-              color: '#000a7d',
-              fontWeight: '900',
-            }}>
-            {exercise?.calories} calories
-          </Text>
-          <Text
-            style={{
-              fontFamily: font.DEFAULT_FONT,
-              fontSize: 32,
-              color: '#000a7d',
-              fontWeight: '900',
-            }}>
-            burned
-          </Text>
-        </View>
-      </ImageBackground>
+      <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
+        <ImageBackground
+          imageStyle={{opacity: 0.5, borderRadius: 10}}
+          style={{
+            height: 200,
+            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          source={{uri: exercise?.imageURL}}>
+          <View style={{alignItems: 'center', margin: 5}}>
+            <Text
+              style={{
+                fontFamily: font.DEFAULT_FONT,
+                fontSize: 32,
+                color: '#000a7d',
+                fontWeight: '900',
+              }}>
+              {exercise?.calories} calories
+            </Text>
+            <Text
+              style={{
+                fontFamily: font.DEFAULT_FONT,
+                fontSize: 32,
+                color: '#000a7d',
+                fontWeight: '900',
+              }}>
+              burned
+            </Text>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
       <View
         style={{
           flexDirection: 'row',

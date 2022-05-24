@@ -78,6 +78,15 @@ const styles = StyleSheet.create({
     marginBottom: 0.5,
     width: '100%',
   },
+  childBenefit: {
+    flexDirection: 'row',
+    //borderBottomWidth: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    //height: 40,
+    marginBottom: 0.5,
+    width: '100%',
+  },
   labelText: {
     flex: 1,
     color: 'black',

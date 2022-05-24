@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.BLACK,
     fontSize: 20,
-    marginVertical: 10,
+    flex: 1,
   },
   smallerTitle: {
     fontSize: 12,
@@ -98,6 +98,21 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -5, height: 5},
     shadowOpacity: 0.5,
     shadowRadius: 2,
+  },
+  dot: {
+    width: 50,
+    height: 3,
+    borderRadius: 10,
+    borderColor: '#c9c9c9',
+    backgroundColor: '#ededed',
+    borderWidth: 1,
+    margin: 5,
+    marginTop: 10,
+  },
+  dots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   //screen: {margin: '3%'},
 });

@@ -21,12 +21,12 @@ import Token from '../../data/Token';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 
-const DiaryScreen = () => {
+const NutrientScreen = () => {
   const context = useContext(DataContext);
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: 'Diary',
+      headerTitle: 'Nutrient',
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
@@ -131,72 +131,9 @@ const DiaryScreen = () => {
           />
         ) : Object.values(diary).length > 0 ? (
           <>
-            <CaloriesRemaining
-              goal={3000}
-              food={calories_in}
-              exercise={calories_out}
-              onPress={() => {
-                navigation.navigate('NutrientScreen');
-              }}
-            />
             <SafeAreaView style={styles.addingSection}>
-              {/* <FlatList
-                data={DATA}
-                renderItem={({item}) => <DiaryItem item={item} />}
-                keyExtractor={item => item.id}
-                showsVerticalScrollIndicator={false}
-              /> */}
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View>
-                  <DiaryItem
-                    meal={'Breakfast'}
-                    listItem={breakfast}
-                    diaryId={diary.id}
-                    date={date}
-                    onPress={() =>
-                      navigation.navigate('AddFoodScreen', {
-                        meal: 'Breakfast',
-                        diaryId: diary.id,
-                      })
-                    }
-                  />
-                  <DiaryItem
-                    meal={'Lunch'}
-                    listItem={lunch}
-                    diaryId={diary.id}
-                    date={date}
-                    onPress={() =>
-                      navigation.navigate('AddFoodScreen', {
-                        meal: 'Lunch',
-                        diaryId: diary.id,
-                      })
-                    }
-                  />
-                  <DiaryItem
-                    meal={'Dinner'}
-                    listItem={dinner}
-                    diaryId={diary.id}
-                    date={date}
-                    onPress={() =>
-                      navigation.navigate('AddFoodScreen', {
-                        meal: 'Dinner',
-                        diaryId: diary.id,
-                      })
-                    }
-                  />
-                  <DiaryItem
-                    meal={'Exercise'}
-                    listItem={exercise}
-                    diaryId={diary.id}
-                    date={date}
-                    onPress={() =>
-                      navigation.navigate('AddExerciseScreen', {
-                        meal: 'Exercise',
-                        diaryId: diary.id,
-                      })
-                    }
-                  />
-                </View>
+                <View></View>
               </ScrollView>
             </SafeAreaView>
           </>
@@ -206,4 +143,4 @@ const DiaryScreen = () => {
   );
 };
 
-export default DiaryScreen;
+export default NutrientScreen;

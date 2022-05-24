@@ -150,7 +150,22 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
     const duration = data.item?.duration;
     return (
       <View>
-        <TouchableHighlight style={styles.rowFront}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            if (meal === 'Exercise') {
+              navigation.navigate('DetailExerciseScreen', {
+                exercise: data.item,
+                action: 'Update',
+              });
+            } else {
+              navigation.navigate('DetailFoodScreen', {
+                food: data.item,
+                action: 'Update',
+              });
+            }
+          }}
+          style={styles.rowFront}>
           <View>
             <Text style={styles.textHeader} numberOfLines={1}>
               {name}{' '}
@@ -172,7 +187,7 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
               )}
             </View>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   };

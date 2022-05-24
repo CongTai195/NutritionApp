@@ -23,12 +23,17 @@ const DetailExerciseScreen = () => {
   const route = useRoute();
   const diary_id = route.params.diaryId;
   const exercise = route.params.exercise;
-  const [quantity, setQuantity] = useState(1);
+  const action = route.params.action;
+  const [quantity, setQuantity] = useState(
+    action === 'View' ? 1 : exercise.duration,
+  );
   const [isAdded, setIsAdded] = useState(false);
   const daily_calories = 2800;
   const daily_carbs = 335;
   const daily_fat = 89;
   const daily_protein = 134;
+  const benefits =
+    'Running Improves Cardiovascular Health; Running Builds Muscular Strength; Running Increases Bone Density; Running Improves Markers of Health; Running Reduces Stress; Running Boosts Confidence; Running Burns Calories; Running Is Accessible; Running Improves Your Mood; Running Can Connect You to Nature; Running Can Be Social';
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -98,24 +103,48 @@ const DetailExerciseScreen = () => {
               />
             </View>
             <View style={styles.header}>
-              <Text style={styles.name}>{exercise.name.split(' ')[0]}</Text>
+              <Text style={styles.name}>{exercise.name.split(', ')[0]}</Text>
               <Text style={styles.information}>{exercise.name}</Text>
             </View>
             <View style={styles.others}>
               {/* <TouchableOpacity activeOpacity={0.5}> */}
               <View style={styles.childOthers}>
-                <Text style={styles.labelText}>Duration</Text>
+                <Text style={styles.labelText}>Duration (in minute)</Text>
                 <QuantitySelector
                   quantity={quantity}
                   setQuantity={value => setQuantity(value)}
                 />
               </View>
               <View style={styles.childOthers}>
-                <Text style={styles.labelText}>Calories Burn</Text>
+                <Text style={styles.labelText}>Calories burn</Text>
                 <Text style={styles.servingSizeText}>
-                  {Math.round(exercise.calories * quantity)}
+                  {action === 'View'
+                    ? Math.round(exercise.calories * quantity)
+                    : Math.round(
+                        (exercise.calories / exercise.duration) * quantity,
+                      )}
                 </Text>
               </View>
+              {/* </TouchableOpacity> */}
+            </View>
+            <View style={styles.others}>
+              {/* <TouchableOpacity activeOpacity={0.5}> */}
+              <View style={styles.childOthers}>
+                <Text style={[styles.labelText, {fontWeight: '900'}]}>
+                  Benefit of Running
+                </Text>
+              </View>
+              {/* <View style={{}}> */}
+              {benefits?.split('; ').map(benefit => (
+                <>
+                  <View style={styles.childBenefit}>
+                    <Text style={[styles.labelText, {marginBottom: 10}]}>
+                      {'  '}- {benefit}.
+                    </Text>
+                  </View>
+                </>
+              ))}
+              {/* </View> */}
               {/* </TouchableOpacity> */}
             </View>
           </ScrollView>

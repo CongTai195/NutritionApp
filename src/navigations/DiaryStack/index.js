@@ -7,6 +7,7 @@ import AddFoodScreen from '../../screens/AddFoodScreen';
 import DetailFoodScreen from '../../screens/DetailFoodScreen';
 import AddExerciseScreen from '../../screens/AddExerciseScreen';
 import DetailExerciseScreen from '../../screens/DetailExerciseScreen';
+import NutrientScreen from '../../screens/NutrientScreen';
 
 const DiaryStack = () => {
   const Stack = createStackNavigator();
@@ -35,6 +36,11 @@ const DiaryStack = () => {
       <Stack.Screen
         name="DetailExerciseScreen"
         component={DetailExerciseScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="NutrientScreen"
+        component={NutrientScreen}
         options={{headerShown: true}}
       />
     </Stack.Navigator>

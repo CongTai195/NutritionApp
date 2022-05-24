@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   card: {
     //flex: 1,
-    //height: 150,
+    //height: 200,
     //padding: 10,
     //alignSelf: 'center',
     //backgroundColor: color,

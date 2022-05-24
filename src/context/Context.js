@@ -11,18 +11,12 @@ export class DataProvider extends Component {
     this.state = {
       user: [],
       diary: [],
-      food_diary: [],
-      breakfast_diary: [],
-      lunch_diary: [],
-      dinner_diary: [],
-      exercise_diary: [],
       food: [],
 
       today: `${moment().toDate().getDate()}/${
         moment().toDate().getMonth() + 1
       }/${moment().toDate().getFullYear()}`,
-      food_diary_today: [],
-      exercise_diary_today: [],
+      diary_today: [],
 
       isLoading: false,
 
@@ -113,6 +107,7 @@ export class DataProvider extends Component {
         this.setIsLoading(false);
         await AsyncStorage.removeItem('@storage_Key');
         this.setState({user: {}});
+        this.setState({diary_today: {}});
       } else {
         console.log(result);
       }
@@ -141,24 +136,9 @@ export class DataProvider extends Component {
       const result = await response.json();
       if (result.status === 'OK') {
         if (date === this.state.today) {
-          this.setState({exercise_diary_today: result.results.exercise});
-          this.setState({food_diary_today: result.results.food});
-          this.setState({exercise_diary_today: result.results.exercise});
+          this.setState({diary_today: result.results});
         }
         this.setState({diary: result.results});
-        this.setState({food_diary: result.results.food});
-        this.setState({
-          breakfast_diary: result.results.food.filter(
-            e => e.meal === 'Breakfast',
-          ),
-        });
-        this.setState({
-          lunch_diary: result.results.food.filter(e => e.meal === 'Lunch'),
-        });
-        this.setState({
-          dinner_diary: result.results.food.filter(e => e.meal === 'Dinner'),
-        });
-        this.setState({exercise_diary: result.results.exercise});
       }
       if (result.status === 'NG') {
         this.creatDiary(date);
@@ -184,12 +164,7 @@ export class DataProvider extends Component {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        this.setState({diary_diary: result.results});
-        this.setState({food: {}});
-        this.setState({breakfast_diary: {}});
-        this.setState({lunch_diary: {}});
-        this.setState({dinner_diary: {}});
-        this.setState({exercise_diary: {}});
+        this.setState({diary: result.results});
       } else {
         console.log(result);
       }
@@ -220,35 +195,16 @@ export class DataProvider extends Component {
   };
 
   render() {
-    const {
-      user,
-      diary,
-      food_diary,
-      dinner_diary,
-      lunch_diary,
-      breakfast_diary,
-      food_diary_today,
-      exercise_diary_today,
-      exercise_diary,
-      food,
-      BASE_URL,
-      isLoading,
-    } = this.state;
+    const {user, diary, diary_today, food, BASE_URL, isLoading} = this.state;
     const {login, logout, addUser, getDiary, searchFood, setIsLoading} = this;
     return (
       <DataContext.Provider
         value={{
           user,
           diary,
-          food_diary,
-          dinner_diary,
-          lunch_diary,
-          breakfast_diary,
           food,
           isLoading,
-          food_diary_today,
-          exercise_diary_today,
-          exercise_diary,
+          diary_today,
           BASE_URL,
           setIsLoading,
           searchFood,

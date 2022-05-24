@@ -118,6 +118,7 @@ const AddExerciseScreen = () => {
                   navigation.navigate('DetailExerciseScreen', {
                     exercise: item,
                     diaryId: diaryId,
+                    action: 'View',
                   })
                 }
                 item={item}
