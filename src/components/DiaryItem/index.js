@@ -19,8 +19,10 @@ import Token from '../../data/Token';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useToast} from 'react-native-toast-notifications';
 
 const DiaryItem = ({meal, listItem, onPress, date}) => {
+  const toast = useToast();
   const context = useContext(DataContext);
   const [items, setItems] = useState({});
   const navigation = useNavigation();
@@ -60,6 +62,13 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
         const result = await response.json();
         console.log(result);
         if (result.status === 'OK') {
+          toast.show('Exercise deleted successfully off your diary', {
+            type: 'danger',
+            placement: 'bottom',
+            duration: 1700,
+            offset: 30,
+            animationType: 'slide-in',
+          });
           const newFoods = items.filter(item => item.id != rowKey);
           setItems(newFoods);
           context.getDiary(date);
@@ -86,6 +95,13 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
         const result = await response.json();
         console.log(result);
         if (result.status === 'OK') {
+          toast.show('Food deleted successfully off your diary', {
+            type: 'danger',
+            placement: 'bottom',
+            duration: 1700,
+            offset: 30,
+            animationType: 'slide-in',
+          });
           const newFoods = items.filter(item => item.id != rowKey);
           setItems(newFoods);
           context.getDiary(date);

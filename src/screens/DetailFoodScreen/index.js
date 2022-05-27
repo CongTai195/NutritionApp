@@ -21,8 +21,10 @@ import {Picker} from '@react-native-picker/picker';
 import AnimatedLottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
+import {useToast} from 'react-native-toast-notifications';
 
 const DetailFoodScreen = () => {
+  const toast = useToast();
   const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
@@ -97,7 +99,14 @@ const DetailFoodScreen = () => {
         );
         const result = await response.json();
         if (result.status === 'OK') {
-          setIsAdded(!isAdded);
+          //setIsAdded(!isAdded);
+          toast.show('Food updated successfully to your diary', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 1700,
+            offset: 30,
+            animationType: 'slide-in',
+          });
           const time = setTimeout(() => {
             navigation.navigate('DiaryScreen');
           }, 1700);
@@ -128,7 +137,14 @@ const DetailFoodScreen = () => {
         });
         const result = await response.json();
         if (result.status === 'OK') {
-          setIsAdded(!isAdded);
+          //setIsAdded(!isAdded);
+          toast.show('Food logged successfully to your diary', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 1700,
+            offset: 30,
+            animationType: 'slide-in',
+          });
           const time = setTimeout(() => {
             navigation.navigate('DiaryScreen');
           }, 1700);

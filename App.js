@@ -1,30 +1,45 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect} from 'react';
 import 'react-native-gesture-handler';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import LoginStack from './src/navigations/LoginStack';
-import SplashScreen from './src/screens/SplashScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import {View, StyleSheet} from 'react-native';
 import BottomTab from './src/navigations/BottomTab';
-import {NavigationContainer} from '@react-navigation/native';
-import MyDrawer from './src/navigations/Drawer';
 import colors from './src/assets/colors/colors';
 import {DataProvider} from './src/context/Context';
+import {ToastProvider} from 'react-native-toast-notifications';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const App = () => {
   useEffect(() => {});
   return (
     // <NavigationContainer>
-    <DataProvider>
-      <View style={styles.container}>
-        <BottomTab />
-      </View>
-    </DataProvider>
+    <ToastProvider
+      successIcon={
+        <Ionicons
+          name="checkmark-done-outline"
+          size={25}
+          color={'white'}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        />
+      }
+      dangerIcon={
+        <Ionicons
+          name="close-circle-outline"
+          size={25}
+          color={'white'}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        />
+      }>
+      <DataProvider>
+        <View style={styles.container}>
+          <BottomTab />
+        </View>
+      </DataProvider>
+    </ToastProvider>
     //</NavigationContainer>
   );
 };

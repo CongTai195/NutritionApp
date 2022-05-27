@@ -16,8 +16,10 @@ import QuantitySelector from '../../components/QuantitySelector';
 import AnimatedLottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
+import {useToast} from 'react-native-toast-notifications';
 
 const DetailExerciseScreen = () => {
+  const toast = useToast();
   const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
@@ -75,7 +77,14 @@ const DetailExerciseScreen = () => {
         });
         const result = await response.json();
         if (result.status === 'OK') {
-          setIsAdded(!isAdded);
+          //setIsAdded(!isAdded);
+          toast.show('Exercise logged successfully to your diary', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 1700,
+            offset: 30,
+            animationType: 'slide-in',
+          });
           const time = setTimeout(() => {
             navigation.navigate('DiaryScreen');
           }, 1700);
@@ -106,7 +115,14 @@ const DetailExerciseScreen = () => {
         );
         const result = await response.json();
         if (result.status === 'OK') {
-          setIsAdded(!isAdded);
+          //setIsAdded(!isAdded);
+          toast.show('Exercise updated successfully to your diary', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 1700,
+            offset: 30,
+            animationType: 'slide-in',
+          });
           const time = setTimeout(() => {
             navigation.navigate('DiaryScreen');
           }, 1700);

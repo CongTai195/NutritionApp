@@ -20,8 +20,10 @@ import BASE_URL from '../../data/ENV';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 import AddExerciseItem from '../../components/AddExerciseItem';
+import {useToast} from 'react-native-toast-notifications';
 
 const AddExerciseScreen = () => {
+  const toast = useToast();
   const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();

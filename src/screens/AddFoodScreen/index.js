@@ -20,8 +20,10 @@ import BASE_URL from '../../data/ENV';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 import {color} from 'react-native-reanimated';
+import {useToast} from 'react-native-toast-notifications';
 
 const AddFoodScreen = () => {
+  const toast = useToast();
   const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
@@ -105,7 +107,14 @@ const AddFoodScreen = () => {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        setIsAdded(true);
+        //setIsAdded(true);
+        toast.show('Food logged successfully to your diary', {
+          type: 'success',
+          placement: 'bottom',
+          duration: 1700,
+          offset: 30,
+          animationType: 'slide-in',
+        });
         setTimeout(() => {
           navigation.goBack();
         }, 1700);
