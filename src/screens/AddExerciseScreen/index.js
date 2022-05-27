@@ -109,23 +109,27 @@ const AddExerciseScreen = () => {
         ) : (
           <Text style={styles.textHeader}>Search Result</Text>
         )}
-        <View style={{flex: 1, bottom: 5}}>
-          <FlatList
-            data={exercise}
-            renderItem={({item}) => (
-              <AddExerciseItem
-                onPress={() =>
-                  navigation.navigate('DetailExerciseScreen', {
-                    exercise: item,
-                    diaryId: diaryId,
-                    action: 'View',
-                  })
-                }
-                item={item}
+        <View style={{flex: 1, marginBottom: 10}}>
+          {exercise?.length > 0 ? (
+            <>
+              <FlatList
+                data={exercise}
+                renderItem={({item}) => (
+                  <AddExerciseItem
+                    onPress={() =>
+                      navigation.navigate('DetailExerciseScreen', {
+                        exercise: item,
+                        diaryId: diaryId,
+                        action: 'View',
+                      })
+                    }
+                    item={item}
+                  />
+                )}
+                keyExtractor={item => item.id}
               />
-            )}
-            keyExtractor={item => item.id}
-          />
+            </>
+          ) : null}
         </View>
       </View>
     </>

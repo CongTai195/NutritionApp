@@ -21,8 +21,9 @@ import font from '../../assets/fonts/font';
 import Month from '../../data/Months';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Progress from 'react-native-progress';
 import ExerciseCard from '../../components/ExerciseCard';
+import Carousel from '../../components/Carousel';
+import Card from '../../components/Card';
 
 const headerImage = require('../../assets/images/defaultAvatar.png');
 const notification = require('../../assets/images/Notification.png');
@@ -43,10 +44,20 @@ const HomeScreen = () => {
     moment().toDate().getMonth() + 1
   }/${moment().toDate().getFullYear()}`;
   const windowWidth = Dimensions.get('window').width;
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const onFlatListUpdate = React.useCallback(({viewableItems}) => {
+  const [activeNutrientIndex, setActiveNutrientIndex] = React.useState(0);
+  const [activeExercisesIndex, setActiveExercisesIndex] = React.useState(0);
+
+  const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 6});
+
+  const onNutrientUpdate = React.useRef(({viewableItems}) => {
     if (viewableItems.length > 0) {
-      setActiveIndex(viewableItems[0].index || 0);
+      setActiveNutrientIndex(viewableItems[0].index || 0);
+    }
+  }, []);
+
+  const onExercisesUpdate = React.useRef(({viewableItems}) => {
+    if (viewableItems.length > 0) {
+      setActiveExercisesIndex(viewableItems[0].index || 0);
     }
   }, []);
 
@@ -105,6 +116,39 @@ const HomeScreen = () => {
         }, 0)
       : 0;
 
+  let nutrientArray = [
+    {
+      id: 1,
+      name: 'Carbs',
+      mass: 100,
+      status: carbs,
+      image: carbs_image,
+      lightColor: '#f8e4d9',
+      color: '#fcf1ea',
+      darkColor: colors.ORANGE,
+    },
+    {
+      id: 2,
+      name: 'Fat',
+      mass: 100,
+      status: fat,
+      image: fat_image,
+      lightColor: '#f8e4d9',
+      color: '#fcf1ea',
+      darkColor: '#644678',
+    },
+    {
+      id: 3,
+      name: 'Protein',
+      mass: 100,
+      status: protein,
+      image: meat,
+      lightColor: '#f8e4d9',
+      color: '#fcf1ea',
+      darkColor: colors.RED_MEET,
+    },
+  ];
+
   useEffect(() => {
     context.getDiary(date);
   }, [user]);
@@ -150,61 +194,28 @@ const HomeScreen = () => {
             <Ionicons name="arrow-forward-outline" size={25} color="black" />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            margin: 5,
-            paddingHorizontal: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <ScrollView
-            snapToInterval={windowWidth - 6}
-            snapToAlignment="center"
-            horizontal
-            decelerationRate={'fast'}
-            view
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            style={styles.scrollView}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View>
+        <Carousel
+          data={nutrientArray}
+          renderItem={({item, index}) => (
+            <View key={index}>
               <Card
-                name={'Carbs'}
-                mass={100}
-                status={carbs}
-                image={carbs_image}
-                lightColor="#f8e4d9"
-                color="#fcf1ea"
-                darkColor={colors.ORANGE}
+                key={index}
+                name={item.name}
+                mass={item.mass}
+                status={item.status}
+                image={item.image}
+                lightColor={item.lightColor}
+                color={item.color}
+                darkColor={item.darkColor}
               />
             </View>
-            <View>
-              <Card
-                name={'Fat'}
-                mass={100}
-                status={fat}
-                image={fat_image}
-                lightColor="#dad5fe"
-                color="#e7e3ff"
-                darkColor="#644678"
-              />
-            </View>
-            <View>
-              <Card
-                name={'Protein'}
-                mass={100}
-                status={protein}
-                image={meat}
-                lightColor="#d7f0f7"
-                color="#e8f7fc"
-                darkColor={colors.RED_MEET}
-              />
-            </View>
-          </ScrollView>
-        </View>
+          )}
+          snapToInterval={windowWidth - 5}
+          viewabilityConfig={viewConfigRef.current}
+          onViewableItemsChanged={onNutrientUpdate.current}
+          activeIndex={activeNutrientIndex}
+          dotColor={colors.BACK_GROUND_COLOR}
+        />
 
         <View
           style={{
@@ -223,15 +234,15 @@ const HomeScreen = () => {
             <Ionicons name="arrow-forward-outline" size={25} color="black" />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            margin: 5,
-            paddingHorizontal: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {exercise?.length === 0 ? (
-            <>
+        {exercise?.length === 0 ? (
+          <>
+            <View
+              style={{
+                margin: 5,
+                paddingHorizontal: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <View>
                 <TouchableOpacity
                   activeOpacity={0.9}
@@ -241,145 +252,38 @@ const HomeScreen = () => {
                   <Banner />
                 </TouchableOpacity>
               </View>
-            </>
-          ) : (
-            <>
-              <FlatList
-                data={exercise}
-                renderItem={({item, index}) => (
-                  <ExerciseCard
-                    onPress={() => {
-                      navigation.navigate('DetailExerciseScreen', {
-                        exercise: item,
-                        action: 'Update',
-                      });
-                    }}
-                    exercise={item}
-                    key={index}
-                  />
-                )}
-                snapToInterval={windowWidth - 6}
-                snapToAlignment="center"
-                horizontal
-                decelerationRate={'fast'}
-                view
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                style={styles.scrollView}
-                contentContainerStyle={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                viewabilityConfig={{
-                  viewAreaCoveragePercentThreshold: 6,
-                }}
-                onViewableItemsChanged={onFlatListUpdate}
-              />
-              <View style={styles.dots}>
-                {exercise?.map((exercise, index) => (
-                  <View
-                    style={[
-                      styles.dot,
-                      {
-                        backgroundColor:
-                          index == activeIndex ? '#000a7d' : colors.LIGHT_GREY,
-                      },
-                    ]}
-                  />
-                ))}
-              </View>
-            </>
-          )}
-        </View>
+            </View>
+          </>
+        ) : (
+          <>
+            <Carousel
+              data={exercise}
+              renderItem={({item, index}) => (
+                <ExerciseCard
+                  onPress={() => {
+                    navigation.navigate('DetailExerciseScreen', {
+                      exercise: item,
+                      action: 'Update',
+                    });
+                  }}
+                  exercise={item}
+                  key={index}
+                />
+              )}
+              snapToInterval={windowWidth - 5}
+              viewabilityConfig={viewConfigRef.current}
+              onViewableItemsChanged={onExercisesUpdate.current}
+              activeIndex={activeExercisesIndex}
+              dotColor={colors.BACK_GROUND_COLOR}
+            />
+          </>
+        )}
       </ScrollView>
     </View>
   );
 };
 
 export default HomeScreen;
-
-const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
-  return (
-    <View style={styles.card}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          marginRight: 20,
-          marginBottom: 5,
-        }}>
-        <Text
-          style={{
-            fontSize: 16,
-            color: darkColor,
-            fontFamily: font.DEFAULT_FONT,
-            fontWeight: '900',
-          }}>
-          {status} / {mass} g
-        </Text>
-      </View>
-      <ImageBackground
-        imageStyle={{opacity: 0.6, borderRadius: 10}}
-        style={{
-          height: 200,
-          borderRadius: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        source={image}>
-        <View style={{alignSelf: 'center', margin: 5}}>
-          <Progress.Circle
-            size={150}
-            progress={status / 100}
-            showsText
-            text
-            //textStyle={{fontSize: 20}}
-            unfilledColor={'#fff'}
-            borderColor="#fff"
-            color={darkColor}
-            direction="counter-clockwise"
-            //fill={color}
-            strokeCap="round"
-            thickness={10}
-            style={{
-              shadowColor: 'grey',
-              shadowOffset: {width: 2, height: 2},
-              shadowOpacity: 0.1,
-              shadowRadius: 1,
-            }}
-            textStyle={{
-              fontSize: 36,
-              fontFamily: font.DEFAULT_FONT,
-              fontWeight: 'bold',
-              color: darkColor,
-              //textDecorationLine: 'underline',
-              // textShadowColor: '#000',
-              // textShadowOffset: {width: 3, height: 3},
-              // textShadowRadius: 10,
-            }}
-          />
-        </View>
-      </ImageBackground>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text
-          style={{
-            fontFamily: font.DEFAULT_FONT,
-            fontSize: 16,
-            color: darkColor,
-            fontWeight: '900',
-          }}>
-          {name}
-        </Text>
-      </View>
-    </View>
-  );
-};
 
 const Label = ({children}) => <Text style={styles.label}>{children}</Text>;
 

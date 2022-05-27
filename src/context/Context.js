@@ -164,6 +164,9 @@ export class DataProvider extends Component {
       });
       const result = await response.json();
       if (result.status === 'OK') {
+        if (date === this.state.today) {
+          this.setState({diary_today: result.results});
+        }
         this.setState({diary: result.results});
       } else {
         console.log(result);

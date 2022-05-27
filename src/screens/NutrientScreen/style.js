@@ -1,5 +1,8 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../assets/colors/colors';
+import font from '../../assets/fonts/font';
+
+const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   root: {
@@ -12,6 +15,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 0,
+  },
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconNotification: {
     marginLeft: 10,
@@ -42,10 +50,78 @@ const styles = StyleSheet.create({
   addingSection: {
     flex: 1,
     marginTop: 10,
-    marginBottom: 70,
     width: '95%',
     borderRadius: 10,
     backgroundColor: colors.LIGHT_GREY,
+  },
+  others: {
+    backgroundColor: colors.PURE_WHITE,
+    width: '100%',
+    alignSelf: 'center',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  childOthers: {
+    flexDirection: 'row',
+    //borderBottomWidth: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    marginBottom: 0.5,
+    width: '100%',
+  },
+  labelText: {
+    //flex: 1,
+    color: 'black',
+    fontSize: 16,
+    fontFamily: font.DEFAULT_FONT,
+    fontWeight: '500',
+    marginHorizontal: 10,
+  },
+  enoughText: {
+    //flex: 1,
+    color: '#10de00',
+    fontSize: 15,
+    fontFamily: font.DEFAULT_FONT,
+    fontWeight: '500',
+  },
+  amountText: {
+    color: 'black',
+    fontSize: 16,
+    fontFamily: font.DEFAULT_FONT,
+    fontWeight: '500',
+    marginRight: 10,
+  },
+  servingSizeText: {
+    color: 'black',
+    fontSize: 16,
+    fontFamily: font.DEFAULT_FONT,
+    fontWeight: '500',
+  },
+  percent: {
+    flexDirection: 'column',
+    //borderBottomWidth: 0.5,
+    height: 90,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginBottom: 0.5,
+    width: '100%',
+    marginTop: 10,
+  },
+  progressBar: {
+    margin: 10,
+    width: '90%',
+  },
+  nutritionFacts: {
+    backgroundColor: colors.PURE_WHITE,
+    width: '95%',
+    alignSelf: 'center',
+    marginTop: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

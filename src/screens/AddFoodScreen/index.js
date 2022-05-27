@@ -19,6 +19,7 @@ import Token from '../../data/Token';
 import BASE_URL from '../../data/ENV';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
+import {color} from 'react-native-reanimated';
 
 const AddFoodScreen = () => {
   const context = useContext(DataContext);
@@ -140,26 +141,35 @@ const AddFoodScreen = () => {
         ) : (
           <Text style={styles.textHeader}>Search Result</Text>
         )}
-        <View style={{flex: 1}}>
-          <FlatList
-            data={food}
-            renderItem={({item}) => (
-              <AddFoodItem
-                onPress={() =>
-                  navigation.navigate('DetailFoodScreen', {
-                    food: item,
-                    diaryId: diaryId,
-                    meal: meal,
-                  })
-                }
-                item={item}
-                addFood={() => {
-                  addFood(item);
-                }}
+        <View
+          style={{
+            flex: 1,
+            marginBottom: 10,
+            //backgroundColor: colors.RED_MEET,
+          }}>
+          {food.length > 0 ? (
+            <>
+              <FlatList
+                data={food}
+                renderItem={({item}) => (
+                  <AddFoodItem
+                    onPress={() =>
+                      navigation.navigate('DetailFoodScreen', {
+                        food: item,
+                        diaryId: diaryId,
+                        meal: meal,
+                      })
+                    }
+                    item={item}
+                    addFood={() => {
+                      addFood(item);
+                    }}
+                  />
+                )}
+                keyExtractor={item => item.id}
               />
-            )}
-            keyExtractor={item => item.id}
-          />
+            </>
+          ) : null}
         </View>
         <Modal
           animationType="slide"

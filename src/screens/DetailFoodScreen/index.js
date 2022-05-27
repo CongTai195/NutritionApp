@@ -27,9 +27,12 @@ const DetailFoodScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const food = route.params.food;
-  const diaryId = route.params.diaryId;
+  const diaryId = context.diary.id;
   const meal = route.params.meal;
-  const [quantity, setQuantity] = useState(1);
+  const action = route.params.action;
+  const [quantity, setQuantity] = useState(
+    action === 'Update' ? route.params.quantity : 1,
+  );
   const [isAdded, setIsAdded] = useState(false);
   const [showNutritionFacts, setShowNutritionFacts] = useState(false);
   const nutrition_facts_array = food.nutrition_facts;
@@ -39,16 +42,22 @@ const DetailFoodScreen = () => {
   const daily_protein = 134;
 
   const [selectedServingSize, setSelectedServingSize] = useState(
-    nutrition_facts_array[0].serving_size,
+    action === 'Update'
+      ? route.params.serving_size
+      : nutrition_facts_array[0].serving_size,
   );
 
   const nutrition_facts = nutrition_facts_array.find(e => {
     return e.serving_size == selectedServingSize;
   });
 
+  const capitalizeFirstLetter = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: `Add Food`,
+      headerTitle: action === 'Update' ? `Update Food` : `Add Food`,
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
@@ -68,35 +77,69 @@ const DetailFoodScreen = () => {
   }, [navigation, quantity, nutrition_facts, isAdded]);
 
   const addFood = async () => {
-    try {
-      const response = await fetch(`${context.BASE_URL}/api/diary/food`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          diary_id: diaryId,
-          serving_size_food_id: nutrition_facts.id,
-          quantity: quantity,
-          meal: meal,
-        }),
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setIsAdded(!isAdded);
-        const time = setTimeout(() => {
-          navigation.navigate('DiaryScreen');
-        }, 1700);
-        return () => clearTimeout(time);
-      } else {
-        console.log(result);
-        alert('Error adding food');
+    if (action === 'Update') {
+      try {
+        const response = await fetch(
+          `${context.BASE_URL}/api/diary/food/${route.params.food_detail_id}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization:
+                'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
+            },
+            method: 'PUT',
+            body: JSON.stringify({
+              serving_size_food_id: nutrition_facts.id,
+              quantity: quantity,
+            }),
+          },
+        );
+        const result = await response.json();
+        if (result.status === 'OK') {
+          setIsAdded(!isAdded);
+          const time = setTimeout(() => {
+            navigation.navigate('DiaryScreen');
+          }, 1700);
+          return () => clearTimeout(time);
+        } else {
+          console.log(result);
+          alert('Error updating food');
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
+    } else {
+      try {
+        const response = await fetch(`${context.BASE_URL}/api/diary/food`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            diary_id: diaryId,
+            serving_size_food_id: nutrition_facts.id,
+            quantity: quantity,
+            meal: meal,
+          }),
+        });
+        const result = await response.json();
+        if (result.status === 'OK') {
+          setIsAdded(!isAdded);
+          const time = setTimeout(() => {
+            navigation.navigate('DiaryScreen');
+          }, 1700);
+          return () => clearTimeout(time);
+        } else {
+          console.log(result);
+          alert('Error adding food');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   return (
@@ -124,65 +167,54 @@ const DetailFoodScreen = () => {
                   protein={food.fromProtein}
                 />
               </View>
-              <View style={styles.nutritionDetail}>
-                <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  {food.fromCarbs}%
-                </Text>
-                <Text
-                  style={[
-                    {fontSize: 16, color: 'black'},
-                    styles.textNutritionDetail,
-                  ]}>
-                  {Math.round(nutrition_facts.carbs * quantity * 10) / 10} g
-                </Text>
-                <Text
-                  style={[
-                    {fontSize: 14, color: colors.YELLOW},
-                    styles.textNutritionDetail,
-                  ]}>
-                  Carbs
-                </Text>
-              </View>
-
-              <View style={styles.nutritionDetail}>
-                <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  {food.fromFat}%
-                </Text>
-                <Text
-                  style={[
-                    {fontSize: 16, color: 'black'},
-                    styles.textNutritionDetail,
-                  ]}>
-                  {Math.round(nutrition_facts.fat * quantity * 10) / 10} g
-                </Text>
-                <Text
-                  style={[
-                    {fontSize: 14, color: colors.PURPLE},
-                    styles.textNutritionDetail,
-                  ]}>
-                  Fat
-                </Text>
-              </View>
-
-              <View style={styles.nutritionDetail}>
-                <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                  {food.fromProtein}%
-                </Text>
-                <Text
-                  style={[
-                    {fontSize: 16, color: 'black'},
-                    styles.textNutritionDetail,
-                  ]}>
-                  {Math.round(nutrition_facts.protein * quantity * 10) / 10} g
-                </Text>
-                <Text
-                  style={[
-                    {fontSize: 14, color: colors.RED_MEET},
-                    styles.textNutritionDetail,
-                  ]}>
-                  Protein
-                </Text>
-              </View>
+              {Object.keys(food)?.map(item =>
+                item === 'fromCarbs' ||
+                item === 'fromFat' ||
+                item === 'fromProtein' ? (
+                  <>
+                    <View style={styles.nutritionDetail}>
+                      <Text
+                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
+                        {food[item]}%
+                      </Text>
+                      <Text
+                        style={[
+                          {fontSize: 16, color: 'black'},
+                          styles.textNutritionDetail,
+                        ]}>
+                        {item === 'fromCarbs'
+                          ? Math.round(nutrition_facts.carbs * quantity * 10) /
+                            10
+                          : item === 'fromFat'
+                          ? Math.round(nutrition_facts.fat * quantity * 10) / 10
+                          : Math.round(
+                              nutrition_facts.protein * quantity * 10,
+                            ) / 10}
+                        g
+                      </Text>
+                      <Text
+                        style={[
+                          {
+                            fontSize: 14,
+                            color:
+                              item === 'fromCarbs'
+                                ? colors.YELLOW
+                                : item === 'fromFat'
+                                ? colors.PURPLE
+                                : colors.RED_MEET,
+                          },
+                          styles.textNutritionDetail,
+                        ]}>
+                        {item === 'fromCarbs'
+                          ? 'Carbs'
+                          : item === 'fromFat'
+                          ? 'Fat'
+                          : 'Protein'}
+                      </Text>
+                    </View>
+                  </>
+                ) : null,
+              )}
             </View>
 
             <View style={styles.others}>
@@ -219,124 +251,80 @@ const DetailFoodScreen = () => {
               <View style={styles.percent}>
                 <Text style={styles.labelText}>Percent of Daily Goals</Text>
                 <View style={{flexDirection: 'row'}}>
-                  <View style={styles.progressBar}>
-                    <Progress.Bar
-                      borderColor={colors.GREY}
-                      color={colors.GREEN}
-                      progress={
-                        (nutrition_facts.calories * quantity) / daily_calories
-                      }
-                      width={null}
-                    />
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 5,
-                      }}>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        {Math.round(
-                          ((nutrition_facts.calories * quantity) /
-                            daily_calories) *
-                            100,
-                        )}
-                        %
-                      </Text>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        Calories
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.progressBar}>
-                    <Progress.Bar
-                      borderColor={colors.GREY}
-                      color={colors.ORANGE}
-                      progress={
-                        (nutrition_facts.carbs * quantity) / daily_carbs
-                      }
-                      width={null}
-                    />
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 5,
-                      }}>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        {Math.round(
-                          ((nutrition_facts.carbs * quantity) / daily_carbs) *
-                            100,
-                        )}
-                        %
-                      </Text>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        Carbs
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.progressBar}>
-                    <Progress.Bar
-                      borderColor={colors.GREY}
-                      color={colors.PURPLE}
-                      progress={(nutrition_facts.fat * quantity) / daily_fat}
-                      width={null}
-                    />
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 5,
-                      }}>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        {Math.round(
-                          ((nutrition_facts.fat * quantity) / daily_fat) * 100,
-                        )}
-                        %
-                      </Text>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        Fat
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.progressBar}>
-                    <Progress.Bar
-                      borderColor={colors.GREY}
-                      color={colors.RED_MEET}
-                      progress={
-                        (nutrition_facts.protein * quantity) / daily_protein
-                      }
-                      width={null}
-                    />
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 5,
-                      }}>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        {Math.round(
-                          ((nutrition_facts.protein * quantity) /
-                            daily_protein) *
-                            100,
-                        )}
-                        %
-                      </Text>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        Protein
-                      </Text>
-                    </View>
-                  </View>
+                  {Object.keys(nutrition_facts)?.map(item =>
+                    item === 'calories' ||
+                    item === 'carbs' ||
+                    item === 'protein' ||
+                    item === 'fat' ? (
+                      <>
+                        <View style={styles.progressBar}>
+                          <Progress.Bar
+                            borderColor={colors.GREY}
+                            color={
+                              item === 'calories'
+                                ? colors.GREEN
+                                : item === 'protein'
+                                ? colors.RED_MEET
+                                : item === 'carbs'
+                                ? colors.ORANGE
+                                : item === 'fat'
+                                ? '#644678'
+                                : colors.BACK_GROUND_COLOR
+                            }
+                            progress={
+                              (nutrition_facts[item] * quantity) /
+                              (item === 'calories'
+                                ? daily_calories
+                                : item === 'protein'
+                                ? daily_protein
+                                : item === 'carbs'
+                                ? daily_carbs
+                                : daily_fat)
+                            }
+                            width={null}
+                          />
+                          <View
+                            style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              marginTop: 5,
+                            }}>
+                            <Text
+                              style={[
+                                {fontSize: 14},
+                                styles.textNutritionDetail,
+                              ]}>
+                              {Math.round(
+                                ((nutrition_facts[item] * quantity) /
+                                  (item === 'calories'
+                                    ? daily_calories
+                                    : item === 'protein'
+                                    ? daily_protein
+                                    : item === 'carbs'
+                                    ? daily_carbs
+                                    : daily_fat)) *
+                                  100,
+                              )}
+                              %
+                            </Text>
+                            <Text
+                              style={[
+                                {fontSize: 14},
+                                styles.textNutritionDetail,
+                              ]}>
+                              {item === 'calories'
+                                ? 'Calories'
+                                : item === 'protein'
+                                ? 'Protein'
+                                : item === 'carbs'
+                                ? 'Carbs'
+                                : 'Fat'}
+                            </Text>
+                          </View>
+                        </View>
+                      </>
+                    ) : null,
+                  )}
                 </View>
               </View>
             </View>
@@ -375,95 +363,28 @@ const DetailFoodScreen = () => {
             </TouchableOpacity>
             {showNutritionFacts ? (
               <View style={styles.others}>
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Calories</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.calories * quantity * 10) / 10}{' '}
-                    cal
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Total Fat</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.fat * quantity * 10) / 10} g
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Cholesterol</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.cholesterol * quantity * 10) /
-                      10}{' '}
-                    mg
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Sodium</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.sodium * quantity * 10) / 10} mg
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Total Carbohydrates</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.carbs * quantity * 10) / 10} g
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Protein</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.protein * quantity * 10) / 10} g
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Vitamin D</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.vitamin_D * quantity * 10) / 10}
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Calcium</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.calcium * quantity * 10) / 10} %
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Iron</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.iron * quantity * 10) / 10} %
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Potassium</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.potassium * quantity * 10) / 10}{' '}
-                    mg
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Vitamin A</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.vitamin_A * quantity * 10) / 10}{' '}
-                    %
-                  </Text>
-                </View>
-
-                <View style={styles.childOthers}>
-                  <Text style={styles.labelText}>Vitamin C</Text>
-                  <Text style={styles.amountText}>
-                    {Math.round(nutrition_facts.vitamin_C * quantity * 10) / 10}{' '}
-                    %
-                  </Text>
-                </View>
+                {Object.keys(nutrition_facts)?.map(item =>
+                  item === 'id' ? null : item === 'serving_size' ? null : (
+                    <>
+                      <View style={styles.childOthers}>
+                        <Text style={styles.labelText}>
+                          {capitalizeFirstLetter(item)}
+                        </Text>
+                        <Text style={styles.amountText}>
+                          {Math.round(nutrition_facts[item] * quantity * 10) /
+                            10}{' '}
+                          {item === 'calories'
+                            ? 'cal'
+                            : item === 'carbs' ||
+                              item === 'protein' ||
+                              item === 'fat'
+                            ? 'g'
+                            : 'mg'}
+                        </Text>
+                      </View>
+                    </>
+                  ),
+                )}
               </View>
             ) : null}
           </ScrollView>

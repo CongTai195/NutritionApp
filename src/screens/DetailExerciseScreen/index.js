@@ -21,7 +21,7 @@ const DetailExerciseScreen = () => {
   const context = useContext(DataContext);
   const navigation = useNavigation();
   const route = useRoute();
-  const diary_id = route.params.diaryId;
+  const diary_id = context.diary.id;
   const exercise = route.params.exercise;
   const action = route.params.action;
   const [quantity, setQuantity] = useState(
@@ -37,7 +37,7 @@ const DetailExerciseScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: `Add Exercise`,
+      headerTitle: action === 'Update' ? `Update Exercise` : `Add Exercise`,
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
@@ -57,34 +57,67 @@ const DetailExerciseScreen = () => {
   }, [navigation, quantity, isAdded]);
 
   const addFood = async () => {
-    try {
-      const response = await fetch(`${context.BASE_URL}/api/diary/exercise`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:
-            'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          diary_id: diary_id,
-          duration: quantity,
-          exercise_id: exercise.id,
-        }),
-      });
-      const result = await response.json();
-      if (result.status === 'OK') {
-        setIsAdded(!isAdded);
-        const time = setTimeout(() => {
-          navigation.navigate('DiaryScreen');
-        }, 1700);
-        return () => clearTimeout(time);
-      } else {
-        console.log(result);
-        alert('Error adding food');
+    if (action === 'View') {
+      try {
+        const response = await fetch(`${context.BASE_URL}/api/diary/exercise`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            diary_id: diary_id,
+            duration: quantity,
+            exercise_id: exercise.id,
+          }),
+        });
+        const result = await response.json();
+        if (result.status === 'OK') {
+          setIsAdded(!isAdded);
+          const time = setTimeout(() => {
+            navigation.navigate('DiaryScreen');
+          }, 1700);
+          return () => clearTimeout(time);
+        } else {
+          console.log(result);
+          alert('Error adding food');
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
+    } else {
+      try {
+        const response = await fetch(
+          `${context.BASE_URL}/api/diary/exercise/${exercise.id}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization:
+                'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
+            },
+            method: 'PUT',
+            body: JSON.stringify({
+              duration: quantity,
+            }),
+          },
+        );
+        const result = await response.json();
+        if (result.status === 'OK') {
+          setIsAdded(!isAdded);
+          const time = setTimeout(() => {
+            navigation.navigate('DiaryScreen');
+          }, 1700);
+          return () => clearTimeout(time);
+        } else {
+          console.log(result);
+          alert('Error updating exercise');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   return (

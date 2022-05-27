@@ -7,7 +7,7 @@ export default {
   PURE_WHITE: '#FFFFFF',
   LIGHT_GREY: '#ededed',
   BLACK: '#000',
-  PURPLE: '#8860a2',
+  PURPLE: '#644678',
   YELLOW: '#d48302',
   GREEN: '#05f78e',
   BLUE: '#aceafc',

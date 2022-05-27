@@ -4,8 +4,8 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  FlatList,
   SafeAreaView,
+  Dimensions,
 } from 'react-native';
 import React, {useLayoutEffect, useState, useEffect, useContext} from 'react';
 import styles from './style';
@@ -13,15 +13,14 @@ import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
-import DiaryItem from '../../components/DiaryItem';
-import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
 import {useFocusEffect} from '@react-navigation/native';
-import Token from '../../data/Token';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
+import * as Progress from 'react-native-progress';
+import {color} from 'react-native-reanimated';
 
 const NutrientScreen = () => {
+  const windowWidth = Dimensions.get('window').width;
   const context = useContext(DataContext);
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -37,7 +36,6 @@ const NutrientScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const diary = context.diary;
-  //const food = context.food_diary;
   const food = diary?.food;
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
   const lunch = food?.filter(e => e.meal === 'Lunch');
@@ -50,19 +48,45 @@ const NutrientScreen = () => {
       .getFullYear()}`,
   );
 
-  const calories_in =
-    food?.length > 0
-      ? food?.reduce((total, food) => {
-          return total + parseFloat(food.calories);
-        }, 0)
-      : 0;
+  const capitalizeFirstLetter = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
-  const calories_out =
-    exercise?.length > 0
-      ? exercise?.reduce((total, exercise) => {
-          return total + parseFloat(exercise.calories);
+  const getNutrient = nutrient => {
+    return food?.length > 0
+      ? food?.reduce((total, food) => {
+          return total + parseFloat(food[nutrient]);
         }, 0)
       : 0;
+  };
+
+  const calories_in = getNutrient('calories');
+  const carbs = getNutrient('carbs');
+  const fat = getNutrient('fat');
+  const protein = getNutrient('protein');
+  const cholesterol = getNutrient('cholesterol');
+  const sodium = getNutrient('sodium');
+  const calcium = getNutrient('calcium');
+  const iron = getNutrient('iron');
+  const potassium = getNutrient('potassium');
+  const vitamin_D = getNutrient('vitamin_D');
+  const vitamin_A = getNutrient('vitamin_A');
+  const vitamin_C = getNutrient('vitamin_C');
+
+  let nutrientArray = {
+    calories: calories_in,
+    carbs: carbs,
+    fat: fat,
+    protein: protein,
+    cholesterol: cholesterol,
+    sodium: sodium,
+    calcium: calcium,
+    iron: iron,
+    potassium: potassium,
+    vitamin_A: vitamin_A,
+    vitamin_C: vitamin_C,
+    vitamin_D: vitamin_D,
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -115,11 +139,6 @@ const NutrientScreen = () => {
               dateSelected.toDate().getMonth() + 1
             }/${dateSelected.toDate().getFullYear()}`,
           );
-          // setCalories({
-          //   goal: calories_data[0].calories.goal,
-          //   food: calories_data[0].calories.food,
-          //   exercise: calories_data[0].calories.exercise,
-          // });
         }}
       />
       <View style={styles.container}>
@@ -132,8 +151,104 @@ const NutrientScreen = () => {
         ) : Object.values(diary).length > 0 ? (
           <>
             <SafeAreaView style={styles.addingSection}>
+              <View style={{flexDirection: 'row', marginBottom: 10}}>
+                <View
+                  style={{
+                    flex: 1,
+                  }}></View>
+                <View
+                  style={{
+                    flex: 1.3,
+                    flexDirection: 'row',
+                  }}>
+                  <View style={styles.header}>
+                    <Text style={styles.labelText}>Total</Text>
+                  </View>
+                  <View style={styles.header}>
+                    <Text style={styles.labelText}>Goal</Text>
+                  </View>
+                  <View style={styles.header}>
+                    <Text style={styles.labelText}>Left</Text>
+                  </View>
+                </View>
+              </View>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View></View>
+                <View style={styles.others}>
+                  {Object.keys(nutrientArray)?.map((item, index) =>
+                    item === 'id' ? null : item === 'serving_size' ? null : (
+                      <>
+                        <View key={index} style={styles.childOthers}>
+                          <View
+                            style={{
+                              flex: 1,
+                            }}>
+                            <Text style={styles.labelText}>
+                              {capitalizeFirstLetter(item)}{' '}
+                              {item === 'calories'
+                                ? ' (cal)'
+                                : item === 'carbs' ||
+                                  item === 'protein' ||
+                                  item === 'fat'
+                                ? ' (g)'
+                                : ' (mg)'}{' '}
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flex: 1.3,
+                              flexDirection: 'row',
+                            }}>
+                            <View style={styles.header}>
+                              <Text style={styles.amountText}>
+                                {Math.round(nutrientArray[item] * 10) / 10}{' '}
+                              </Text>
+                            </View>
+                            <View style={styles.header}>
+                              <Text style={styles.labelText}>134</Text>
+                            </View>
+                            <View style={styles.header}>
+                              {134 >
+                              Math.round(nutrientArray[item] * 10) / 10 ? (
+                                <>
+                                  <Text style={styles.labelText}>
+                                    {134 -
+                                      Math.round(nutrientArray[item] * 10) /
+                                        10}{' '}
+                                  </Text>
+                                </>
+                              ) : (
+                                <>
+                                  <Text style={styles.enoughText}>ENOUGH</Text>
+                                </>
+                              )}
+                            </View>
+                          </View>
+                        </View>
+                        <View style={styles.progressBar}>
+                          <Progress.Bar
+                            borderColor={colors.GREY}
+                            color={
+                              item === 'calories'
+                                ? colors.GREEN
+                                : item === 'protein'
+                                ? colors.RED_MEET
+                                : item === 'carbs'
+                                ? colors.ORANGE
+                                : item === 'fat'
+                                ? '#644678'
+                                : colors.BACK_GROUND_COLOR
+                            }
+                            progress={
+                              Math.round(nutrientArray[item] * 10) / 10 / 134
+                            }
+                            height={3}
+                            width={null}
+                          />
+                        </View>
+                      </>
+                    ),
+                  )}
+                </View>
               </ScrollView>
             </SafeAreaView>
           </>

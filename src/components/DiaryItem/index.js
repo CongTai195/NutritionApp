@@ -134,7 +134,7 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
   };
   const VisibleItem = props => {
     const {data} = props;
-    const name = data.item.name;
+    const name = meal === 'Exercise' ? data.item?.name : data.item.food?.name;
     const calories = data.item.calories;
     const serving_size =
       data.item.serving_size?.split(' ')[0] * data.item.quantity +
@@ -146,7 +146,7 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
       (data.item.serving_size?.split(' ')[3]
         ? ' ' + data.item.serving_size?.split(' ')[3]
         : '');
-    const detail = data.item?.detail;
+    const detail = data.item?.food?.detail;
     const duration = data.item?.duration;
     return (
       <View>
@@ -160,7 +160,10 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
               });
             } else {
               navigation.navigate('DetailFoodScreen', {
-                food: data.item,
+                food: data.item?.food,
+                serving_size: data.item?.serving_size,
+                quantity: data.item?.quantity,
+                food_detail_id: data.item?.id,
                 action: 'Update',
               });
             }
