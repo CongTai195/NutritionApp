@@ -6,9 +6,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.BACK_GROUND_COLOR,
   },
-  inner:{
-    justifyContent:"center",
-    flex: 1
+  inner: {
+    justifyContent: 'center',
+    //alignItems: 'center',
+    flex: 1,
   },
   logo: {
     marginTop: 30,
@@ -29,23 +30,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  toSignup:{
+  toSignup: {
     flexDirection: 'row',
     margin: 20,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
-  textToSignup:{
+  textToSignup: {
     fontSize: 16,
     color: colors.WHITE,
     marginHorizontal: 10,
-    fontWeight: "600"
+    fontWeight: '600',
   },
-  textSignup:{
+  textSignup: {
     fontSize: 16,
-    color: colors.RED,
+    color: colors.BLUE,
     marginHorizontal: 10,
-    fontWeight: "600"
-  }
+    fontWeight: '600',
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    //flex: 1,
+  },
 });
 
 export default styles;

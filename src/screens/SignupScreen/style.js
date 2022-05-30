@@ -6,9 +6,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.BACK_GROUND_COLOR,
   },
-  inner:{
-    justifyContent:"center",
-    flex: 1
+  inner: {
+    justifyContent: 'center',
+    flex: 1,
   },
   logo: {
     marginTop: 30,
@@ -29,23 +29,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  toLogin:{
+  toLogin: {
     flexDirection: 'row',
     margin: 20,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
-  textToLogin:{
+  textToLogin: {
     fontSize: 16,
     color: colors.WHITE,
     marginHorizontal: 10,
-    fontWeight: "600"
+    fontWeight: '600',
   },
-  textLogin:{
+  textLogin: {
     fontSize: 16,
-    color: colors.RED,
+    color: colors.BLUE,
     marginHorizontal: 10,
-    fontWeight: "600"
-  }
+    fontWeight: '600',
+  },
 });
 
 export default styles;

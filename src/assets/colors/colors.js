@@ -1,5 +1,6 @@
 export default {
   BACK_GROUND_COLOR: '#24253c',
+  DARK_BACK_GROUND_COLOR: '#1e1e31',
   THEME: '#7C5695',
   RED: '#E73752',
   WHITE: '#E6EBEC',
@@ -18,4 +19,5 @@ export default {
   ORANGE: '#804f01',
   PINK: '#FCE4EC',
   RED_MEET: '#8c0101',
+  BLUE: '#133ed8',
 };

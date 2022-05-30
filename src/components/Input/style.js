@@ -1,5 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../assets/colors/colors';
+
+const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -8,13 +10,14 @@ const styles = StyleSheet.create({
   },
   inputPart: {
     flexDirection: 'row',
-    alignItems: "center",
-    marginHorizontal: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width - 50,
     height: 45,
     margin: 12,
     borderWidth: 1.5,
     paddingHorizontal: 10,
-    borderColor: colors.RED,
+    borderColor: colors.BLUE,
     borderRadius: 20,
   },
   input: {
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     color: colors.RED,
-  }
+  },
 });
 
 export default styles;

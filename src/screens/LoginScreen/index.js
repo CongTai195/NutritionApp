@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useLayoutEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -18,11 +18,21 @@ import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../../components/Heading';
 import colors from '../../assets/colors/colors';
+import font from '../../assets/fonts/font';
 import {DataContext} from '../../context/Context';
 
 const LoginScreen = () => {
   const context = useContext(DataContext);
   const navigation = useNavigation();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Sign In',
+      headerTintColor: '#fff',
+      headerStyle: {backgroundColor: colors.BLUE},
+      headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
+      headerTitleAlign: 'center',
+    });
+  }, [navigation]);
   const [data, setData] = useState({});
   const [initialPlaceholder, setInitialPlaceholder] = useState({
     username: 'Email',
@@ -80,60 +90,70 @@ const LoginScreen = () => {
     <KeyboardAvoidingView style={styles.container} behavior={'height'}>
       <View style={styles.inner}>
         {RenderLogo()}
-        <Heading name="Log In" />
-        <Input
-          name="Username"
-          icon="user"
-          secureText={false}
-          value={data.username}
-          initialPlaceholder={initialPlaceholder.username}
-          onFocus={() =>
-            setInitialPlaceholder({...initialPlaceholder, username: ''})
-          }
-          onBlur={() =>
-            setInitialPlaceholder({...initialPlaceholder, username: 'Username'})
-          }
-          onChangeText={value => onChange({name: 'username', value})}
-          error={error.username}
-        />
-        <Input
-          name="Password"
-          icon="lock"
-          secureText={secureTextEntry}
-          value={data.password}
-          initialPlaceholder={initialPlaceholder.password}
-          onFocus={() =>
-            setInitialPlaceholder({...initialPlaceholder, password: ''})
-          }
-          onBlur={() =>
-            setInitialPlaceholder({...initialPlaceholder, password: 'Password'})
-          }
-          onChangeText={value => onChange({name: 'password', value})}
-          pressable={
-            <Pressable
-              style={styles.hidePassword}
-              onPress={() => changeSecureTextEntry()}>
-              {/* <Text style={styles.textHidePassword}>
+        <View style={styles.button}>
+          <Input
+            name="Username"
+            icon="user"
+            secureText={false}
+            value={data.username}
+            initialPlaceholder={initialPlaceholder.username}
+            onFocus={() =>
+              setInitialPlaceholder({...initialPlaceholder, username: ''})
+            }
+            onBlur={() =>
+              setInitialPlaceholder({
+                ...initialPlaceholder,
+                username: 'Username',
+              })
+            }
+            onChangeText={value => onChange({name: 'username', value})}
+            error={error.username}
+          />
+          <Input
+            name="Password"
+            icon="lock"
+            secureText={secureTextEntry}
+            value={data.password}
+            initialPlaceholder={initialPlaceholder.password}
+            onFocus={() =>
+              setInitialPlaceholder({...initialPlaceholder, password: ''})
+            }
+            onBlur={() =>
+              setInitialPlaceholder({
+                ...initialPlaceholder,
+                password: 'Password',
+              })
+            }
+            onChangeText={value => onChange({name: 'password', value})}
+            pressable={
+              <Pressable
+                style={styles.hidePassword}
+                onPress={() => changeSecureTextEntry()}>
+                {/* <Text style={styles.textHidePassword}>
                 {secureTextEntry === false ? 'Hide' : 'Show'}
               </Text> */}
-              {secureTextEntry === false ? (
-                <Ionicons
-                  name="eye-off-outline"
-                  size={24}
-                  color={colors.PURE_WHITE}
-                />
-              ) : (
-                <Ionicons
-                  name="eye-outline"
-                  size={24}
-                  color={colors.PURE_WHITE}
-                />
-              )}
-            </Pressable>
-          }
-          error={error.password}
-        />
-        <Button onPress={onPress} text={'LOG IN'} />
+                {secureTextEntry === false ? (
+                  <Ionicons
+                    name="eye-off-outline"
+                    size={24}
+                    color={colors.PURE_WHITE}
+                  />
+                ) : (
+                  <Ionicons
+                    name="eye-outline"
+                    size={24}
+                    color={colors.PURE_WHITE}
+                  />
+                )}
+              </Pressable>
+            }
+            error={error.password}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={onPress} text={'SIGN IN'} />
+        </View>
+
         <View style={styles.toSignup}>
           <Text style={styles.textToSignup}>Don't have an account?</Text>
           <Text

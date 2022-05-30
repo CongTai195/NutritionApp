@@ -92,6 +92,35 @@ export class DataProvider extends Component {
     }
   };
 
+  register = async (name, email, password) => {
+    try {
+      const response = await fetch(`${this.state.BASE_URL}/api/register`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        alert('Register Successfully');
+      } else {
+        alert('Fail Register');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.setIsLoading(true);
+      }, 1500);
+    }
+  };
+
   logout = async token => {
     try {
       const response = await fetch(`${this.state.BASE_URL}/api/logout`, {
@@ -199,7 +228,15 @@ export class DataProvider extends Component {
 
   render() {
     const {user, diary, diary_today, food, BASE_URL, isLoading} = this.state;
-    const {login, logout, addUser, getDiary, searchFood, setIsLoading} = this;
+    const {
+      login,
+      logout,
+      register,
+      addUser,
+      getDiary,
+      searchFood,
+      setIsLoading,
+    } = this;
     return (
       <DataContext.Provider
         value={{
@@ -214,6 +251,7 @@ export class DataProvider extends Component {
           getDiary,
           addUser,
           login,
+          register,
           logout,
         }}>
         {this.props.children}

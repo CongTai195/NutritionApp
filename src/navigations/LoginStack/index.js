@@ -7,18 +7,18 @@ import SignupScreen from '../../screens/SignupScreen';
 const LoginStack = () => {
   const Stack = createStackNavigator();
   return (
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SignupScreen"
-          component={SignupScreen}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="SignupScreen"
+        component={SignupScreen}
+        options={{headerShown: true}}
+      />
+    </Stack.Navigator>
   );
 };
 

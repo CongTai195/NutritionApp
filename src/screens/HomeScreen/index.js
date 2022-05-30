@@ -197,18 +197,18 @@ const HomeScreen = () => {
         <Carousel
           data={nutrientArray}
           renderItem={({item, index}) => (
-            <View key={index}>
-              <Card
-                key={index}
-                name={item.name}
-                mass={item.mass}
-                status={item.status}
-                image={item.image}
-                lightColor={item.lightColor}
-                color={item.color}
-                darkColor={item.darkColor}
-              />
-            </View>
+            // <View key={index}>
+            <Card
+              key={index}
+              name={item.name}
+              mass={item.mass}
+              status={item.status}
+              image={item.image}
+              lightColor={item.lightColor}
+              color={item.color}
+              darkColor={item.darkColor}
+            />
+            // </View>
           )}
           snapToInterval={windowWidth - 5}
           viewabilityConfig={viewConfigRef.current}
