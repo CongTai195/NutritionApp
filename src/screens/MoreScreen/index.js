@@ -96,7 +96,7 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="barbell-outline"
@@ -113,7 +113,7 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
@@ -150,7 +150,7 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="receipt-outline"
@@ -167,8 +167,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="alarm-outline"
@@ -185,8 +185,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="apps-outline"
@@ -203,8 +203,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="body-outline"
@@ -221,8 +221,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="people-outline"
@@ -239,8 +239,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="mail-outline"
@@ -257,8 +257,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="settings-outline"
@@ -275,8 +275,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="shield-checkmark-outline"
@@ -293,8 +293,8 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="help-circle-outline"
@@ -311,7 +311,7 @@ const MoreScreen = () => {
                 color={'black'}
               />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => logOut()} activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons

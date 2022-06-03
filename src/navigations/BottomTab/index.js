@@ -51,17 +51,18 @@ const BottomTab = () => {
   //   getKey();
   // });
 
-  if (context.isLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size={'large'}
-          color={colors.PURE_WHITE}
-          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-        />
-      </View>
-    );
-  } else if (!token) {
+  // if (context.isLoading) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <ActivityIndicator
+  //         size={'large'}
+  //         color={colors.PURE_WHITE}
+  //         style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+  //       />
+  //     </View>
+  //   );
+  // } else
+  if (!token) {
     return (
       <NavigationContainer>
         <LoginStack />

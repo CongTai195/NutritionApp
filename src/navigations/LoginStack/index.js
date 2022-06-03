@@ -4,6 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
+import SuccessfulRegister from '../../components/RegisterComponent/SuccessfulRegister';
+
 const LoginStack = () => {
   const Stack = createStackNavigator();
   return (
@@ -16,6 +18,11 @@ const LoginStack = () => {
       <Stack.Screen
         name="SignupScreen"
         component={SignupScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="SuccessfulRegister"
+        component={SuccessfulRegister}
         options={{headerShown: true}}
       />
     </Stack.Navigator>

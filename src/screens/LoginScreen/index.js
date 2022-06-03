@@ -152,7 +152,11 @@ const LoginScreen = () => {
           />
         </View>
         <View style={styles.button}>
-          <Button onPress={onPress} text={'SIGN IN'} />
+          <Button
+            isLoading={context.isLoading}
+            onPress={onPress}
+            text={'SIGN IN'}
+          />
         </View>
 
         <View style={styles.toSignup}>

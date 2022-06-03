@@ -76,11 +76,12 @@ export class DataProvider extends Component {
   };
 
   setIsLoading = isLoading => {
-    this.setState({isLoading: !isLoading});
+    this.setState({isLoading: isLoading});
   };
 
   login = async (userName, password) => {
     try {
+      this.setIsLoading(true);
       const response = await fetch(`${this.state.BASE_URL}/api/login`, {
         headers: {
           Accept: 'application/json',
@@ -94,7 +95,6 @@ export class DataProvider extends Component {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        this.setIsLoading(false);
         await AsyncStorage.setItem('@storage_Key', result.results.token);
         await this.setToken();
         this.setState({user: result.results.info});
@@ -105,7 +105,7 @@ export class DataProvider extends Component {
       console.error(error);
     } finally {
       setTimeout(() => {
-        this.setIsLoading(true);
+        this.setIsLoading(false);
       }, 1500);
     }
   };
@@ -123,6 +123,7 @@ export class DataProvider extends Component {
     activity_level,
   ) => {
     try {
+      this.setIsLoading(true);
       const response = await fetch(`${this.state.BASE_URL}/api/register`, {
         headers: {
           Accept: 'application/json',
@@ -144,16 +145,22 @@ export class DataProvider extends Component {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        alert('Register Successfully');
+        this.setState({register_data: {}});
+        await AsyncStorage.setItem('@storage_Key', result.results.token);
+        this.setState({user: result.results.info});
+        return true;
       } else {
-        alert('Fail Register');
         console.log(result);
+        setTimeout(() => {
+          alert('Fail Register');
+        }, 1500);
+        return false;
       }
     } catch (error) {
       console.error(error);
     } finally {
       setTimeout(() => {
-        this.setIsLoading(true);
+        this.setIsLoading(false);
       }, 1500);
     }
   };
@@ -170,9 +177,8 @@ export class DataProvider extends Component {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        this.setIsLoading(false);
         await AsyncStorage.removeItem('@storage_Key');
-        await this.removeToken();
+        this.removeToken();
         this.setState({user: {}});
         this.setState({diary_today: {}});
       } else {
@@ -180,10 +186,6 @@ export class DataProvider extends Component {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.setIsLoading(true);
-      }, 1500);
     }
   };
 
@@ -262,6 +264,7 @@ export class DataProvider extends Component {
       getDiary,
       setIsLoading,
       setRegisterData,
+      setToken,
     } = this;
     return (
       <DataContext.Provider
@@ -281,6 +284,7 @@ export class DataProvider extends Component {
           login,
           register,
           logout,
+          setToken,
         }}>
         {this.props.children}
       </DataContext.Provider>

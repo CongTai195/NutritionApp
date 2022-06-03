@@ -23,6 +23,7 @@ const HeightWeightRegister = props => {
   const [weight, setWeight] = useState(
     context.register_data?.starting_weight || '',
   );
+  const [BMI, setBMI] = useState(0);
   const [goalWeight, setGoalWeight] = useState(
     context.register_data?.goal_weight || '',
   );
@@ -54,7 +55,7 @@ const HeightWeightRegister = props => {
             ]}>
             <TextInput
               maxLength={3}
-              placeholder="Your height"
+              placeholder="cm"
               placeholderTextColor="#c4c4c4"
               style={[
                 styles.textTextInput,
@@ -67,15 +68,6 @@ const HeightWeightRegister = props => {
               }}
               value={height.toString()}
             />
-            {height === '' ? null : (
-              <View
-                style={{
-                  position: 'absolute',
-                  left: width / 2,
-                }}>
-                <Text style={styles.text}>cm</Text>
-              </View>
-            )}
           </View>
         </View>
         <View
@@ -95,7 +87,7 @@ const HeightWeightRegister = props => {
             ]}>
             <TextInput
               maxLength={3}
-              placeholder="Your weight"
+              placeholder="kg"
               placeholderTextColor="#c4c4c4"
               style={[
                 styles.textTextInput,
@@ -110,18 +102,24 @@ const HeightWeightRegister = props => {
                 });
               }}
               value={weight.toString()}
+              onBlur={() =>
+                setBMI(
+                  Math.round(
+                    (weight / (((height / 100) * height) / 100)) * 10,
+                  ) / 10,
+                )
+              }
+              onSubmitEditing={() =>
+                setBMI(
+                  Math.round(
+                    (weight / (((height / 100) * height) / 100)) * 10,
+                  ) / 10,
+                )
+              }
             />
-            {weight === '' ? null : (
-              <View
-                style={{
-                  position: 'absolute',
-                  left: width / 2,
-                }}>
-                <Text style={styles.text}>kg</Text>
-              </View>
-            )}
           </View>
         </View>
+
         <View
           style={{
             marginTop: 20,
@@ -130,14 +128,46 @@ const HeightWeightRegister = props => {
             alignItems: 'center',
             marginHorizontal: 30,
           }}>
-          <Text style={styles.textDescription}>
-            It's ok to estimate, you can update this later.
-          </Text>
+          {BMI !== 0 ? null : (
+            <>
+              <Text style={styles.textDescription}>
+                It's ok to estimate, you can update this later.
+              </Text>
+            </>
+          )}
+          {BMI === 0 ? null : BMI > 15 && BMI < 50 ? (
+            <View>
+              <Text style={styles.textDescriptionBMI}>Your BMI score is:</Text>
+              <Text style={styles.textBMI}>{BMI}</Text>
+              <Text style={styles.textDescriptionBMI}>
+                {BMI < 18.5
+                  ? 'You are classified as underweight.'
+                  : BMI < 25
+                  ? 'You are classified as normal weight.'
+                  : BMI < 30
+                  ? 'You are classified as Overweight.'
+                  : 'You are classified as obese.'}
+              </Text>
+              <Text style={styles.textDescriptionBMI}>
+                {BMI < 18.5
+                  ? '18.5 > BMI'
+                  : BMI < 25
+                  ? '25 > BMI > 18.5'
+                  : BMI < 30
+                  ? '30 > BMI > 25'
+                  : 'BMI > 30'}
+              </Text>
+            </View>
+          ) : (
+            <View>
+              <Text style={styles.textWarning}>Is your weight correct?</Text>
+            </View>
+          )}
         </View>
         <View
           style={{
-            marginTop: 20,
-            marginVertical: 10,
+            marginTop: BMI !== 0 ? 0 : 20,
+            marginBottom: 10,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -151,7 +181,7 @@ const HeightWeightRegister = props => {
             ]}>
             <TextInput
               maxLength={3}
-              placeholder="Your weight"
+              placeholder="kg"
               placeholderTextColor="#c4c4c4"
               style={[
                 styles.textTextInput,
@@ -164,15 +194,6 @@ const HeightWeightRegister = props => {
               }}
               value={goalWeight.toString()}
             />
-            {goalWeight === '' ? null : (
-              <View
-                style={{
-                  position: 'absolute',
-                  left: width / 2,
-                }}>
-                <Text style={styles.text}>kg</Text>
-              </View>
-            )}
           </View>
         </View>
         <View

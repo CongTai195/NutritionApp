@@ -22,7 +22,7 @@ const ProfileScreen = () => {
   const progressNumber = 5;
   const height = user.height;
   const sex = user.gender === 1 ? 'Male' : 'Female';
-  const dob = '22 Mar 2000';
+  const age = user.age;
   const location = 'Vietnam';
   const email = user.email;
 

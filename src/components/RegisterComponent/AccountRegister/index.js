@@ -81,8 +81,14 @@ const AccountRegister = () => {
         return {...prev, confirmPassword: 'Your password is not matched'};
       });
     }
-    if (data.email && data.password && data.yourName && data.confirmPassword) {
-      context.register(
+    if (
+      data.email &&
+      data.password &&
+      data.yourName &&
+      data.confirmPassword &&
+      data.confirmPassword === data.password
+    ) {
+      const result = context.register(
         data.yourName,
         data.email,
         data.password,
@@ -94,6 +100,9 @@ const AccountRegister = () => {
         context.register_data?.weekly_goal,
         context.register_data?.activity_level,
       );
+      if (result) {
+        navigation.replace('SuccessfulRegister');
+      }
     }
   };
 
@@ -226,7 +235,11 @@ const AccountRegister = () => {
         </View>
       </View>
       <View style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-        <Button onPress={onPress} text={'SIGN UP'} />
+        <Button
+          isLoading={context.isLoading}
+          onPress={onPress}
+          text={'SIGN UP'}
+        />
       </View>
     </KeyboardAvoidingView>
   );

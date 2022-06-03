@@ -26,6 +26,20 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
     textAlign: 'center',
   },
+  textWarning: {
+    fontWeight: '900',
+    fontSize: 15,
+    color: colors.RED,
+    fontFamily: font.DEFAULT_FONT,
+    textAlign: 'center',
+  },
+  textDescriptionBMI: {
+    fontWeight: '900',
+    fontSize: 15,
+    color: '#FFF',
+    fontFamily: font.DEFAULT_FONT,
+    textAlign: 'center',
+  },
   selection: {
     flex: 1,
     alignItems: 'center',
@@ -48,7 +62,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   textTextInput: {
-    width: 200,
+    width: 100,
     color: '#fff',
     fontFamily: font.DEFAULT_FONT,
     fontSize: 18,
@@ -61,6 +75,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.PURE_WHITE,
     fontFamily: font.DEFAULT_FONT,
+  },
+  textBMI: {
+    fontWeight: '900',
+    fontSize: 30,
+    color: colors.GREEN_SELECTED,
+    fontFamily: font.DEFAULT_FONT,
+    textAlign: 'center',
   },
 });
 

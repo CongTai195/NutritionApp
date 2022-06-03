@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
 import colors from '../../assets/colors/colors';
 import styles from './style';
 const Button = props => {
@@ -10,12 +10,20 @@ const Button = props => {
   };
   return (
     <View style={[styles.buttonPart]}>
-      <TouchableOpacity
-        disabled={props.disable}
-        style={[styles.button, {backgroundColor: getDisable()}]}
-        onPress={() => props.onPress()}>
-        <Text style={styles.textButton}>{props.text}</Text>
-      </TouchableOpacity>
+      {!props.isLoading ? (
+        <TouchableOpacity
+          disabled={props.disable}
+          style={[styles.button, {backgroundColor: getDisable()}]}
+          onPress={() => props.onPress()}>
+          <Text style={styles.textButton}>{props.text}</Text>
+        </TouchableOpacity>
+      ) : (
+        <ActivityIndicator
+          size={'large'}
+          color={colors.PURE_WHITE}
+          style={[styles.button, {backgroundColor: colors.BLUE}]}
+        />
+      )}
     </View>
   );
 };

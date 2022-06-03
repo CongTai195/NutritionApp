@@ -211,7 +211,7 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
     );
   };
   const renderItem = (data, rowMap) => {
-    return <VisibleItem data={data} />;
+    return <VisibleItem key={rowMap} data={data} />;
   };
 
   const renderHiddenItem = (data, rowMap) => {

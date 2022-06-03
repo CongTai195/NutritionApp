@@ -184,14 +184,12 @@ const DetailExerciseScreen = () => {
                 </Text>
               </View>
               {/* <View style={{}}> */}
-              {benefits?.split('; ').map(benefit => (
-                <>
-                  <View style={styles.childBenefit}>
-                    <Text style={[styles.labelText, {marginBottom: 10}]}>
-                      {'  '}- {benefit}.
-                    </Text>
-                  </View>
-                </>
+              {benefits?.split('; ').map((benefit, index) => (
+                <View key={index} style={styles.childBenefit}>
+                  <Text style={[styles.labelText, {marginBottom: 10}]}>
+                    {'  '}- {benefit}.
+                  </Text>
+                </View>
               ))}
               {/* </View> */}
               {/* </TouchableOpacity> */}
