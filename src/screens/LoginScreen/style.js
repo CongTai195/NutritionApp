@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import colors from '../../assets/colors/colors';
+import font from '../../assets/fonts/font';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,12 +41,14 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
     marginHorizontal: 10,
     fontWeight: '600',
+    fontFamily: font.DEFAULT_FONT,
   },
   textSignup: {
     fontSize: 16,
-    color: colors.BLUE,
+    color: colors.PURE_WHITE,
     marginHorizontal: 10,
-    fontWeight: '600',
+    fontWeight: '900',
+    fontFamily: font.DEFAULT_FONT,
   },
   button: {
     justifyContent: 'center',

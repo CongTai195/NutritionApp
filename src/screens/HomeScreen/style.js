@@ -13,9 +13,6 @@ const styles = StyleSheet.create({
     // justifyContent: 'flex-start',
     // alignItems: 'center',
   },
-  iconNotification: {
-    marginLeft: 10,
-  },
   counter: {
     backgroundColor: colors.PURE_WHITE,
     height: '20%',

@@ -42,6 +42,7 @@ const Carousel = ({
       <View style={styles.dots}>
         {data?.map((item, index) => (
           <View
+            key={item.id}
             style={[
               styles.dot,
               {

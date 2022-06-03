@@ -23,6 +23,7 @@ import {DataContext} from '../../context/Context';
 
 const DiaryScreen = () => {
   const context = useContext(DataContext);
+  const user = context.user;
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,6 +38,7 @@ const DiaryScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const diary = context.diary;
+  const calories = user.calories;
   //const food = context.food_diary;
   const food = diary?.food;
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
@@ -132,7 +134,7 @@ const DiaryScreen = () => {
         ) : Object.values(diary).length > 0 ? (
           <>
             <CaloriesRemaining
-              goal={3000}
+              goal={calories}
               food={calories_in}
               exercise={calories_out}
               onPress={() => {

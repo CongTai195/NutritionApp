@@ -59,6 +59,7 @@ const LoginScreen = () => {
       });
     }
   };
+
   const onPress = () => {
     if (!data.username) {
       setError(prev => {

@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     //height: 50,
+    borderRadius: 5,
     padding: 1,
     borderColor: colors.PURE_WHITE,
-    borderWidth: 0.5,
+    borderWidth: 1,
     marginTop: 10,
   },
   textTextInput: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
     fontSize: 18,
     textAlign: 'center',
-    fontWeight: '900',
+    //fontWeight: '900',
   },
   textSelection: {
     textAlign: 'center',

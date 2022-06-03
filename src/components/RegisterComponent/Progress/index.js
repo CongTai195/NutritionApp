@@ -17,15 +17,14 @@ const Progress = props => {
         flexDirection: 'row',
       }}>
       {props.progress.map((item, index) => (
-        <>
-          <View
-            key={index}
-            style={{
-              flex: 1,
-              marginHorizontal: 3,
-              backgroundColor: item,
-            }}></View>
-        </>
+        <View
+          key={index}
+          style={{
+            flex: 1,
+            borderRadius: 5,
+            marginHorizontal: 3,
+            backgroundColor: item,
+          }}></View>
       ))}
     </View>
   );

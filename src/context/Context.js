@@ -12,6 +12,7 @@ export class DataProvider extends Component {
       user: [],
       diary: [],
       food: [],
+      register_data: {},
 
       today: `${moment().toDate().getDate()}/${
         moment().toDate().getMonth() + 1
@@ -21,14 +22,30 @@ export class DataProvider extends Component {
       isLoading: false,
 
       BASE_URL: 'http://10.0.2.2:8000',
+      token: null,
     };
   }
+
+  setToken = async () => {
+    this.setState({token: await AsyncStorage.getItem('@storage_Key')});
+  };
+
+  removeToken = () => {
+    this.setState({token: null});
+  };
+
+  setRegisterData = ({name, value}) => {
+    this.setState({
+      register_data: {...this.state.register_data, [name]: value},
+    });
+  };
 
   async componentDidMount() {
     if (await AsyncStorage.getItem('@storage_Key')) {
       if (this.state.user.length === 0) {
         this.getUser();
       }
+      this.setToken();
     }
   }
 
@@ -79,6 +96,7 @@ export class DataProvider extends Component {
       if (result.status === 'OK') {
         this.setIsLoading(false);
         await AsyncStorage.setItem('@storage_Key', result.results.token);
+        await this.setToken();
         this.setState({user: result.results.info});
       } else {
         alert('Invalid username or password');
@@ -92,7 +110,18 @@ export class DataProvider extends Component {
     }
   };
 
-  register = async (name, email, password) => {
+  register = async (
+    name,
+    email,
+    password,
+    gender,
+    age,
+    height,
+    starting_weight,
+    goal_weight,
+    weekly_goal,
+    activity_level,
+  ) => {
     try {
       const response = await fetch(`${this.state.BASE_URL}/api/register`, {
         headers: {
@@ -104,6 +133,13 @@ export class DataProvider extends Component {
           name: name,
           email: email,
           password: password,
+          gender: gender,
+          age: age,
+          height: height,
+          starting_weight: starting_weight,
+          goal_weight: goal_weight,
+          weekly_goal: weekly_goal,
+          activity_level: activity_level,
         }),
       });
       const result = await response.json();
@@ -111,6 +147,7 @@ export class DataProvider extends Component {
         alert('Register Successfully');
       } else {
         alert('Fail Register');
+        console.log(result);
       }
     } catch (error) {
       console.error(error);
@@ -135,6 +172,7 @@ export class DataProvider extends Component {
       if (result.status === 'OK') {
         this.setIsLoading(false);
         await AsyncStorage.removeItem('@storage_Key');
+        await this.removeToken();
         this.setState({user: {}});
         this.setState({diary_today: {}});
       } else {
@@ -205,37 +243,25 @@ export class DataProvider extends Component {
     }
   };
 
-  searchFood = async searchValue => {
-    {
-      //this.setState({food: {}});
-      try {
-        const response = await fetch(`${BASE_URL}search?name=${searchValue}`, {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization:
-              `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
-          },
-        });
-        const result = await response.json();
-        console.log(result);
-        this.setState({food: result.results});
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
   render() {
-    const {user, diary, diary_today, food, BASE_URL, isLoading} = this.state;
+    const {
+      user,
+      register_data,
+      diary,
+      diary_today,
+      food,
+      BASE_URL,
+      token,
+      isLoading,
+    } = this.state;
     const {
       login,
       logout,
       register,
       addUser,
       getDiary,
-      searchFood,
       setIsLoading,
+      setRegisterData,
     } = this;
     return (
       <DataContext.Provider
@@ -246,8 +272,10 @@ export class DataProvider extends Component {
           isLoading,
           diary_today,
           BASE_URL,
+          register_data,
+          token,
+          setRegisterData,
           setIsLoading,
-          searchFood,
           getDiary,
           addUser,
           login,

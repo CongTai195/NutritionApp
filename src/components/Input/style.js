@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../assets/colors/colors';
+import font from '../../assets/fonts/font';
 
 const width = Dimensions.get('window').width;
 
@@ -15,15 +16,18 @@ const styles = StyleSheet.create({
     width: width - 50,
     height: 45,
     margin: 12,
-    borderWidth: 1.5,
+    //padding: 15,
+    borderWidth: 1,
     paddingHorizontal: 10,
-    borderColor: colors.BLUE,
-    borderRadius: 20,
+    //borderColor: colors.PURE_WHITE,
+    borderRadius: 5,
   },
   input: {
     flex: 1,
     color: colors.PURE_WHITE,
+    fontWeight: '500',
     fontSize: 16,
+    fontFamily: font.DEFAULT_FONT,
     height: 50,
     margin: 10,
   },
@@ -32,8 +36,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorText: {
-    fontSize: 16,
+    fontFamily: font.DEFAULT_FONT,
+    fontSize: 14,
     color: colors.RED,
+    fontWeight: '900',
   },
 });
 

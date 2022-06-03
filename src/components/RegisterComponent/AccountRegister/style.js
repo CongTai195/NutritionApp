@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import colors from '../../assets/colors/colors';
+import colors from '../../../assets/colors/colors';
+import font from '../../../assets/fonts/font';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,11 +44,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontWeight: '600',
   },
-  textLogin: {
+  text: {
+    fontWeight: '900',
     fontSize: 16,
-    color: colors.BLUE,
-    marginHorizontal: 10,
-    fontWeight: '600',
+    color: colors.PURE_WHITE,
+    fontFamily: font.DEFAULT_FONT,
   },
 });
 

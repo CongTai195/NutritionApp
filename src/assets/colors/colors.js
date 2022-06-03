@@ -9,7 +9,7 @@ export default {
   LIGHT_GREY: '#ededed',
   BLACK: '#000',
   PURPLE: '#644678',
-  YELLOW: '#d48302',
+  YELLOW: '#fda71d',
   GREEN: '#05f78e',
   BLUE: '#aceafc',
   BOTTOM_TAB: '#EDEDED',
@@ -20,4 +20,5 @@ export default {
   PINK: '#FCE4EC',
   RED_MEET: '#8c0101',
   BLUE: '#133ed8',
+  GREEN_SELECTED: '#57ff60',
 };

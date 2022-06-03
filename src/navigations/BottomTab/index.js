@@ -20,9 +20,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BottomTab = () => {
   const context = useContext(DataContext);
-  const user = context.user;
+  const token = context.token;
   const Tab = createBottomTabNavigator();
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
@@ -43,13 +43,13 @@ const BottomTab = () => {
     }
   };
 
-  const getKey = async () => {
-    setToken(await AsyncStorage.getItem('@storage_Key'));
-  };
+  // const getKey = async () => {
+  //   setToken(await AsyncStorage.getItem('@storage_Key'));
+  // };
 
-  useEffect(() => {
-    getKey();
-  });
+  // useEffect(() => {
+  //   getKey();
+  // });
 
   if (context.isLoading) {
     return (

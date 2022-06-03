@@ -37,6 +37,7 @@ const HomeScreen = () => {
   const context = useContext(DataContext);
   const user = context.user;
   const diary = context.diary_today;
+  const calories = user.calories;
   const food = diary.food;
   const exercise = diary.exercise;
   const navigation = useNavigation();
@@ -68,20 +69,6 @@ const HomeScreen = () => {
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
-      headerLeft: () => (
-        <View style={styles.iconNotification}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('LoginScreen');
-            }}>
-            <Ionicons
-              name="notifications"
-              size={25}
-              color={colors.PURE_WHITE}
-            />
-          </TouchableOpacity>
-        </View>
-      ),
     });
   }, [navigation]);
 
@@ -169,7 +156,7 @@ const HomeScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <Banner /> */}
         <CaloriesRemaining
-          goal={goal}
+          goal={calories}
           food={calories_in}
           exercise={calories_out}
           onPress={() => {
@@ -199,7 +186,7 @@ const HomeScreen = () => {
           renderItem={({item, index}) => (
             // <View key={index}>
             <Card
-              key={index}
+              key={item.id}
               name={item.name}
               mass={item.mass}
               status={item.status}

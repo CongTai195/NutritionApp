@@ -25,21 +25,52 @@ import FirstGoalRegister from '../../components/RegisterComponent/FirstGoalRegis
 import SecondGoalRegister from '../../components/RegisterComponent/SecondGoalRegister';
 import SexAgeRegister from '../../components/RegisterComponent/SexAgeRegister';
 import HeightWeightRegister from '../../components/RegisterComponent/HeightWeightRegister';
+import Progress from '../../components/RegisterComponent/Progress';
+import {useFocusEffect} from '@react-navigation/native';
+import WeeklyGoalRegister from '../../components/RegisterComponent/WeeklyGoalRegister';
+import AccountRegister from '../../components/RegisterComponent/AccountRegister';
 
 const SignupScreen = () => {
   const context = useContext(DataContext);
   const [index, setIndex] = useState(0);
   const navigation = useNavigation();
+  const progress = [
+    colors.GREEN_SELECTED,
+    colors.GREEN_SELECTED,
+    colors.GREEN_SELECTED,
+    colors.GREEN_SELECTED,
+    colors.GREEN_SELECTED,
+    colors.YELLOW,
+  ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: index === 0 ? 'Sign Up' : index === 1 ? 'Goal' : '',
+      headerTitle:
+        index === 0
+          ? 'Sign Up'
+          : index === 1 || index === 2 || index === 5
+          ? 'Goal'
+          : index === 3 || index === 4
+          ? 'You'
+          : 'Sign Up',
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BLUE},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
+      headerLeft: () => (
+        <View style={styles.iconNotification}>
+          <TouchableOpacity onPress={() => onPrev()}>
+            <Ionicons
+              name="arrow-back-outline"
+              size={25}
+              color={colors.PURE_WHITE}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
     });
-  }, [navigation]);
+  }, [navigation, index]);
+
   const [secureTextEntry, setSecurityTextEntry] = useState(true);
   const [data, setData] = useState({});
   const [initialPlaceholder, setInitialPlaceholder] = useState({
@@ -62,6 +93,7 @@ const SignupScreen = () => {
       });
     }
   };
+
   const onPress = () => {
     if (!data.yourName) {
       setError(prev => {
@@ -92,163 +124,85 @@ const SignupScreen = () => {
     setSecurityTextEntry(prev => !prev);
   };
 
-  const onNext = () => {
-    setIndex(prev => (prev += 1));
+  const onNext = props => {
+    if (!props.item || props.array?.length === 0) {
+      alert('Please make your choice!');
+    } else setIndex(prev => (prev += 1));
+  };
+
+  const onPrev = () => {
+    if (index === 0 || index === 1) {
+      navigation.goBack();
+    } else {
+      setIndex(prev => (prev -= 1));
+    }
   };
 
   return (
     <>
       {index === 0 ? (
         <>
-          <SplashRegister onPress={() => onNext()}></SplashRegister>
+          <SplashRegister onPress={() => onNext({item: true})}></SplashRegister>
         </>
       ) : index === 1 ? (
         <>
-          <FirstGoalRegister onPress={() => onNext()}></FirstGoalRegister>
+          <FirstGoalRegister
+            onPress={() =>
+              onNext({item: context.register_data?.goal})
+            }></FirstGoalRegister>
         </>
       ) : index === 2 ? (
         <>
-          <SecondGoalRegister onPress={() => onNext()}></SecondGoalRegister>
+          <SecondGoalRegister
+            onPress={() =>
+              onNext({item: context.register_data?.activity_level})
+            }></SecondGoalRegister>
         </>
       ) : index === 3 ? (
         <>
-          <SexAgeRegister onPress={() => onNext()}></SexAgeRegister>
+          <SexAgeRegister
+            onPress={() =>
+              onNext({
+                item: true,
+                array:
+                  context.register_data?.gender && context.register_data?.age
+                    ? [
+                        context.register_data?.gender,
+                        context.register_data?.age,
+                      ]
+                    : [],
+              })
+            }></SexAgeRegister>
         </>
       ) : index === 4 ? (
         <>
-          <HeightWeightRegister onPress={() => onNext()}></HeightWeightRegister>
+          <HeightWeightRegister
+            onPress={() =>
+              onNext({
+                item: true,
+                array:
+                  context.register_data?.height &&
+                  context.register_data?.starting_weight &&
+                  context.register_data?.goal_weight
+                    ? [
+                        context.register_data?.height,
+                        context.register_data?.starting_weight,
+                        context.register_data?.goal_weight,
+                      ]
+                    : [],
+              })
+            }></HeightWeightRegister>
+        </>
+      ) : index === 5 ? (
+        <>
+          <WeeklyGoalRegister
+            onPress={() =>
+              onNext({item: context.register_data?.weekly_goal})
+            }></WeeklyGoalRegister>
         </>
       ) : (
         <>
-          <KeyboardAvoidingView style={styles.container} behavior={'height'}>
-            <View style={styles.inner}>
-              <Heading name="Sign Up" />
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Input
-                  name="Your name"
-                  secureText={false}
-                  value={data.yourName}
-                  initialPlaceholder={initialPlaceholder.yourName}
-                  onFocus={() =>
-                    setInitialPlaceholder({...initialPlaceholder, yourName: ''})
-                  }
-                  onBlur={() =>
-                    setInitialPlaceholder({
-                      ...initialPlaceholder,
-                      yourName: 'Your Name',
-                    })
-                  }
-                  onChangeText={value => onChange({name: 'yourName', value})}
-                  error={error.yourName}
-                />
-                <Input
-                  name="Email"
-                  secureText={false}
-                  value={data.email}
-                  initialPlaceholder={initialPlaceholder.email}
-                  onFocus={() =>
-                    setInitialPlaceholder({...initialPlaceholder, email: ''})
-                  }
-                  onBlur={() =>
-                    setInitialPlaceholder({
-                      ...initialPlaceholder,
-                      email: 'Email',
-                    })
-                  }
-                  onChangeText={value => onChange({name: 'email', value})}
-                  error={error.email}
-                />
-                <Input
-                  name="Password"
-                  secureText={secureTextEntry}
-                  value={data.password}
-                  initialPlaceholder={initialPlaceholder.password}
-                  onFocus={() =>
-                    setInitialPlaceholder({...initialPlaceholder, password: ''})
-                  }
-                  onBlur={() =>
-                    setInitialPlaceholder({
-                      ...initialPlaceholder,
-                      password: 'Password',
-                    })
-                  }
-                  onChangeText={value => onChange({name: 'password', value})}
-                  pressable={
-                    <Pressable
-                      style={styles.hidePassword}
-                      onPress={() => changeSecureTextEntry()}>
-                      {secureTextEntry === false ? (
-                        <Ionicons
-                          name="eye-off-outline"
-                          size={24}
-                          color={colors.PURE_WHITE}
-                        />
-                      ) : (
-                        <Ionicons
-                          name="eye-outline"
-                          size={24}
-                          color={colors.PURE_WHITE}
-                        />
-                      )}
-                    </Pressable>
-                  }
-                  error={error.password}
-                />
-                <Input
-                  name="Confirm Password"
-                  secureText={secureTextEntry}
-                  value={data.confirmPassword}
-                  initialPlaceholder={initialPlaceholder.confirmPassword}
-                  onFocus={() =>
-                    setInitialPlaceholder({
-                      ...initialPlaceholder,
-                      confirmPassword: '',
-                    })
-                  }
-                  onBlur={() =>
-                    setInitialPlaceholder({
-                      ...initialPlaceholder,
-                      confirmPassword: 'Confirm Password',
-                    })
-                  }
-                  onChangeText={value =>
-                    onChange({name: 'confirmPassword', value})
-                  }
-                  pressable={
-                    <Pressable
-                      style={styles.hidePassword}
-                      onPress={() => changeSecureTextEntry()}>
-                      {secureTextEntry === false ? (
-                        <Ionicons
-                          name="eye-off-outline"
-                          size={24}
-                          color={colors.PURE_WHITE}
-                        />
-                      ) : (
-                        <Ionicons
-                          name="eye-outline"
-                          size={24}
-                          color={colors.PURE_WHITE}
-                        />
-                      )}
-                    </Pressable>
-                  }
-                  error={error.confirmPassword}
-                />
-              </View>
-              <Button onPress={onPress} text={'SIGN UP'} />
-              <View style={styles.toLogin}>
-                <Text style={styles.textToLogin}>Already have an account?</Text>
-                <Text
-                  style={styles.textLogin}
-                  onPress={() => {
-                    navigation.goBack();
-                  }}>
-                  Log In
-                </Text>
-              </View>
-            </View>
-          </KeyboardAvoidingView>
+          <AccountRegister></AccountRegister>
         </>
       )}
     </>

@@ -20,8 +20,8 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const name = user.name;
   const progressNumber = 5;
-  const height = 176;
-  const sex = 'Male';
+  const height = user.height;
+  const sex = user.gender === 1 ? 'Male' : 'Female';
   const dob = '22 Mar 2000';
   const location = 'Vietnam';
   const email = user.email;
@@ -137,20 +137,6 @@ const ProfileScreen = () => {
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Sex</Text>
             <Text style={[styles.textChild, {color: 'blue'}]}>{sex}</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.5}>
-          <View style={styles.child}>
-            <Text style={[styles.textChild, {flex: 1}]}>Date of Birth</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{dob}</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.5}>
-          <View style={styles.child}>
-            <Text style={[styles.textChild, {flex: 1}]}>Location</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{location}</Text>
           </View>
         </TouchableOpacity>
 
