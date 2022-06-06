@@ -127,7 +127,9 @@ const SignupScreen = () => {
   const onNext = props => {
     if (!props.item || props.array?.length === 0) {
       alert('Please make your choice!');
-    } else setIndex(prev => (prev += 1));
+    } else if (index === 4 && context.register_data?.goal === 'Maintain Weight')
+      setIndex(prev => (prev += 2));
+    else setIndex(prev => (prev += 1));
   };
 
   const onPrev = () => {

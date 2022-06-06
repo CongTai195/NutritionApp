@@ -37,6 +37,13 @@ const NutrientScreen = () => {
 
   const diary = context.diary;
   const food = diary?.food;
+  const calories = diary?.process.calories;
+  const total_fat = Math.round((calories * diary?.process?.fat) / 100 / 9);
+  const total_carbs = Math.round((calories * diary?.process?.carbs) / 100 / 4);
+  const total_protein = Math.round(
+    (calories * diary?.process?.protein) / 100 / 4,
+  );
+
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
   const lunch = food?.filter(e => e.meal === 'Lunch');
   const dinner = food?.filter(e => e.meal === 'Dinner');
@@ -73,20 +80,92 @@ const NutrientScreen = () => {
   const vitamin_A = getNutrient('vitamin_A');
   const vitamin_C = getNutrient('vitamin_C');
 
-  let nutrientArray = {
-    calories: calories_in,
-    carbs: carbs,
-    fat: fat,
-    protein: protein,
-    cholesterol: cholesterol,
-    sodium: sodium,
-    calcium: calcium,
-    iron: iron,
-    potassium: potassium,
-    vitamin_A: vitamin_A,
-    vitamin_C: vitamin_C,
-    vitamin_D: vitamin_D,
-  };
+  let array = [
+    {
+      id: 0,
+      name: 'Calories (cal)',
+      amount: calories_in,
+      goal: calories,
+      left: calories - calories_in,
+    },
+    {
+      id: 1,
+      name: 'Carbs (g)',
+      amount: carbs,
+      goal: total_carbs,
+      left: total_carbs - carbs,
+    },
+    {
+      id: 2,
+      name: 'Fat (g)',
+      amount: fat,
+      goal: total_fat,
+      left: total_fat - fat,
+    },
+    {
+      id: 3,
+      name: 'Protein (g)',
+      amount: protein,
+      goal: total_protein,
+      left: total_protein - protein,
+    },
+    {
+      id: 4,
+      name: 'Cholesterol (mg)',
+      amount: cholesterol,
+      goal: 10,
+      left: 0 - cholesterol,
+    },
+    {
+      id: 5,
+      name: 'Sodium (mg)',
+      amount: sodium,
+      goal: 10,
+      left: 0 - sodium,
+    },
+    {
+      id: 6,
+      name: 'Calcium (mg)',
+      amount: calcium,
+      goal: 10,
+      left: 0 - calcium,
+    },
+    {
+      id: 7,
+      name: 'Iron (mg)',
+      amount: iron,
+      goal: 10,
+      left: 0 - iron,
+    },
+    {
+      id: 8,
+      name: 'Potassium (mg)',
+      amount: potassium,
+      goal: 10,
+      left: 0 - potassium,
+    },
+    {
+      id: 9,
+      name: 'Vitamin A',
+      amount: vitamin_A,
+      goal: 10,
+      left: 0 - vitamin_A,
+    },
+    {
+      id: 10,
+      name: 'Vitamin C',
+      amount: vitamin_C,
+      goal: 10,
+      left: 0 - vitamin_C,
+    },
+    {
+      id: 11,
+      name: 'Vitamin D',
+      amount: vitamin_D,
+      goal: 10,
+      left: 0 - vitamin_D,
+    },
+  ];
 
   useFocusEffect(
     React.useCallback(() => {
@@ -174,80 +253,66 @@ const NutrientScreen = () => {
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.others}>
-                  {Object.keys(nutrientArray)?.map((item, index) =>
-                    item === 'id' ? null : item === 'serving_size' ? null : (
-                      <>
-                        <View key={index} style={styles.childOthers}>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text style={styles.labelText}>
-                              {capitalizeFirstLetter(item)}{' '}
-                              {item === 'calories'
-                                ? ' (cal)'
-                                : item === 'carbs' ||
-                                  item === 'protein' ||
-                                  item === 'fat'
-                                ? ' (g)'
-                                : ' (mg)'}{' '}
+                  {array.map((item, index) => (
+                    <>
+                      <View style={styles.childOthers}>
+                        <View
+                          style={{
+                            flex: 1,
+                          }}>
+                          <Text style={styles.labelText}>{item.name}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 1.3,
+                            flexDirection: 'row',
+                          }}>
+                          <View style={styles.header}>
+                            <Text style={styles.amountText}>
+                              {Math.round(item.amount * 10) / 10}{' '}
                             </Text>
                           </View>
-                          <View
-                            style={{
-                              flex: 1.3,
-                              flexDirection: 'row',
-                            }}>
-                            <View style={styles.header}>
-                              <Text style={styles.amountText}>
-                                {Math.round(nutrientArray[item] * 10) / 10}{' '}
-                              </Text>
-                            </View>
-                            <View style={styles.header}>
-                              <Text style={styles.labelText}>134</Text>
-                            </View>
-                            <View style={styles.header}>
-                              {134 >
-                              Math.round(nutrientArray[item] * 10) / 10 ? (
-                                <>
-                                  <Text style={styles.labelText}>
-                                    {134 -
-                                      Math.round(nutrientArray[item] * 10) /
-                                        10}{' '}
-                                  </Text>
-                                </>
-                              ) : (
-                                <>
-                                  <Text style={styles.enoughText}>ENOUGH</Text>
-                                </>
-                              )}
-                            </View>
+                          <View style={styles.header}>
+                            <Text style={styles.labelText}>{item.goal}</Text>
+                          </View>
+                          <View style={styles.header}>
+                            {item.left > 0 ? (
+                              <>
+                                <Text style={styles.labelText}>
+                                  {item.left}
+                                </Text>
+                              </>
+                            ) : (
+                              <>
+                                <Text style={styles.enoughText}>ENOUGH</Text>
+                              </>
+                            )}
                           </View>
                         </View>
-                        <View style={styles.progressBar}>
-                          <Progress.Bar
-                            borderColor={colors.GREY}
-                            color={
-                              item === 'calories'
-                                ? colors.GREEN
-                                : item === 'protein'
-                                ? colors.RED_MEET
-                                : item === 'carbs'
-                                ? colors.ORANGE
-                                : item === 'fat'
-                                ? '#644678'
-                                : colors.BACK_GROUND_COLOR
-                            }
-                            progress={
-                              Math.round(nutrientArray[item] * 10) / 10 / 134
-                            }
-                            height={3}
-                            width={null}
-                          />
-                        </View>
-                      </>
-                    ),
-                  )}
+                      </View>
+                      <View style={styles.progressBar}>
+                        <Progress.Bar
+                          borderColor={colors.GREY}
+                          color={
+                            item.id === 0
+                              ? colors.GREEN
+                              : item.id === 3
+                              ? colors.RED_MEET
+                              : item.id === 1
+                              ? colors.ORANGE
+                              : item.id === 2
+                              ? '#644678'
+                              : colors.BACK_GROUND_COLOR
+                          }
+                          progress={
+                            Math.round(item.amount * 10) / 10 / item.goal
+                          }
+                          height={3}
+                          width={null}
+                        />
+                      </View>
+                    </>
+                  ))}
                 </View>
               </ScrollView>
             </SafeAreaView>

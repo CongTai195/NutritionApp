@@ -58,17 +58,17 @@ const AccountRegister = () => {
         </View>
         <View style={{marginVertical: 10}}>
           <Text style={styles.textDescription}>Your BMR score is:</Text>
-          <Text style={styles.textCalories}>{user?.BMR}</Text>
+          <Text style={styles.textCalories}>{user?.process.BMR}</Text>
         </View>
         <View style={{marginVertical: 10}}>
           <Text style={styles.textDescription}>Your TDEE score is:</Text>
-          <Text style={styles.textCalories}>{user?.TDEE}</Text>
+          <Text style={styles.textCalories}>{user?.process.TDEE}</Text>
         </View>
         <View style={{marginVertical: 10}}>
           <Text style={styles.textDescription}>
             Your daily net calorie goal is:
           </Text>
-          <Text style={styles.textCalories}>{user?.calories}</Text>
+          <Text style={styles.textCalories}>{user?.process.calories}</Text>
         </View>
       </View>
       <View style={styles.button}>

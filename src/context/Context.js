@@ -34,10 +34,13 @@ export class DataProvider extends Component {
     this.setState({token: null});
   };
 
-  setRegisterData = ({name, value}) => {
-    this.setState({
-      register_data: {...this.state.register_data, [name]: value},
-    });
+  setRegisterData = ({name, value}, callback) => {
+    this.setState(
+      {
+        register_data: {...this.state.register_data, [name]: value},
+      },
+      callback,
+    );
   };
 
   async componentDidMount() {
@@ -229,6 +232,7 @@ export class DataProvider extends Component {
         method: 'POST',
         body: JSON.stringify({
           date: date,
+          is_enough: 0,
         }),
       });
       const result = await response.json();

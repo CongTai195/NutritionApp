@@ -55,7 +55,7 @@ const AccountRegister = () => {
       });
     }
   };
-  const onPress = () => {
+  const onPress = async () => {
     if (!data.yourName) {
       setError(prev => {
         return {...prev, yourName: 'Please input your name'};
@@ -88,7 +88,7 @@ const AccountRegister = () => {
       data.confirmPassword &&
       data.confirmPassword === data.password
     ) {
-      const result = context.register(
+      const result = await context.register(
         data.yourName,
         data.email,
         data.password,

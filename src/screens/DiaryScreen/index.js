@@ -38,7 +38,7 @@ const DiaryScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const diary = context.diary;
-  const calories = user.calories;
+  const calories = diary?.process?.calories;
   //const food = context.food_diary;
   const food = diary?.food;
   const breakfast = food?.filter(e => e.meal === 'Breakfast');

@@ -95,11 +95,28 @@ const HeightWeightRegister = props => {
               ]}
               keyboardType={'numeric'}
               onChangeText={value => {
-                setWeight(value);
-                context.setRegisterData({
-                  name: 'starting_weight',
-                  value: value,
-                });
+                if (context.register_data?.goal === 'Maintain Weight') {
+                  context.setRegisterData(
+                    {
+                      name: 'starting_weight',
+                      value: value,
+                    },
+                    () => {
+                      context.setRegisterData({
+                        name: 'goal_weight',
+                        value: value,
+                      });
+                    },
+                  );
+                  setWeight(value);
+                  setGoalWeight(value);
+                } else {
+                  context.setRegisterData({
+                    name: 'starting_weight',
+                    value: value,
+                  });
+                  setWeight(value);
+                }
               }}
               value={weight.toString()}
               onBlur={() =>
@@ -164,51 +181,58 @@ const HeightWeightRegister = props => {
             </View>
           )}
         </View>
-        <View
-          style={{
-            marginTop: BMI !== 0 ? 0 : 20,
-            marginBottom: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text style={styles.text}>What's your goal weight?</Text>
-        </View>
-        <View style={{width: width, flexDirection: 'row'}}>
-          <View
-            style={[
-              styles.textInput,
-              {marginHorizontal: 15, flexDirection: 'row'},
-            ]}>
-            <TextInput
-              maxLength={3}
-              placeholder="kg"
-              placeholderTextColor="#c4c4c4"
-              style={[
-                styles.textTextInput,
-                {fontWeight: goalWeight === '' ? '500' : '900'},
-              ]}
-              keyboardType={'numeric'}
-              onChangeText={value => {
-                setGoalWeight(value);
-                context.setRegisterData({name: 'goal_weight', value: value});
-              }}
-              value={goalWeight.toString()}
-            />
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: 20,
-            marginVertical: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginHorizontal: 10,
-          }}>
-          <Text style={styles.textDescription}>
-            Don't worry, this doesn't affect your daily calorie goal and you can
-            always change it later.
-          </Text>
-        </View>
+        {context.register_data?.goal === 'Maintain Weight' ? null : (
+          <>
+            <View
+              style={{
+                marginTop: BMI !== 0 ? 0 : 20,
+                marginBottom: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.text}>What's your goal weight?</Text>
+            </View>
+            <View style={{width: width, flexDirection: 'row'}}>
+              <View
+                style={[
+                  styles.textInput,
+                  {marginHorizontal: 15, flexDirection: 'row'},
+                ]}>
+                <TextInput
+                  maxLength={3}
+                  placeholder="kg"
+                  placeholderTextColor="#c4c4c4"
+                  style={[
+                    styles.textTextInput,
+                    {fontWeight: goalWeight === '' ? '500' : '900'},
+                  ]}
+                  keyboardType={'numeric'}
+                  onChangeText={value => {
+                    setGoalWeight(value);
+                    context.setRegisterData({
+                      name: 'goal_weight',
+                      value: value,
+                    });
+                  }}
+                  value={goalWeight.toString()}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 20,
+                marginVertical: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 10,
+              }}>
+              <Text style={styles.textDescription}>
+                Don't worry, this doesn't affect your daily calorie goal and you
+                can always change it later.
+              </Text>
+            </View>
+          </>
+        )}
       </View>
       <View style={styles.button}>
         <Button

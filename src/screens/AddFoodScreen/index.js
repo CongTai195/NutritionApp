@@ -121,6 +121,7 @@ const AddFoodScreen = () => {
         // return () => clearTimeout(time);
       } else {
         alert('Error adding food');
+        console.log(result);
       }
     } catch (error) {
       console.error(error);

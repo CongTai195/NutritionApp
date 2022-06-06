@@ -26,8 +26,21 @@ const FirstGoalRegister = props => {
     else return '#FFF';
   };
   const onPress = item => {
-    context.setRegisterData({name: 'goal', value: item});
-    setSelection(item);
+    if (item === 'Maintain Weight') {
+      context.setRegisterData(
+        {
+          name: 'weekly_goal',
+          value: 'Maintain Weight',
+        },
+        () => {
+          context.setRegisterData({name: 'goal', value: item});
+        },
+      );
+      setSelection(item);
+    } else {
+      context.setRegisterData({name: 'goal', value: item});
+      setSelection(item);
+    }
   };
 
   const array = [

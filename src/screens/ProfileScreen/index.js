@@ -20,10 +20,9 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const name = user.name;
   const progressNumber = 5;
-  const height = user.height;
+  const height = user?.process.height;
   const sex = user.gender === 1 ? 'Male' : 'Female';
   const age = user.age;
-  const location = 'Vietnam';
   const email = user.email;
 
   useLayoutEffect(() => {
@@ -123,6 +122,13 @@ const ProfileScreen = () => {
               }}
               source={require('../../assets/images/defaultAvatar.png')}
             />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity activeOpacity={0.5}>
+          <View style={styles.child}>
+            <Text style={[styles.textChild, {flex: 1}]}>Age</Text>
+            <Text style={[styles.textChild, {color: 'blue'}]}>{age} cm</Text>
           </View>
         </TouchableOpacity>
 

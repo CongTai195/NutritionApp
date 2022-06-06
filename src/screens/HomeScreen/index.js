@@ -37,7 +37,12 @@ const HomeScreen = () => {
   const context = useContext(DataContext);
   const user = context.user;
   const diary = context.diary_today;
-  const calories = user.calories;
+  const calories = diary?.process?.calories;
+  const total_fat = Math.round((calories * diary?.process?.fat) / 100 / 9);
+  const total_carbs = Math.round((calories * diary?.process?.carbs) / 100 / 4);
+  const total_protein = Math.round(
+    (calories * diary?.process?.protein) / 100 / 4,
+  );
   const food = diary.food;
   const exercise = diary.exercise;
   const navigation = useNavigation();
@@ -107,7 +112,7 @@ const HomeScreen = () => {
     {
       id: 1,
       name: 'Carbs',
-      mass: 100,
+      mass: total_carbs,
       status: carbs,
       image: carbs_image,
       lightColor: '#f8e4d9',
@@ -117,7 +122,7 @@ const HomeScreen = () => {
     {
       id: 2,
       name: 'Fat',
-      mass: 100,
+      mass: total_fat,
       status: fat,
       image: fat_image,
       lightColor: '#f8e4d9',
@@ -127,7 +132,7 @@ const HomeScreen = () => {
     {
       id: 3,
       name: 'Protein',
-      mass: 100,
+      mass: total_protein,
       status: protein,
       image: meat,
       lightColor: '#f8e4d9',

@@ -183,52 +183,47 @@ const DetailFoodScreen = () => {
                   protein={food.fromProtein}
                 />
               </View>
-              {Object.keys(food)?.map(item =>
+              {Object.keys(food)?.map((item, index) =>
                 item === 'fromCarbs' ||
                 item === 'fromFat' ||
                 item === 'fromProtein' ? (
-                  <>
-                    <View style={styles.nutritionDetail}>
-                      <Text
-                        style={[{fontSize: 14}, styles.textNutritionDetail]}>
-                        {food[item]}%
-                      </Text>
-                      <Text
-                        style={[
-                          {fontSize: 16, color: 'black'},
-                          styles.textNutritionDetail,
-                        ]}>
-                        {item === 'fromCarbs'
-                          ? Math.round(nutrition_facts.carbs * quantity * 10) /
-                            10
-                          : item === 'fromFat'
-                          ? Math.round(nutrition_facts.fat * quantity * 10) / 10
-                          : Math.round(
-                              nutrition_facts.protein * quantity * 10,
-                            ) / 10}
-                        g
-                      </Text>
-                      <Text
-                        style={[
-                          {
-                            fontSize: 14,
-                            color:
-                              item === 'fromCarbs'
-                                ? colors.YELLOW
-                                : item === 'fromFat'
-                                ? colors.PURPLE
-                                : colors.RED_MEET,
-                          },
-                          styles.textNutritionDetail,
-                        ]}>
-                        {item === 'fromCarbs'
-                          ? 'Carbs'
-                          : item === 'fromFat'
-                          ? 'Fat'
-                          : 'Protein'}
-                      </Text>
-                    </View>
-                  </>
+                  <View key={index} style={styles.nutritionDetail}>
+                    <Text style={[{fontSize: 14}, styles.textNutritionDetail]}>
+                      {food[item]}%
+                    </Text>
+                    <Text
+                      style={[
+                        {fontSize: 16, color: 'black'},
+                        styles.textNutritionDetail,
+                      ]}>
+                      {item === 'fromCarbs'
+                        ? Math.round(nutrition_facts.carbs * quantity * 10) / 10
+                        : item === 'fromFat'
+                        ? Math.round(nutrition_facts.fat * quantity * 10) / 10
+                        : Math.round(nutrition_facts.protein * quantity * 10) /
+                          10}
+                      g
+                    </Text>
+                    <Text
+                      style={[
+                        {
+                          fontSize: 14,
+                          color:
+                            item === 'fromCarbs'
+                              ? colors.YELLOW
+                              : item === 'fromFat'
+                              ? colors.PURPLE
+                              : colors.RED_MEET,
+                        },
+                        styles.textNutritionDetail,
+                      ]}>
+                      {item === 'fromCarbs'
+                        ? 'Carbs'
+                        : item === 'fromFat'
+                        ? 'Fat'
+                        : 'Protein'}
+                    </Text>
+                  </View>
                 ) : null,
               )}
             </View>
@@ -267,78 +262,76 @@ const DetailFoodScreen = () => {
               <View style={styles.percent}>
                 <Text style={styles.labelText}>Percent of Daily Goals</Text>
                 <View style={{flexDirection: 'row'}}>
-                  {Object.keys(nutrition_facts)?.map(item =>
+                  {Object.keys(nutrition_facts)?.map((item, index) =>
                     item === 'calories' ||
                     item === 'carbs' ||
                     item === 'protein' ||
                     item === 'fat' ? (
-                      <>
-                        <View style={styles.progressBar}>
-                          <Progress.Bar
-                            borderColor={colors.GREY}
-                            color={
-                              item === 'calories'
-                                ? colors.GREEN
-                                : item === 'protein'
-                                ? colors.RED_MEET
-                                : item === 'carbs'
-                                ? colors.ORANGE
-                                : item === 'fat'
-                                ? '#644678'
-                                : colors.BACK_GROUND_COLOR
-                            }
-                            progress={
-                              (nutrition_facts[item] * quantity) /
-                              (item === 'calories'
-                                ? daily_calories
-                                : item === 'protein'
-                                ? daily_protein
-                                : item === 'carbs'
-                                ? daily_carbs
-                                : daily_fat)
-                            }
-                            width={null}
-                          />
-                          <View
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              marginTop: 5,
-                            }}>
-                            <Text
-                              style={[
-                                {fontSize: 14},
-                                styles.textNutritionDetail,
-                              ]}>
-                              {Math.round(
-                                ((nutrition_facts[item] * quantity) /
-                                  (item === 'calories'
-                                    ? daily_calories
-                                    : item === 'protein'
-                                    ? daily_protein
-                                    : item === 'carbs'
-                                    ? daily_carbs
-                                    : daily_fat)) *
-                                  100,
-                              )}
-                              %
-                            </Text>
-                            <Text
-                              style={[
-                                {fontSize: 14},
-                                styles.textNutritionDetail,
-                              ]}>
-                              {item === 'calories'
-                                ? 'Calories'
-                                : item === 'protein'
-                                ? 'Protein'
-                                : item === 'carbs'
-                                ? 'Carbs'
-                                : 'Fat'}
-                            </Text>
-                          </View>
+                      <View key={index} style={styles.progressBar}>
+                        <Progress.Bar
+                          borderColor={colors.GREY}
+                          color={
+                            item === 'calories'
+                              ? colors.GREEN
+                              : item === 'protein'
+                              ? colors.RED_MEET
+                              : item === 'carbs'
+                              ? colors.ORANGE
+                              : item === 'fat'
+                              ? '#644678'
+                              : colors.BACK_GROUND_COLOR
+                          }
+                          progress={
+                            (nutrition_facts[item] * quantity) /
+                            (item === 'calories'
+                              ? daily_calories
+                              : item === 'protein'
+                              ? daily_protein
+                              : item === 'carbs'
+                              ? daily_carbs
+                              : daily_fat)
+                          }
+                          width={null}
+                        />
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 5,
+                          }}>
+                          <Text
+                            style={[
+                              {fontSize: 14},
+                              styles.textNutritionDetail,
+                            ]}>
+                            {Math.round(
+                              ((nutrition_facts[item] * quantity) /
+                                (item === 'calories'
+                                  ? daily_calories
+                                  : item === 'protein'
+                                  ? daily_protein
+                                  : item === 'carbs'
+                                  ? daily_carbs
+                                  : daily_fat)) *
+                                100,
+                            )}
+                            %
+                          </Text>
+                          <Text
+                            style={[
+                              {fontSize: 14},
+                              styles.textNutritionDetail,
+                            ]}>
+                            {item === 'calories'
+                              ? 'Calories'
+                              : item === 'protein'
+                              ? 'Protein'
+                              : item === 'carbs'
+                              ? 'Carbs'
+                              : 'Fat'}
+                          </Text>
                         </View>
-                      </>
+                      </View>
                     ) : null,
                   )}
                 </View>
@@ -379,26 +372,23 @@ const DetailFoodScreen = () => {
             </TouchableOpacity>
             {showNutritionFacts ? (
               <View style={styles.others}>
-                {Object.keys(nutrition_facts)?.map(item =>
+                {Object.keys(nutrition_facts)?.map((item, index) =>
                   item === 'id' ? null : item === 'serving_size' ? null : (
-                    <>
-                      <View style={styles.childOthers}>
-                        <Text style={styles.labelText}>
-                          {capitalizeFirstLetter(item)}
-                        </Text>
-                        <Text style={styles.amountText}>
-                          {Math.round(nutrition_facts[item] * quantity * 10) /
-                            10}{' '}
-                          {item === 'calories'
-                            ? 'cal'
-                            : item === 'carbs' ||
-                              item === 'protein' ||
-                              item === 'fat'
-                            ? 'g'
-                            : 'mg'}
-                        </Text>
-                      </View>
-                    </>
+                    <View key={index} style={styles.childOthers}>
+                      <Text style={styles.labelText}>
+                        {capitalizeFirstLetter(item)}
+                      </Text>
+                      <Text style={styles.amountText}>
+                        {Math.round(nutrition_facts[item] * quantity * 10) / 10}{' '}
+                        {item === 'calories'
+                          ? 'cal'
+                          : item === 'carbs' ||
+                            item === 'protein' ||
+                            item === 'fat'
+                          ? 'g'
+                          : 'mg'}
+                      </Text>
+                    </View>
                   ),
                 )}
               </View>
