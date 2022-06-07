@@ -17,8 +17,6 @@ import colors from '../../assets/colors/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
-import Token from '../../data/Token';
-import Month from '../../data/Months';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';

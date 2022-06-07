@@ -17,7 +17,6 @@ import DiaryItem from '../../components/DiaryItem';
 import CaloriesRemaining from '../../components/CaloriesRemaining';
 import font from '../../assets/fonts/font';
 import {useFocusEffect} from '@react-navigation/native';
-import Token from '../../data/Token';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 
@@ -66,6 +65,8 @@ const DiaryScreen = () => {
         }, 0)
       : 0;
 
+  let remaining = calories - calories_in + calories_out;
+
   useFocusEffect(
     React.useCallback(() => {
       context.getDiary(date);
@@ -75,10 +76,19 @@ const DiaryScreen = () => {
     }, [date, navigation]),
   );
 
+  useEffect(() => {
+    if (remaining < 0) {
+      context.updateDiary(diary.id, {is_enough: 1});
+    }
+    if (remaining > 0) {
+      context.updateDiary(diary.id, {is_enough: 0});
+    }
+  }, [remaining]);
+
   return (
     <View style={styles.root}>
       <CalendarStrip
-        showMonth
+        showMonth={true}
         scrollable
         style={{height: 70}}
         calendarColor={colors.PURE_WHITE}
@@ -109,6 +119,7 @@ const DiaryScreen = () => {
         iconStyle={{tintColor: 'black'}}
         selectedDate={today}
         useIsoWeekday={false}
+        //datesWhitelist={[{start: moment('2021-01-01'), end: moment()}]}
         startingDate={moment().subtract(3, 'days')}
         onDateSelected={dateSelected => {
           setIsLoading(true);
@@ -117,11 +128,6 @@ const DiaryScreen = () => {
               dateSelected.toDate().getMonth() + 1
             }/${dateSelected.toDate().getFullYear()}`,
           );
-          // setCalories({
-          //   goal: calories_data[0].calories.goal,
-          //   food: calories_data[0].calories.food,
-          //   exercise: calories_data[0].calories.exercise,
-          // });
         }}
       />
       <View style={styles.container}>

@@ -29,6 +29,7 @@ import Progress from '../../components/RegisterComponent/Progress';
 import {useFocusEffect} from '@react-navigation/native';
 import WeeklyGoalRegister from '../../components/RegisterComponent/WeeklyGoalRegister';
 import AccountRegister from '../../components/RegisterComponent/AccountRegister';
+import SuccessfulRegister from '../../components/RegisterComponent/SuccessfulRegister';
 
 const SignupScreen = () => {
   const context = useContext(DataContext);

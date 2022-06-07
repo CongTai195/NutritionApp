@@ -1,6 +1,8 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../../assets/colors/colors';
 import font from '../../../assets/fonts/font';
+
+const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -63,6 +65,28 @@ const styles = StyleSheet.create({
     color: colors.GREEN_SELECTED,
     fontFamily: font.DEFAULT_FONT,
     textAlign: 'center',
+  },
+  note: {
+    backgroundColor: colors.PURE_WHITE,
+    position: 'absolute',
+    //left: -100,
+    padding: 5,
+    //zIndex: 99,
+    top: 30,
+    left: 25,
+    right: 0,
+    //bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: (width * 7) / 8,
+    borderRadius: 5,
+  },
+  textNote: {
+    textAlign: 'justify',
+    fontWeight: '900',
+    fontSize: 16,
+    color: 'black',
+    fontFamily: font.DEFAULT_FONT,
   },
 });
 

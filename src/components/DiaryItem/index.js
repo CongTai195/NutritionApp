@@ -15,7 +15,6 @@ import {useNavigation} from '@react-navigation/native';
 import font from '../../assets/fonts/font';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MealItem from '../MealItem';
-import Token from '../../data/Token';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -60,7 +59,6 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
           },
         );
         const result = await response.json();
-        console.log(result);
         if (result.status === 'OK') {
           toast.show('Exercise deleted successfully off your diary', {
             type: 'danger',

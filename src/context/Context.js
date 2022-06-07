@@ -220,6 +220,33 @@ export class DataProvider extends Component {
     }
   };
 
+  updateDiary = async (diaryID, params) => {
+    try {
+      console.log(diaryID);
+      const response = await fetch(
+        `${this.state.BASE_URL}/api/diary/${diaryID}`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
+          },
+          method: 'PUT',
+          body: JSON.stringify(params),
+        },
+      );
+      const result = await response.json();
+      if (result.status === 'OK') {
+      } else {
+        console.log(result);
+        alert('Error updating food');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   creatDiary = async date => {
     try {
       const response = await fetch(`${this.state.BASE_URL}/api/diary`, {
@@ -269,6 +296,7 @@ export class DataProvider extends Component {
       setIsLoading,
       setRegisterData,
       setToken,
+      updateDiary,
     } = this;
     return (
       <DataContext.Provider
@@ -289,6 +317,7 @@ export class DataProvider extends Component {
           register,
           logout,
           setToken,
+          updateDiary,
         }}>
         {this.props.children}
       </DataContext.Provider>

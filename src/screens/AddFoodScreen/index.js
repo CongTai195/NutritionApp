@@ -15,8 +15,6 @@ import SearchInput from '../../components/SearchInput';
 import AddFoodItem from '../../components/AddFoodItem';
 import AnimatedLottieView from 'lottie-react-native';
 import font from '../../assets/fonts/font';
-import Token from '../../data/Token';
-import BASE_URL from '../../data/ENV';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 import {color} from 'react-native-reanimated';

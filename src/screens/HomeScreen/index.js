@@ -30,8 +30,9 @@ const notification = require('../../assets/images/Notification.png');
 const carbs_image = require('../../assets/images/Carbon.jpg');
 const meat = require('../../assets/images/Beef.jpg');
 const fat_image = require('../../assets/images/fat.jpg');
-const banner = require('../../assets/images/BG.png');
+const banner = require('../../assets/images/Banner.jpg');
 const fire = require('../../assets/images/fire.png');
+const water = require('../../assets/images/glass.png');
 
 const HomeScreen = () => {
   const context = useContext(DataContext);
@@ -241,7 +242,7 @@ const HomeScreen = () => {
                   onPress={() => {
                     navigation.navigate('Diary');
                   }}>
-                  <Banner />
+                  <Banner image={banner} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -270,6 +271,47 @@ const HomeScreen = () => {
             />
           </>
         )}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginLeft: 10,
+            marginTop: 10,
+            marginRight: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Label>Your Water</Label>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Diary');
+            }}>
+            <Ionicons name="arrow-forward-outline" size={25} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            margin: 5,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <View>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => {
+                navigation.navigate('Diary');
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <WaterAdd image={water} />
+                <WaterAdd image={water} />
+                <WaterAdd image={water} />
+                <WaterAdd image={water} />
+                <WaterAdd image={water} />
+                <WaterAdd image={water} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -320,7 +362,7 @@ const HeaderTitle = ({name}) => (
   </View>
 );
 
-const Banner = () => (
+const Banner = ({image}) => (
   <View style={[styles.card, {marginVertical: 5}]}>
     <ImageBackground
       imageStyle={{opacity: 1, borderRadius: 10}}
@@ -330,7 +372,7 @@ const Banner = () => (
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      source={require('../../assets/images/Banner.jpg')}>
+      source={image}>
       <View style={{alignSelf: 'center', margin: 5}}>
         <Text
           style={{
@@ -343,5 +385,22 @@ const Banner = () => (
         </Text>
       </View>
     </ImageBackground>
+  </View>
+);
+
+const WaterAdd = ({image}) => (
+  <View style={[styles.waterCard, {marginVertical: 5}]}>
+    <ImageBackground
+      imageStyle={{
+        borderRadius: 10,
+        resizeMode: 'contain',
+      }}
+      style={{
+        height: 100,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      source={image}></ImageBackground>
   </View>
 );
