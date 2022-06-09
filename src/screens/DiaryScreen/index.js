@@ -46,9 +46,9 @@ const DiaryScreen = () => {
   const exercise = diary?.exercise;
 
   const [date, setDate] = useState(
-    `${today.toDate().getDate()}/${today.toDate().getMonth() + 1}/${today
+    `${today.toDate().getFullYear()}-${today.toDate().getMonth() + 1}-${today
       .toDate()
-      .getFullYear()}`,
+      .getDate()}`,
   );
 
   const calories_in =
@@ -89,7 +89,7 @@ const DiaryScreen = () => {
     <View style={styles.root}>
       <CalendarStrip
         showMonth={true}
-        scrollable
+        scrollable={false}
         style={{height: 70}}
         calendarColor={colors.PURE_WHITE}
         calendarHeaderStyle={{color: colors.PURE_WHITE}}
@@ -118,15 +118,16 @@ const DiaryScreen = () => {
         iconContainer={{flex: 0.1}}
         iconStyle={{tintColor: 'black'}}
         selectedDate={today}
+        minDate={context.user?.created_at}
         useIsoWeekday={false}
         //datesWhitelist={[{start: moment('2021-01-01'), end: moment()}]}
-        startingDate={moment().subtract(3, 'days')}
+        //startingDate={moment().subtract(3, 'days')}
         onDateSelected={dateSelected => {
           setIsLoading(true);
           setDate(
-            `${dateSelected.toDate().getDate()}/${
+            `${dateSelected.toDate().getFullYear()}-${
               dateSelected.toDate().getMonth() + 1
-            }/${dateSelected.toDate().getFullYear()}`,
+            }-${dateSelected.toDate().getDate()}`,
           );
         }}
       />

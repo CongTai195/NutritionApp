@@ -50,9 +50,9 @@ const NutrientScreen = () => {
   const exercise = diary?.exercise;
 
   const [date, setDate] = useState(
-    `${today.toDate().getDate()}/${today.toDate().getMonth() + 1}/${today
+    `${today.toDate().getFullYear()}-${today.toDate().getMonth() + 1}-${today
       .toDate()
-      .getFullYear()}`,
+      .getDate()}`,
   );
 
   const capitalizeFirstLetter = string => {
@@ -214,9 +214,9 @@ const NutrientScreen = () => {
         onDateSelected={dateSelected => {
           setIsLoading(true);
           setDate(
-            `${dateSelected.toDate().getDate()}/${
+            `${dateSelected.toDate().getFullYear()}-${
               dateSelected.toDate().getMonth() + 1
-            }/${dateSelected.toDate().getFullYear()}`,
+            }-${dateSelected.toDate().getDate()}`,
           );
         }}
       />

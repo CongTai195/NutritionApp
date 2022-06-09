@@ -1,5 +1,5 @@
 import {Text, View, Dimensions} from 'react-native';
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -12,8 +12,11 @@ import {
   ContributionGraph,
   StackedBarChart,
 } from 'react-native-chart-kit';
+import {DataContext} from '../../context/Context';
 
 const ProgressScreen = () => {
+  const context = useContext(DataContext);
+  const user = context.user;
   const labels = [
     'Today',
     'Tomorrow',
@@ -31,11 +34,11 @@ const ProgressScreen = () => {
       headerTitle: 'Progress',
       headerTintColor: '#fff',
       headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
-      headerTitleStyle:{fontWeight: "700", fontFamily: font.DEFAULT_FONT},
+      headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
   }, [navigation]);
-  const startWeight = 91;
+  const startWeight = user?.process.starting_weight;
   const currentWeight = 84;
 
   return (
@@ -49,7 +52,7 @@ const ProgressScreen = () => {
           <Text style={styles.textChildHeader}>{currentWeight} kg</Text>
           <Text style={styles.textChildHeader}>CURRENT</Text>
         </View>
-        <View style={[styles.childHeader, {flex: 1.5}]}>
+        <View style={[styles.childHeader]}>
           <Text style={styles.textChildHeader}>
             {currentWeight > startWeight
               ? currentWeight - startWeight
@@ -57,8 +60,11 @@ const ProgressScreen = () => {
             kg
           </Text>
           <Text style={styles.textChildHeader}>
-            CHANGE {currentWeight > startWeight ? `(+` : `(-`}{' '}
-            {(Math.round(((startWeight - currentWeight) / startWeight) * 100))} %)
+            {currentWeight > startWeight ? `(+` : `(-`}{' '}
+            {Math.round(
+              (Math.abs(startWeight - currentWeight) / startWeight) * 100,
+            )}{' '}
+            %)
           </Text>
         </View>
       </View>
@@ -71,7 +77,7 @@ const ProgressScreen = () => {
             },
           ],
         }}
-        width={Dimensions.get('window').width*95/100} // from react-native
+        width={(Dimensions.get('window').width * 95) / 100} // from react-native
         height={320}
         //yAxisLabel="$"
         yAxisSuffix="kg"

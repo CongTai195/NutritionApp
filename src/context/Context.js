@@ -14,9 +14,9 @@ export class DataProvider extends Component {
       food: [],
       register_data: {},
 
-      today: `${moment().toDate().getDate()}/${
+      today: `${moment().toDate().getFullYear()}-${
         moment().toDate().getMonth() + 1
-      }/${moment().toDate().getFullYear()}`,
+      }-${moment().toDate().getDate()}`,
       diary_today: [],
 
       isLoading: false,
@@ -213,7 +213,7 @@ export class DataProvider extends Component {
         this.setState({diary: result.results});
       }
       if (result.status === 'NG') {
-        this.creatDiary(date);
+        this.createDiary(date);
       }
     } catch (error) {
       console.error(error);
@@ -222,7 +222,6 @@ export class DataProvider extends Component {
 
   updateDiary = async (diaryID, params) => {
     try {
-      console.log(diaryID);
       const response = await fetch(
         `${this.state.BASE_URL}/api/diary/${diaryID}`,
         {
@@ -247,7 +246,7 @@ export class DataProvider extends Component {
     }
   };
 
-  creatDiary = async date => {
+  createDiary = async date => {
     try {
       const response = await fetch(`${this.state.BASE_URL}/api/diary`, {
         headers: {

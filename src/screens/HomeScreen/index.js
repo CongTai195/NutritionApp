@@ -24,6 +24,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExerciseCard from '../../components/ExerciseCard';
 import Carousel from '../../components/Carousel';
 import Card from '../../components/Card';
+import PushNotification from 'react-native-push-notification';
+import BackgroundFetch from 'react-native-background-fetch';
 
 const headerImage = require('../../assets/images/defaultAvatar.png');
 const notification = require('../../assets/images/Notification.png');
@@ -39,20 +41,42 @@ const HomeScreen = () => {
   const user = context.user;
   const diary = context.diary_today;
   const calories = diary?.process?.calories;
+  const food = diary?.food;
+  const breakfast = food?.filter(e => e.meal === 'Breakfast');
+  const calories_breakfast =
+    breakfast?.length > 0
+      ? breakfast?.reduce((total, item) => {
+          return total + parseFloat(item.calories);
+        }, 0)
+      : 0;
+  const lunch = food?.filter(e => e.meal === 'Lunch');
+  const calories_lunch =
+    lunch?.length > 0
+      ? lunch?.reduce((total, item) => {
+          return total + parseFloat(item.calories);
+        }, 0)
+      : 0;
+  const dinner = food?.filter(e => e.meal === 'Dinner');
+  const calories_dinner =
+    dinner?.length > 0
+      ? dinner?.reduce((total, item) => {
+          return total + parseFloat(item.calories);
+        }, 0)
+      : 0;
   const total_fat = Math.round((calories * diary?.process?.fat) / 100 / 9);
   const total_carbs = Math.round((calories * diary?.process?.carbs) / 100 / 4);
   const total_protein = Math.round(
     (calories * diary?.process?.protein) / 100 / 4,
   );
-  const food = diary.food;
   const exercise = diary.exercise;
   const navigation = useNavigation();
-  const date = `${moment().toDate().getDate()}/${
+  const date = `${moment().toDate().getFullYear()}-${
     moment().toDate().getMonth() + 1
-  }/${moment().toDate().getFullYear()}`;
+  }-${moment().toDate().getDate()}`;
   const windowWidth = Dimensions.get('window').width;
   const [activeNutrientIndex, setActiveNutrientIndex] = React.useState(0);
   const [activeExercisesIndex, setActiveExercisesIndex] = React.useState(0);
+  const [time, setTime] = useState(new Date(Date.now()));
 
   const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 6});
 
@@ -144,8 +168,55 @@ const HomeScreen = () => {
 
   useEffect(() => {
     context.getDiary(date);
-  }, [user]);
-  const goal = 3000;
+  }, []);
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     setTime(new Date(Date.now()));
+  //   }, 30000);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (
+  //     time.getHours() === 8 &&
+  //     time.getMinutes() === 25 &&
+  //     calories_breakfast === 0
+  //   ) {
+  //     testPush("You haven't log your Breakfast.");
+  //   }
+  //   if (
+  //     time.getHours() === 19 &&
+  //     time.getMinutes() === 58 &&
+  //     calories_lunch === 0
+  //   ) {
+  //     testPush("You haven't log your Lunch.");
+  //   }
+  //   if (
+  //     time.getHours() === 20 &&
+  //     time.getMinutes() === 0 &&
+  //     calories_dinner === 0
+  //   ) {
+  //     testPush("You haven't log your Dinner.");
+  //   }
+  // }, [time.getMinutes()]);
+
+  const testPush = async message => {
+    try {
+      PushNotification.localNotification({
+        //... You can use all the options from localNotifications
+        channelId: 'my-channel',
+        message: message, // (required)
+        color: 'red',
+        playSound: true,
+        soundName: 'default',
+        allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+
+        //   // (optional) Increment of configured repeatType. Check 'Repeating Notifications' section for more info.
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -179,7 +250,7 @@ const HomeScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Label>Your Nutrients</Label>
+          <Label>Nutrients</Label>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NutrientScreen');
@@ -219,7 +290,7 @@ const HomeScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Label>Your Exercises</Label>
+          <Label>Exercises</Label>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Diary');
@@ -280,10 +351,10 @@ const HomeScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Label>Your Water</Label>
+          <Label>Progress</Label>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Diary');
+              testPush();
             }}>
             <Ionicons name="arrow-forward-outline" size={25} color="black" />
           </TouchableOpacity>
@@ -299,7 +370,7 @@ const HomeScreen = () => {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => {
-                navigation.navigate('Diary');
+                testPush('Hello');
               }}>
               <View style={{flexDirection: 'row'}}>
                 <WaterAdd image={water} />
