@@ -26,6 +26,15 @@ import Carousel from '../../components/Carousel';
 import Card from '../../components/Card';
 import PushNotification from 'react-native-push-notification';
 import BackgroundFetch from 'react-native-background-fetch';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from 'react-native-chart-kit';
+import Progress from '../../components/Progress';
 
 const headerImage = require('../../assets/images/defaultAvatar.png');
 const notification = require('../../assets/images/Notification.png');
@@ -70,12 +79,11 @@ const HomeScreen = () => {
   );
   const exercise = diary.exercise;
   const navigation = useNavigation();
-  const date = `${moment().toDate().getFullYear()}-${
-    moment().toDate().getMonth() + 1
-  }-${moment().toDate().getDate()}`;
+  const date = moment().toDate().toISOString().split('T')[0];
   const windowWidth = Dimensions.get('window').width;
   const [activeNutrientIndex, setActiveNutrientIndex] = React.useState(0);
   const [activeExercisesIndex, setActiveExercisesIndex] = React.useState(0);
+  const [activeLogIndex, setLogIndex] = React.useState(0);
   const [time, setTime] = useState(new Date(Date.now()));
 
   const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 6});
@@ -89,6 +97,12 @@ const HomeScreen = () => {
   const onExercisesUpdate = React.useRef(({viewableItems}) => {
     if (viewableItems.length > 0) {
       setActiveExercisesIndex(viewableItems[0].index || 0);
+    }
+  }, []);
+
+  const onLogUpdate = React.useRef(({viewableItems}) => {
+    if (viewableItems.length > 0) {
+      setLogIndex(viewableItems[0].index || 0);
     }
   }, []);
 
@@ -199,6 +213,31 @@ const HomeScreen = () => {
   //     testPush("You haven't log your Dinner.");
   //   }
   // }, [time.getMinutes()]);
+  useEffect(() => {
+    BackgroundFetch.configure(
+      {
+        minimumFetchInterval: 15, // fetch interval in minutes
+      },
+      async taskId => {
+        //console.log('Received background-fetch event: ', taskId);
+        PushNotification.localNotification({
+          //... You can use all the options from localNotifications
+          channelId: 'my-channel',
+          message: "You haven't log your meal", // (required)
+          color: 'red',
+          playSound: true,
+          soundName: 'default',
+          allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+        });
+        //console.log('Finish background-fetch event: ', taskId);
+        // Call finish upon completion of the background task
+        BackgroundFetch.finish(taskId);
+      },
+      error => {
+        console.error(error);
+      },
+    );
+  }, []);
 
   const testPush = async message => {
     try {
@@ -217,6 +256,61 @@ const HomeScreen = () => {
       console.log(e);
     }
   };
+  const formatDate = input => {
+    var datePart = input.match(/\d+/g),
+      month = datePart[1],
+      day = datePart[2];
+
+    return day + '/' + month;
+  };
+
+  const weights = context.weight;
+
+  const data_weight = weights?.map(item => {
+    return item.weight_log;
+  });
+
+  const data_heart_rate = weights?.map(item => {
+    return item.heart_rate_log;
+  });
+
+  const data_blood = weights?.map(item => {
+    return item.blood_pressure_log;
+  });
+
+  const labels = weights?.map(item => {
+    return formatDate(item?.date);
+  });
+
+  let logArray = [
+    {
+      id: 1,
+      name: 'Weight',
+      data: data_weight,
+      labels: labels,
+      lightColor: '#f8e4d9',
+      color: '#fcf1ea',
+      label: ' kg',
+    },
+    {
+      id: 2,
+      name: 'Blood Pressure',
+      data: data_blood,
+      labels: labels,
+      lightColor: '#f8e4d9',
+      color: '#fcf1ea',
+      label: 'mmHg',
+    },
+    {
+      id: 3,
+      name: 'Heart Rate',
+      data: data_heart_rate,
+      labels: labels,
+      lightColor: '#f8e4d9',
+      color: '#fcf1ea',
+      label: ' BPM',
+    },
+  ];
 
   return (
     <View style={styles.container}>
@@ -354,12 +448,12 @@ const HomeScreen = () => {
           <Label>Progress</Label>
           <TouchableOpacity
             onPress={() => {
-              testPush();
+              navigation.navigate('AddWeightScreen', {date: diary.date});
             }}>
-            <Ionicons name="arrow-forward-outline" size={25} color="black" />
+            <Ionicons name="add-sharp" size={30} color="black" />
           </TouchableOpacity>
         </View>
-        <View
+        {/* <View
           style={{
             margin: 5,
             paddingHorizontal: 10,
@@ -367,22 +461,45 @@ const HomeScreen = () => {
             justifyContent: 'center',
           }}>
           <View>
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={() => {
-                testPush('Hello');
-              }}>
-              <View style={{flexDirection: 'row'}}>
-                <WaterAdd image={water} />
-                <WaterAdd image={water} />
-                <WaterAdd image={water} />
-                <WaterAdd image={water} />
-                <WaterAdd image={water} />
-                <WaterAdd image={water} />
-              </View>
-            </TouchableOpacity>
+            {weights?.length > 0 ? (
+              <Progress data={data_weight} labels={labels} height={200} />
+            ) : (
+              <ActivityIndicator
+                size={'large'}
+                color={colors.BACK_GROUND_COLOR}
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              />
+            )}
           </View>
-        </View>
+        </View> */}
+        {weights.length > 0 ? (
+          <Carousel
+            data={logArray}
+            renderItem={({item, index}) => (
+              // <View key={index}>
+
+              <Progress
+                color={item.color}
+                lightColor={item.lightColor}
+                name={item.name}
+                data={item.data}
+                labels={item.labels}
+                label={item.label}
+                height={200}
+              />
+              // </View>
+            )}
+            snapToInterval={windowWidth - 5}
+            viewabilityConfig={viewConfigRef.current}
+            onViewableItemsChanged={onLogUpdate.current}
+            activeIndex={activeLogIndex}
+            dotColor={colors.BACK_GROUND_COLOR}
+          />
+        ) : null}
       </ScrollView>
     </View>
   );

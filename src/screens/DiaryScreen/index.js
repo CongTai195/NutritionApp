@@ -45,11 +45,7 @@ const DiaryScreen = () => {
   const dinner = food?.filter(e => e.meal === 'Dinner');
   const exercise = diary?.exercise;
 
-  const [date, setDate] = useState(
-    `${today.toDate().getFullYear()}-${today.toDate().getMonth() + 1}-${today
-      .toDate()
-      .getDate()}`,
-  );
+  const [date, setDate] = useState(today.toDate().toISOString().split('T')[0]);
 
   const calories_in =
     food?.length > 0
@@ -124,11 +120,7 @@ const DiaryScreen = () => {
         //startingDate={moment().subtract(3, 'days')}
         onDateSelected={dateSelected => {
           setIsLoading(true);
-          setDate(
-            `${dateSelected.toDate().getFullYear()}-${
-              dateSelected.toDate().getMonth() + 1
-            }-${dateSelected.toDate().getDate()}`,
-          );
+          setDate(dateSelected.toDate().toISOString().split('T')[0]);
         }}
       />
       <View style={styles.container}>

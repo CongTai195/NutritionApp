@@ -8,6 +8,7 @@ import SignupScreen from '../../screens/SignupScreen';
 import LoginScreen from '../../screens/LoginScreen';
 import NutrientScreen from '../../screens/NutrientScreen';
 import DetailExerciseScreen from '../../screens/DetailExerciseScreen';
+import AddWeightScreen from '../../screens/AddWeightScreen';
 
 const HomeStack = () => {
   const Stack = createStackNavigator();
@@ -41,6 +42,11 @@ const HomeStack = () => {
       <Stack.Screen
         name="DetailExerciseScreen"
         component={DetailExerciseScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="AddWeightScreen"
+        component={AddWeightScreen}
         options={{headerShown: true}}
       />
     </Stack.Navigator>

@@ -35,7 +35,8 @@ const BottomTab = () => {
       routeName === 'DetailFoodScreen' ||
       routeName === 'DetailExerciseScreen' ||
       routeName === 'AddExerciseScreen' ||
-      routeName === 'NutrientScreen'
+      routeName === 'NutrientScreen' ||
+      routeName === 'AddWeightScreen'
     ) {
       return 'none';
     } else {

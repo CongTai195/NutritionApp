@@ -43,6 +43,14 @@ const NutrientScreen = () => {
   const total_protein = Math.round(
     (calories * diary?.process?.protein) / 100 / 4,
   );
+  const total_cholesterol = diary?.process?.cholesterol;
+  const total_sodium = diary?.process?.sodium;
+  const total_potassium = diary?.process?.potassium;
+  const total_calcium = diary?.process?.calcium;
+  const total_iron = diary?.process?.iron;
+  const total_vitaminA = diary?.process?.vitamin_A;
+  const total_vitaminC = diary?.process?.vitamin_C;
+  const total_vitaminD = diary?.process?.vitamin_D;
 
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
   const lunch = food?.filter(e => e.meal === 'Lunch');
@@ -113,57 +121,57 @@ const NutrientScreen = () => {
       id: 4,
       name: 'Cholesterol (mg)',
       amount: cholesterol,
-      goal: 10,
-      left: 0 - cholesterol,
+      goal: total_cholesterol,
+      left: total_cholesterol - cholesterol,
     },
     {
       id: 5,
       name: 'Sodium (mg)',
       amount: sodium,
-      goal: 10,
-      left: 0 - sodium,
+      goal: total_sodium,
+      left: total_sodium - sodium,
     },
     {
       id: 6,
       name: 'Calcium (mg)',
       amount: calcium,
-      goal: 10,
-      left: 0 - calcium,
+      goal: total_calcium,
+      left: total_calcium - calcium,
     },
     {
       id: 7,
       name: 'Iron (mg)',
       amount: iron,
-      goal: 10,
-      left: 0 - iron,
+      goal: total_iron,
+      left: total_iron - iron,
     },
     {
       id: 8,
       name: 'Potassium (mg)',
       amount: potassium,
-      goal: 10,
-      left: 0 - potassium,
+      goal: total_potassium,
+      left: total_potassium - potassium,
     },
     {
       id: 9,
       name: 'Vitamin A',
       amount: vitamin_A,
-      goal: 10,
-      left: 0 - vitamin_A,
+      goal: total_vitaminA,
+      left: total_vitaminA - vitamin_A,
     },
     {
       id: 10,
       name: 'Vitamin C',
       amount: vitamin_C,
-      goal: 10,
-      left: 0 - vitamin_C,
+      goal: total_vitaminC,
+      left: total_vitaminC - vitamin_C,
     },
     {
       id: 11,
       name: 'Vitamin D',
       amount: vitamin_D,
-      goal: 10,
-      left: 0 - vitamin_D,
+      goal: total_vitaminD,
+      left: total_vitaminD - vitamin_D,
     },
   ];
 

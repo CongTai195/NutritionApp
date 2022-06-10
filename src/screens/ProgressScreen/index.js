@@ -1,5 +1,5 @@
-import {Text, View, Dimensions} from 'react-native';
-import React, {useLayoutEffect, useContext} from 'react';
+import {Text, View, Dimensions, ActivityIndicator} from 'react-native';
+import React, {useLayoutEffect, useEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -13,21 +13,27 @@ import {
   StackedBarChart,
 } from 'react-native-chart-kit';
 import {DataContext} from '../../context/Context';
+import Progress from '../../components/Progress';
 
 const ProgressScreen = () => {
   const context = useContext(DataContext);
   const user = context.user;
-  const labels = [
-    'Today',
-    'Tomorrow',
-    '1',
-    '2',
-    '27-03',
-    'April',
-    'May',
-    'June',
-  ];
-  const data = [90, 89, 88, 88, 87, 86, 88, 89];
+  const weights = context.weight;
+
+  const formatDate = input => {
+    var datePart = input.match(/\d+/g),
+      month = datePart[1],
+      day = datePart[2];
+
+    return day + '/' + month;
+  };
+  const data = weights?.map(item => {
+    return item.weight_log;
+  });
+
+  const labels = weights?.map(item => {
+    return formatDate(item?.date);
+  });
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,7 +45,7 @@ const ProgressScreen = () => {
     });
   }, [navigation]);
   const startWeight = user?.process.starting_weight;
-  const currentWeight = 84;
+  const currentWeight = user?.process.current_weight;
 
   return (
     <View style={styles.container}>
@@ -68,43 +74,66 @@ const ProgressScreen = () => {
           </Text>
         </View>
       </View>
-      <LineChart
-        data={{
-          labels: labels,
-          datasets: [
-            {
-              data: data,
+      {weights?.length > 0 ? (
+        <LineChart
+          data={{
+            labels: labels,
+            datasets: [
+              {data: data},
+              // {
+              //   key: 'dummy-range-padding',
+              //   data: [0, 100],
+              //   color: () => 'rgba(0, 0, 0, 0)',
+              //   strokeDashArray: [0, 1000],
+              //   withDots: false,
+              // },
+            ],
+          }}
+          width={Dimensions.get('window').width - 20} // from react-native
+          height={320}
+          //yAxisLabel="$"
+          yAxisSuffix=" kg"
+          yAxisInterval={1} // optional, defaults to 1
+          chartConfig={{
+            backgroundColor: '#000',
+            backgroundGradientFrom: '#ffba62',
+            backgroundGradientTo: '#ffa726',
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(36,37,60, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: {
+              borderRadius: 16,
             },
-          ],
-        }}
-        width={(Dimensions.get('window').width * 95) / 100} // from react-native
-        height={320}
-        //yAxisLabel="$"
-        yAxisSuffix="kg"
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={{
-          backgroundColor: '#000',
-          backgroundGradientFrom: 'white',
-          backgroundGradientTo: 'white',
-          decimalPlaces: 0, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(36,37,60, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: colors.PURE_WHITE,
-          },
-        }}
-        segments={4} // the amount of horizontal lines
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 10,
-        }}
-      />
+            propsForDots: {
+              r: '6',
+              strokeWidth: '2',
+              stroke: colors.PURE_WHITE,
+            },
+            propsForVerticalLabels: {
+              fontWeight: '500',
+              fontSize: 16,
+              fontFamily: font.DEFAULT_FONT,
+            },
+            propsForHorizontalLabels: {
+              fontWeight: '500',
+              fontSize: 14,
+              fontFamily: font.DEFAULT_FONT,
+            },
+          }}
+          segments={4} // the amount of horizontal lines
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 10,
+          }}
+        />
+      ) : (
+        <ActivityIndicator
+          size={'large'}
+          color={colors.BACK_GROUND_COLOR}
+          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+        />
+      )}
     </View>
   );
 };
