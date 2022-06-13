@@ -1,13 +1,13 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
+
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.LIGHT_GREY,
     marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
     backgroundColor: colors.PURE_WHITE,
@@ -61,10 +61,9 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
   },
   others: {
-    //flex: 1,
     backgroundColor: colors.PURE_WHITE,
     width: '95%',
-    //alignSelf: 'center',
+    alignSelf: 'center',
     marginTop: 10,
     borderRadius: 20,
     alignItems: 'center',
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
-    fontWeight: '900',
+    fontWeight: '500',
     marginHorizontal: 10,
   },
   amountText: {
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
     fontWeight: '500',
-    marginRight: 10,
+    //marginRight: 15,
   },
   servingSizeText: {
     color: 'black',
@@ -132,6 +131,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  image: {
+    height: Dimensions.get('window').width / 1.5,
+    width: Dimensions.get('window').width,
+    resizeMode: 'cover',
+    //marginHorizontal: 10,
   },
   imageSection: {
     justifyContent: 'center',

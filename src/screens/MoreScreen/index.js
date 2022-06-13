@@ -15,10 +15,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import font from '../../assets/fonts/font';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 
 const MoreScreen = () => {
   const context = useContext(DataContext);
   const user = context.user;
+  const startDay = user?.created_at;
+  const today = moment().toDate().toISOString().split('T')[0];
+  const startingWeight = user?.process.starting_weight;
+  const currentWeight = user?.process.current_weight;
+  const formatDate = input => {
+    var datePart = input.match(/\d+/g),
+      month = datePart[1],
+      day = datePart[2];
+    return day;
+  };
+
+  const streak = parseInt(formatDate(today)) - parseInt(formatDate(startDay));
+
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,7 +73,7 @@ const MoreScreen = () => {
         <View style={styles.profileSection}>
           <View style={styles.streak}>
             <Text style={styles.lightText}>Streak</Text>
-            <Text style={styles.boldText}>2</Text>
+            <Text style={styles.boldText}>{streak}</Text>
             <Text style={styles.lightText}>days</Text>
           </View>
           <View style={styles.profile}>
@@ -71,8 +85,12 @@ const MoreScreen = () => {
           </View>
           <View style={styles.progress}>
             <Text style={styles.lightText}>Progress</Text>
-            <Text style={styles.boldText}>0 kg</Text>
-            <Text style={styles.lightText}>kgs lost</Text>
+            <Text style={styles.weightLostText}>
+              {Math.abs(startingWeight - currentWeight)} kg
+            </Text>
+            <Text style={styles.lightText}>
+              {startingWeight > currentWeight ? 'kgs lost' : 'kgs gain'}
+            </Text>
           </View>
         </View>
         <View style={styles.othersSection}>
@@ -132,7 +150,11 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('NutritionUpdateScreen');
+            }}
+            activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="pie-chart-outline"

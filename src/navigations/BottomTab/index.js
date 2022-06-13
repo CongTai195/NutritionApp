@@ -36,7 +36,8 @@ const BottomTab = () => {
       routeName === 'DetailExerciseScreen' ||
       routeName === 'AddExerciseScreen' ||
       routeName === 'NutrientScreen' ||
-      routeName === 'AddWeightScreen'
+      routeName === 'AddWeightScreen' ||
+      routeName === 'NutritionUpdateScreen'
     ) {
       return 'none';
     } else {
@@ -131,7 +132,7 @@ const BottomTab = () => {
               },
             })}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Progress"
             component={ProgressScreen}
             options={{
@@ -140,7 +141,7 @@ const BottomTab = () => {
                 <Ionicons name="cellular" size={30} color={color} />
               ),
             }}
-          />
+          /> */}
           <Tab.Screen
             name="More"
             component={MoreStack}

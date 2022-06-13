@@ -13,7 +13,9 @@ export class DataProvider extends Component {
       diary: [],
       food: [],
       register_data: {},
-      weight: [],
+      weight_week: [],
+      weight_month: [],
+      weight_3_months: [],
 
       today: moment().toDate().toISOString().split('T')[0],
       diary_today: [],
@@ -61,7 +63,9 @@ export class DataProvider extends Component {
       });
       const result = await response.json();
       if (result.status === 'OK') {
-        this.setState({weight: result.results});
+        this.setState({weight_week: result.results[0]});
+        this.setState({weight_month: result.results[1]});
+        this.setState({weight_3_months: result.results[2]});
       } else {
         console.log(result);
       }
@@ -335,7 +339,9 @@ export class DataProvider extends Component {
       BASE_URL,
       token,
       isLoading,
-      weight,
+      weight_week,
+      weight_month,
+      weight_3_months,
     } = this.state;
     const {
       login,
@@ -361,7 +367,9 @@ export class DataProvider extends Component {
           BASE_URL,
           register_data,
           token,
-          weight,
+          weight_week,
+          weight_month,
+          weight_3_months,
           getWeight,
           setRegisterData,
           setIsLoading,

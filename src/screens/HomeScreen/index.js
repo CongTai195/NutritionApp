@@ -220,15 +220,16 @@ const HomeScreen = () => {
       },
       async taskId => {
         //console.log('Received background-fetch event: ', taskId);
-        PushNotification.localNotification({
-          //... You can use all the options from localNotifications
-          channelId: 'my-channel',
-          message: "You haven't log your meal", // (required)
-          color: 'red',
-          playSound: true,
-          soundName: 'default',
-          allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-        });
+        // PushNotification.localNotification({
+        //   //... You can use all the options from localNotifications
+        //   channelId: 'my-channel',
+        //   message: `${time}: You haven't log your meal`, // (required)
+        //   color: 'red',
+        //   playSound: true,
+        //   soundName: 'default',
+        //   allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+        // });
+        testPush(`${time}: You haven't log your meal`);
         //console.log('Finish background-fetch event: ', taskId);
         // Call finish upon completion of the background task
         BackgroundFetch.finish(taskId);
@@ -261,10 +262,10 @@ const HomeScreen = () => {
       month = datePart[1],
       day = datePart[2];
 
-    return day + '/' + month;
+    return day;
   };
 
-  const weights = context.weight;
+  const weights = context.weight_week;
 
   const data_weight = weights?.map(item => {
     return item.weight_log;
@@ -279,7 +280,9 @@ const HomeScreen = () => {
   });
 
   const labels = weights?.map(item => {
-    return formatDate(item?.date);
+    if (item?.date === date) {
+      return 'Today';
+    } else return formatDate(item?.date);
   });
 
   let logArray = [
@@ -288,27 +291,30 @@ const HomeScreen = () => {
       name: 'Weight',
       data: data_weight,
       labels: labels,
-      lightColor: '#f8e4d9',
-      color: '#fcf1ea',
+      lightColor: '#ffbc59',
+      color: '#ffa726',
+      labelColor: '#e18600',
       label: ' kg',
     },
     {
       id: 2,
-      name: 'Blood Pressure',
-      data: data_blood,
-      labels: labels,
-      lightColor: '#f8e4d9',
-      color: '#fcf1ea',
-      label: 'mmHg',
-    },
-    {
-      id: 3,
       name: 'Heart Rate',
       data: data_heart_rate,
       labels: labels,
-      lightColor: '#f8e4d9',
-      color: '#fcf1ea',
+      lightColor: '#ff828e',
+      color: '#ff717e',
+      labelColor: '#ff0b21',
       label: ' BPM',
+    },
+    {
+      id: 3,
+      name: 'Blood Pressure',
+      data: data_blood,
+      labels: labels,
+      color: '#edbba0',
+      lightColor: '#f6d3bd',
+      labelColor: '#df8859',
+      label: '',
     },
   ];
 
@@ -448,7 +454,10 @@ const HomeScreen = () => {
           <Label>Progress</Label>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('AddWeightScreen', {date: diary.date});
+              navigation.navigate('AddWeightScreen', {
+                date: diary.date,
+                index: activeLogIndex,
+              });
             }}>
             <Ionicons name="add-sharp" size={30} color="black" />
           </TouchableOpacity>
@@ -490,6 +499,7 @@ const HomeScreen = () => {
                 labels={item.labels}
                 label={item.label}
                 height={200}
+                labelColor={item.labelColor}
               />
               // </View>
             )}

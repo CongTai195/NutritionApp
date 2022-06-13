@@ -66,7 +66,7 @@ const ProfileScreen = () => {
             Lost
           </Text>
         </View>
-        <View style={{borderLeftWidth: 1}}>
+        {/* <View style={{borderLeftWidth: 1}}>
           <Text></Text>
         </View>
         <View style={{margin: 10, flexDirection: 'row', flex: 1}}>
@@ -87,7 +87,7 @@ const ProfileScreen = () => {
             }}>
             Friends
           </Text>
-        </View>
+        </View> */}
       </View>
       <Text
         style={{
@@ -128,7 +128,7 @@ const ProfileScreen = () => {
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Age</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{age} cm</Text>
+            <Text style={[styles.textChild, {color: 'blue'}]}>{age}</Text>
           </View>
         </TouchableOpacity>
 

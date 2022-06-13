@@ -1,5 +1,12 @@
-import {Text, View, Dimensions, ActivityIndicator} from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useLayoutEffect, useEffect, useContext} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -25,7 +32,7 @@ const ProgressScreen = () => {
       month = datePart[1],
       day = datePart[2];
 
-    return day + '/' + month;
+    return day;
   };
   const data = weights?.map(item => {
     return item.weight_log;
@@ -34,6 +41,38 @@ const ProgressScreen = () => {
   const labels = weights?.map(item => {
     return formatDate(item?.date);
   });
+  let logArray = [
+    {
+      id: 1,
+      name: 'Weight',
+      data: data,
+      labels: labels,
+      lightColor: '#ffbc59',
+      color: '#ffa726',
+      labelColor: '#e18600',
+      label: ' kg',
+    },
+    // {
+    //   id: 2,
+    //   name: 'Heart Rate',
+    //   data: data_heart_rate,
+    //   labels: labels,
+    //   lightColor: '#ff828e',
+    //   color: '#ff717e',
+    //   labelColor: '#ff0b21',
+    //   label: ' BPM',
+    // },
+    // {
+    //   id: 3,
+    //   name: 'Blood Pressure',
+    //   data: data_blood,
+    //   labels: labels,
+    //   color: '#edbba0',
+    //   lightColor: '#f6d3bd',
+    //   labelColor: '#df8859',
+    //   label: '',
+    // },
+  ];
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -74,66 +113,38 @@ const ProgressScreen = () => {
           </Text>
         </View>
       </View>
-      {weights?.length > 0 ? (
-        <LineChart
-          data={{
-            labels: labels,
-            datasets: [
-              {data: data},
-              // {
-              //   key: 'dummy-range-padding',
-              //   data: [0, 100],
-              //   color: () => 'rgba(0, 0, 0, 0)',
-              //   strokeDashArray: [0, 1000],
-              //   withDots: false,
-              // },
-            ],
-          }}
-          width={Dimensions.get('window').width - 20} // from react-native
+      {/* <Banner /> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          marginLeft: 10,
+          marginTop: 10,
+          marginRight: 25,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AddWeightScreen', {
+              date: diary.date,
+              index: activeLogIndex,
+            });
+          }}>
+          <Ionicons name="add-sharp" size={30} color="black" />
+        </TouchableOpacity>
+      </View>
+      {weights.length > 0 ? (
+        <Progress
+          name={logArray[0].name}
+          data={logArray[0].data}
+          labels={logArray[0].labels}
+          label={logArray[0].label}
+          color={logArray[0].color}
+          lightColor={logArray[0].lightColor}
+          labelColor={logArray[0].labelColor}
           height={320}
-          //yAxisLabel="$"
-          yAxisSuffix=" kg"
-          yAxisInterval={1} // optional, defaults to 1
-          chartConfig={{
-            backgroundColor: '#000',
-            backgroundGradientFrom: '#ffba62',
-            backgroundGradientTo: '#ffa726',
-            decimalPlaces: 0, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(36,37,60, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
-            propsForDots: {
-              r: '6',
-              strokeWidth: '2',
-              stroke: colors.PURE_WHITE,
-            },
-            propsForVerticalLabels: {
-              fontWeight: '500',
-              fontSize: 16,
-              fontFamily: font.DEFAULT_FONT,
-            },
-            propsForHorizontalLabels: {
-              fontWeight: '500',
-              fontSize: 14,
-              fontFamily: font.DEFAULT_FONT,
-            },
-          }}
-          segments={4} // the amount of horizontal lines
-          bezier
-          style={{
-            marginVertical: 8,
-            borderRadius: 10,
-          }}
         />
-      ) : (
-        <ActivityIndicator
-          size={'large'}
-          color={colors.BACK_GROUND_COLOR}
-          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-        />
-      )}
+      ) : null}
     </View>
   );
 };

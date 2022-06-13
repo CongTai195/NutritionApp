@@ -16,12 +16,42 @@ import font from '../../assets/fonts/font';
 import {LineChart} from 'react-native-chart-kit';
 import styles from './style';
 
-const Progress = ({name, labels, data, height, color, lightColor, label}) => {
+const Progress = ({
+  name,
+  labels,
+  data,
+  height,
+  color,
+  lightColor,
+  label,
+  labelColor,
+}) => {
+  const hexToRgbA = hex => {
+    var c;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+      c = hex.substring(1).split('');
+      if (c.length == 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c = '0x' + c.join('');
+      return (
+        'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',1)'
+      );
+    }
+    throw new Error('Bad Hex');
+  };
+
+  const countUnique = iterable => {
+    return new Set(iterable).size;
+  };
+
+  const horizontalLines = countUnique(data) - 1 > 1 ? countUnique(data) - 1 : 2;
+
   return (
     <View style={styles.card}>
       <View
         style={{
-          height: 200,
+          //height: 200,
           borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
@@ -48,11 +78,11 @@ const Progress = ({name, labels, data, height, color, lightColor, label}) => {
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
               backgroundColor: '#000',
-              backgroundGradientFrom: color,
-              backgroundGradientTo: lightColor,
+              backgroundGradientFrom: lightColor,
+              backgroundGradientTo: color,
               decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(36,37,60, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              color: (opacity = 1) => hexToRgbA(labelColor),
+              labelColor: (opacity = 1) => hexToRgbA('#000'),
               style: {
                 borderRadius: 16,
               },
@@ -62,20 +92,20 @@ const Progress = ({name, labels, data, height, color, lightColor, label}) => {
                 stroke: colors.PURE_WHITE,
               },
               propsForVerticalLabels: {
-                fontWeight: '500',
+                fontWeight: '900',
                 fontSize: 16,
                 fontFamily: font.DEFAULT_FONT,
               },
               propsForHorizontalLabels: {
-                fontWeight: '500',
+                fontWeight: '900',
                 fontSize: 14,
                 fontFamily: font.DEFAULT_FONT,
               },
             }}
-            segments={4} // the amount of horizontal lines
+            segments={horizontalLines} // the amount of horizontal lines
             bezier
             style={{
-              marginVertical: 8,
+              //marginVertical: 8,
               borderRadius: 10,
             }}
           />
@@ -92,7 +122,7 @@ const Progress = ({name, labels, data, height, color, lightColor, label}) => {
           style={{
             fontFamily: font.DEFAULT_FONT,
             fontSize: 16,
-            color: '#000',
+            color: labelColor,
             fontWeight: '900',
           }}>
           {name}
