@@ -46,7 +46,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
         <View style={{alignSelf: 'center', margin: 5}}>
           <Progress.Circle
             size={150}
-            progress={status / 100}
+            progress={status / mass}
             showsText
             text
             //textStyle={{fontSize: 20}}

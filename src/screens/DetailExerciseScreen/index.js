@@ -152,7 +152,10 @@ const DetailExerciseScreen = () => {
 
       <View style={styles.header}>
         <Text style={styles.name}>{exercise.name.split(', ')[0]}</Text>
-        <Text style={styles.information}>{exercise.name}</Text>
+        <Text style={styles.information}>
+          {'  '}
+          {exercise.name}
+        </Text>
       </View>
       <View style={styles.others}>
         {/* <TouchableOpacity activeOpacity={0.5}> */}
@@ -173,14 +176,12 @@ const DetailExerciseScreen = () => {
         </View>
         {/* </TouchableOpacity> */}
       </View>
-      <View style={styles.others}>
-        {/* <TouchableOpacity activeOpacity={0.5}> */}
+      {/* <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={[styles.labelText, {fontWeight: '900'}]}>
             Benefit of Running
           </Text>
         </View>
-        {/* <View style={{}}> */}
         {benefits?.split('; ').map((benefit, index) => (
           <View key={index} style={styles.childBenefit}>
             <Text style={[styles.labelText, {marginBottom: 10}]}>
@@ -188,9 +189,7 @@ const DetailExerciseScreen = () => {
             </Text>
           </View>
         ))}
-        {/* </View> */}
-        {/* </TouchableOpacity> */}
-      </View>
+      </View> */}
     </ScrollView>
   );
 };

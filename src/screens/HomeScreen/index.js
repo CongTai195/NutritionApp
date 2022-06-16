@@ -43,7 +43,7 @@ const meat = require('../../assets/images/Beef.jpg');
 const fat_image = require('../../assets/images/fat.jpg');
 const banner = require('../../assets/images/Banner.jpg');
 const fire = require('../../assets/images/fire.png');
-const water = require('../../assets/images/glass.png');
+const glass = require('../../assets/images/glass.png');
 
 const HomeScreen = () => {
   const context = useContext(DataContext);
@@ -78,6 +78,7 @@ const HomeScreen = () => {
     (calories * diary?.process?.protein) / 100 / 4,
   );
   const exercise = diary.exercise;
+  const water = diary.water;
   const navigation = useNavigation();
   const date = moment().toDate().toISOString().split('T')[0];
   const windowWidth = Dimensions.get('window').width;
@@ -467,29 +468,6 @@ const HomeScreen = () => {
             <Ionicons name="add-sharp" size={30} color="black" />
           </TouchableOpacity>
         </View>
-        {/* <View
-          style={{
-            margin: 5,
-            paddingHorizontal: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <View>
-            {weights?.length > 0 ? (
-              <Progress data={data_weight} labels={labels} height={200} />
-            ) : (
-              <ActivityIndicator
-                size={'large'}
-                color={colors.BACK_GROUND_COLOR}
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
-            )}
-          </View>
-        </View> */}
         {weights.length > 0 ? (
           <Carousel
             data={logArray}
@@ -515,6 +493,52 @@ const HomeScreen = () => {
             dotColor={colors.BACK_GROUND_COLOR}
           />
         ) : null}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginLeft: 10,
+            marginTop: 10,
+            marginRight: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Label>Water</Label>
+
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 16,
+              fontFamily: font.DEFAULT_FONT,
+              fontWeight: '900',
+            }}>
+            {water} / 2000 ml
+          </Text>
+          {/* <Ionicons name="add-sharp" size={30} color="black" /> */}
+        </View>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('AddWaterScreen', {
+              diaryId: diary.id,
+            });
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 10,
+              backgroundColor: '#f2fac4',
+            }}>
+            {Array(4)
+              .fill(1)
+              .map((item, index) => (
+                <WaterAdd
+                  key={index}
+                  image={glass}
+                  color={index <= water / 500 - 1 ? '#86c6fd' : '#f2fac4'}
+                />
+              ))}
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -591,9 +615,9 @@ const Banner = ({image}) => (
   </View>
 );
 
-const WaterAdd = ({image}) => (
-  <View style={[styles.waterCard, {marginVertical: 5}]}>
-    <ImageBackground
+const WaterAdd = ({image, color}) => (
+  <View style={[styles.waterCard, {backgroundColor: color, marginVertical: 5}]}>
+    {/* <ImageBackground
       imageStyle={{
         borderRadius: 10,
         resizeMode: 'contain',
@@ -604,6 +628,23 @@ const WaterAdd = ({image}) => (
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      source={image}></ImageBackground>
+      source={image}></ImageBackground> */}
+    <Image
+      style={{
+        resizeMode: 'contain',
+        width: 100,
+        height: 100,
+      }}
+      source={image}
+    />
+    <Text
+      style={{
+        color: 'black',
+        fontSize: 13,
+        fontFamily: font.DEFAULT_FONT,
+        position: 'absolute',
+      }}>
+      500 ml
+    </Text>
   </View>
 );

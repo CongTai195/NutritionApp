@@ -29,6 +29,16 @@ export class DataProvider extends Component {
     };
   }
 
+  updateWaterAmount = amount => {
+    this.setState(prevState => ({
+      diary_today: {
+        // object that we want to update
+        ...prevState.diary_today, // keep all other key-value pairs
+        water: prevState.diary_today.water + amount, // update the value of specific key
+      },
+    }));
+  };
+
   getMyFood = async () => {
     try {
       const response = await fetch(`${this.state.BASE_URL}/api/myFood`, {
@@ -175,6 +185,9 @@ export class DataProvider extends Component {
         await AsyncStorage.setItem('@storage_Key', result.results.token);
         await this.setToken();
         this.setState({user: result.results.info});
+        this.getWeight();
+        this.getMyFood();
+        this.getMyExercise();
       } else {
         alert('Invalid username or password');
       }
@@ -260,6 +273,8 @@ export class DataProvider extends Component {
         this.setState({diary_today: {}});
         this.setState({diary: []});
         this.setState({weight: []});
+        this.setState({my_food: []});
+        this.setState({my_exercise: []});
       } else {
         console.log(result);
       }
@@ -384,6 +399,7 @@ export class DataProvider extends Component {
       getUser,
       getMyFood,
       getMyExercise,
+      updateWaterAmount,
     } = this;
     return (
       <DataContext.Provider
@@ -414,6 +430,7 @@ export class DataProvider extends Component {
           setToken,
           updateDiary,
           getUser,
+          updateWaterAmount,
         }}>
         {this.props.children}
       </DataContext.Provider>

@@ -22,8 +22,8 @@ const MoreScreen = () => {
   const user = context.user;
   const startDay = user?.created_at;
   const today = moment().toDate().toISOString().split('T')[0];
-  const startingWeight = user?.process.starting_weight;
-  const currentWeight = user?.process.current_weight;
+  const startingWeight = user?.process?.starting_weight;
+  const currentWeight = user?.process?.current_weight;
   const formatDate = input => {
     var datePart = input.match(/\d+/g),
       month = datePart[1],

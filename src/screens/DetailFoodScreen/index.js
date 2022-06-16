@@ -38,10 +38,12 @@ const DetailFoodScreen = () => {
   const [isAdded, setIsAdded] = useState(false);
   const [showNutritionFacts, setShowNutritionFacts] = useState(false);
   const nutrition_facts_array = food.nutrition_facts;
-  const daily_calories = 2800;
-  const daily_carbs = 335;
-  const daily_fat = 89;
-  const daily_protein = 134;
+  const daily_calories = context?.diary?.process?.calories;
+  const daily_carbs =
+    (context?.diary?.process?.carbs * daily_calories) / 100 / 4;
+  const daily_fat = (context?.diary?.process?.fat * daily_calories) / 100 / 9;
+  const daily_protein =
+    (context?.diary?.process?.protein * daily_calories) / 100 / 4;
 
   const [selectedServingSize, setSelectedServingSize] = useState(
     action === 'Update'
@@ -269,7 +271,7 @@ const DetailFoodScreen = () => {
               </View>
               <View style={styles.percent}>
                 <Text style={styles.labelText}>Percent of Daily Goals</Text>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', marginTop: 10}}>
                   {Object.keys(nutrition_facts)?.map((item, index) =>
                     item === 'calories' ||
                     item === 'carbs' ||
@@ -309,7 +311,35 @@ const DetailFoodScreen = () => {
                           }}>
                           <Text
                             style={[
-                              {fontSize: 14},
+                              {
+                                fontSize: 14,
+                                color:
+                                  Math.round(
+                                    ((nutrition_facts[item] * quantity) /
+                                      (item === 'calories'
+                                        ? daily_calories
+                                        : item === 'protein'
+                                        ? daily_protein
+                                        : item === 'carbs'
+                                        ? daily_carbs
+                                        : daily_fat)) *
+                                      100,
+                                  ) > 50
+                                    ? '#ea4d00'
+                                    : Math.round(
+                                        ((nutrition_facts[item] * quantity) /
+                                          (item === 'calories'
+                                            ? daily_calories
+                                            : item === 'protein'
+                                            ? daily_protein
+                                            : item === 'carbs'
+                                            ? daily_carbs
+                                            : daily_fat)) *
+                                          100,
+                                      ) > 30
+                                    ? '#f2bd11'
+                                    : '#00be27',
+                              },
                               styles.textNutritionDetail,
                             ]}>
                             {Math.round(
@@ -327,7 +357,35 @@ const DetailFoodScreen = () => {
                           </Text>
                           <Text
                             style={[
-                              {fontSize: 14},
+                              {
+                                fontSize: 14,
+                                color:
+                                  Math.round(
+                                    ((nutrition_facts[item] * quantity) /
+                                      (item === 'calories'
+                                        ? daily_calories
+                                        : item === 'protein'
+                                        ? daily_protein
+                                        : item === 'carbs'
+                                        ? daily_carbs
+                                        : daily_fat)) *
+                                      100,
+                                  ) > 50
+                                    ? '#ea4d00'
+                                    : Math.round(
+                                        ((nutrition_facts[item] * quantity) /
+                                          (item === 'calories'
+                                            ? daily_calories
+                                            : item === 'protein'
+                                            ? daily_protein
+                                            : item === 'carbs'
+                                            ? daily_carbs
+                                            : daily_fat)) *
+                                          100,
+                                      ) > 30
+                                    ? '#f2bd11'
+                                    : '#00be27',
+                              },
                               styles.textNutritionDetail,
                             ]}>
                             {item === 'calories'

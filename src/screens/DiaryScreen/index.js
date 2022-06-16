@@ -19,6 +19,7 @@ import font from '../../assets/fonts/font';
 import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
+import WaterItem from '../../components/WaterItem';
 
 const DiaryScreen = () => {
   const context = useContext(DataContext);
@@ -193,6 +194,17 @@ const DiaryScreen = () => {
                     onPress={() =>
                       navigation.navigate('AddExerciseScreen', {
                         meal: 'Exercise',
+                        diaryId: diary.id,
+                      })
+                    }
+                  />
+                  <WaterItem
+                    meal={''}
+                    //listItem={exercise}
+                    diaryId={diary.id}
+                    date={date}
+                    onPress={() =>
+                      navigation.navigate('AddWaterScreen', {
                         diaryId: diary.id,
                       })
                     }

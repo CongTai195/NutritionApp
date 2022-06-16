@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textNutritionDetail: {
-    fontWeight: '500',
+    fontWeight: '900',
     fontFamily: font.DEFAULT_FONT,
   },
   others: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   percent: {
     flexDirection: 'column',
     //borderBottomWidth: 0.5,
-    height: 90,
+    //height: 90,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginBottom: 0.5,

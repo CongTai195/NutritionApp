@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
     color: 'black',
     fontWeight: '500',
+    marginTop: 10,
   },
   nutrition: {
     flexDirection: 'row',
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
-    fontWeight: '500',
+    fontWeight: '900',
     marginHorizontal: 10,
   },
   amountText: {

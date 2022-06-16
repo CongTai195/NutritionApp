@@ -83,7 +83,14 @@ const styles = StyleSheet.create({
   enoughText: {
     //flex: 1,
     color: '#10de00',
-    fontSize: 15,
+    fontSize: 13,
+    fontFamily: font.DEFAULT_FONT,
+    fontWeight: '500',
+  },
+  tooMuchText: {
+    //flex: 1,
+    color: '#f2bd11',
+    fontSize: 13,
     fontFamily: font.DEFAULT_FONT,
     fontWeight: '500',
   },

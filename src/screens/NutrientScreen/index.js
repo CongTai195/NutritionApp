@@ -57,11 +57,9 @@ const NutrientScreen = () => {
   const dinner = food?.filter(e => e.meal === 'Dinner');
   const exercise = diary?.exercise;
 
-  const [date, setDate] = useState(
-    `${today.toDate().getFullYear()}-${today.toDate().getMonth() + 1}-${today
-      .toDate()
-      .getDate()}`,
-  );
+  const [date, setDate] = useState(today.toDate().toISOString().split('T')[0]);
+
+  console.log(diary);
 
   const capitalizeFirstLetter = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -187,8 +185,8 @@ const NutrientScreen = () => {
   return (
     <View style={styles.root}>
       <CalendarStrip
-        showMonth
-        scrollable
+        showMonth={true}
+        scrollable={false}
         style={{height: 70}}
         calendarColor={colors.PURE_WHITE}
         calendarHeaderStyle={{color: colors.PURE_WHITE}}
@@ -217,15 +215,13 @@ const NutrientScreen = () => {
         iconContainer={{flex: 0.1}}
         iconStyle={{tintColor: 'black'}}
         selectedDate={today}
+        minDate={context.user?.created_at}
         useIsoWeekday={false}
-        startingDate={moment().subtract(3, 'days')}
+        //datesWhitelist={[{start: moment('2021-01-01'), end: moment()}]}
+        //startingDate={moment().subtract(3, 'days')}
         onDateSelected={dateSelected => {
           setIsLoading(true);
-          setDate(
-            `${dateSelected.toDate().getFullYear()}-${
-              dateSelected.toDate().getMonth() + 1
-            }-${dateSelected.toDate().getDate()}`,
-          );
+          setDate(dateSelected.toDate().toISOString().split('T')[0]);
         }}
       />
       <View style={styles.container}>
@@ -292,7 +288,19 @@ const NutrientScreen = () => {
                               </>
                             ) : (
                               <>
-                                <Text style={styles.enoughText}>ENOUGH</Text>
+                                {(item.left / item.goal) * 100 < -10 ? (
+                                  <>
+                                    <Text style={styles.tooMuchText}>
+                                      redundant
+                                    </Text>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Text style={styles.enoughText}>
+                                      Enough
+                                    </Text>
+                                  </>
+                                )}
                               </>
                             )}
                           </View>
