@@ -9,12 +9,12 @@ const AddFoodItem = ({item, onPress, addFood}) => {
       <View style={styles.information}>
         <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
           <Text style={styles.textHeader} numberOfLines={1}>
-            {item.name}{' '}
+            {item?.name}{' '}
           </Text>
           <View numberOfLines={1} style={{flexDirection: 'row'}}>
             <Text numberOfLines={1} style={styles.textInfo}>
-              {item.nutrition_facts[0].calories} cal,{' '}
-              {item.nutrition_facts[0].serving_size}, {item.detail}
+              {item.nutrition_facts[0]?.calories} cal,{' '}
+              {item.nutrition_facts[0]?.serving_size}, {item?.detail}
             </Text>
           </View>
         </TouchableOpacity>

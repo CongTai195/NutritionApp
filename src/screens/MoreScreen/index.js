@@ -132,7 +132,11 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity> */}
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              navigation.navigate('GoalUpdateScreen');
+            }}>
             <View style={styles.child}>
               <Ionicons
                 name="checkmark-done-outline"

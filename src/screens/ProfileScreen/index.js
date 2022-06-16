@@ -19,7 +19,9 @@ const ProfileScreen = () => {
   const user = context.user;
   const navigation = useNavigation();
   const name = user.name;
-  const progressNumber = 5;
+  const startingWeight = user?.process.starting_weight;
+  const currentWeight = user?.process.current_weight;
+  const progressNumber = Math.abs(startingWeight - currentWeight);
   const height = user?.process.height;
   const sex = user.gender === 1 ? 'Male' : 'Female';
   const age = user.age;
@@ -48,7 +50,14 @@ const ProfileScreen = () => {
         </View>
       </View>
       <View style={styles.progressSection}>
-        <View style={{margin: 10, flexDirection: 'row', flex: 1}}>
+        <View
+          style={{
+            margin: 10,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
+            flex: 1,
+          }}>
           <Text
             style={{
               fontSize: 16,
@@ -63,31 +72,13 @@ const ProfileScreen = () => {
               color: 'black',
               fontFamily: font.DEFAULT_FONT,
             }}>
-            Lost
+            {startingWeight > currentWeight ? 'Lost' : 'Gain'}
           </Text>
         </View>
-        {/* <View style={{borderLeftWidth: 1}}>
+        <View style={{borderLeftWidth: 1}}>
           <Text></Text>
         </View>
-        <View style={{margin: 10, flexDirection: 'row', flex: 1}}>
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'black',
-              fontWeight: '500',
-              fontFamily: font.DEFAULT_FONT,
-            }}>
-            {0}{' '}
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'black',
-              fontFamily: font.DEFAULT_FONT,
-            }}>
-            Friends
-          </Text>
-        </View> */}
+        <View style={{margin: 10, flexDirection: 'row', flex: 1}}></View>
       </View>
       <Text
         style={{

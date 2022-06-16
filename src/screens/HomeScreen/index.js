@@ -84,7 +84,7 @@ const HomeScreen = () => {
   const [activeNutrientIndex, setActiveNutrientIndex] = React.useState(0);
   const [activeExercisesIndex, setActiveExercisesIndex] = React.useState(0);
   const [activeLogIndex, setLogIndex] = React.useState(0);
-  const [time, setTime] = useState(new Date(Date.now()));
+  //const [time, setTime] = useState(new Date(Date.now()));
 
   const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 6});
 
@@ -219,19 +219,24 @@ const HomeScreen = () => {
         minimumFetchInterval: 15, // fetch interval in minutes
       },
       async taskId => {
-        //console.log('Received background-fetch event: ', taskId);
-        // PushNotification.localNotification({
-        //   //... You can use all the options from localNotifications
-        //   channelId: 'my-channel',
-        //   message: `${time}: You haven't log your meal`, // (required)
-        //   color: 'red',
-        //   playSound: true,
-        //   soundName: 'default',
-        //   allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-        // });
-        testPush(`${time}: You haven't log your meal`);
-        //console.log('Finish background-fetch event: ', taskId);
-        // Call finish upon completion of the background task
+        let time = new Date(Date.now());
+        if (
+          time.getHours() === 8 &&
+          time.getMinutes() === 25 &&
+          calories_breakfast === 0
+        ) {
+          testPush(`${time}: You haven't log your Dinner.`);
+        }
+        if (
+          time.getHours() === 19 &&
+          time.getMinutes() === 58 &&
+          calories_lunch === 0
+        ) {
+          testPush(`${time}: You haven't log your Dinner.`);
+        }
+        if (time.getHours() === 16 && calories_dinner === 0) {
+          testPush(`${time}: You haven't log your Dinner.`);
+        }
         BackgroundFetch.finish(taskId);
       },
       error => {

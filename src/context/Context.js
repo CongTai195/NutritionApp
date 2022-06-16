@@ -16,6 +16,8 @@ export class DataProvider extends Component {
       weight_week: [],
       weight_month: [],
       weight_3_months: [],
+      my_food: [],
+      my_exercise: [],
 
       today: moment().toDate().toISOString().split('T')[0],
       diary_today: [],
@@ -27,28 +29,49 @@ export class DataProvider extends Component {
     };
   }
 
-  // updateUserCurrentWeight = () => {
-  //   try {
-  //     this.setState({user: {}});
-  //     const response = await fetch(`${this.state.BASE_URL}/api/getUser`, {
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //         Authorization:
-  //           `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
-  //       },
-  //       method: 'GET',
-  //     });
-  //     const result = await response.json();
-  //     if (result.status === 'OK') {
-  //       this.setState({user: result.results.info});
-  //     } else {
-  //       alert('Invalid username or password');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  getMyFood = async () => {
+    try {
+      const response = await fetch(`${this.state.BASE_URL}/api/myFood`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization:
+            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
+        },
+        method: 'GET',
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        this.setState({my_food: result.results});
+      } else {
+        console.log(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getMyExercise = async () => {
+    try {
+      const response = await fetch(`${this.state.BASE_URL}/api/myExercise`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization:
+            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
+        },
+        method: 'GET',
+      });
+      const result = await response.json();
+      if (result.status === 'OK') {
+        this.setState({my_exercise: result.results});
+      } else {
+        console.log(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   getWeight = async () => {
     try {
@@ -95,6 +118,8 @@ export class DataProvider extends Component {
     if (await AsyncStorage.getItem('@storage_Key')) {
       if (this.state.user.length === 0) {
         this.getUser();
+        this.getMyFood();
+        this.getMyExercise();
       }
       this.setToken();
     }
@@ -342,6 +367,8 @@ export class DataProvider extends Component {
       weight_week,
       weight_month,
       weight_3_months,
+      my_food,
+      my_exercise,
     } = this.state;
     const {
       login,
@@ -355,6 +382,8 @@ export class DataProvider extends Component {
       updateDiary,
       getWeight,
       getUser,
+      getMyFood,
+      getMyExercise,
     } = this;
     return (
       <DataContext.Provider
@@ -370,6 +399,10 @@ export class DataProvider extends Component {
           weight_week,
           weight_month,
           weight_3_months,
+          my_food,
+          my_exercise,
+          getMyExercise,
+          getMyFood,
           getWeight,
           setRegisterData,
           setIsLoading,

@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import MoreScreen from '../../screens/MoreScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
 import NutritionUpdateScreen from '../../screens/NutritionUpdateScreen';
+import GoalUpdateScreen from '../../screens/GoalUpdateScreen';
 const MoreStack = () => {
   const Stack = createStackNavigator();
   return (
@@ -22,6 +23,11 @@ const MoreStack = () => {
       <Stack.Screen
         name="NutritionUpdateScreen"
         component={NutritionUpdateScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="GoalUpdateScreen"
+        component={GoalUpdateScreen}
         options={{headerShown: true}}
       />
     </Stack.Navigator>

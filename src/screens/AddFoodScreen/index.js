@@ -5,7 +5,7 @@ import {
   FlatList,
   Alert,
   Modal,
-  Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useLayoutEffect, useState, useEffect, useContext} from 'react';
 import styles from './style';
@@ -19,6 +19,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 import {color} from 'react-native-reanimated';
 import {useToast} from 'react-native-toast-notifications';
+import StandardFoodScreen from './StandardFoodScreen';
+import CustomFoodScreen from './CustomFoodScreen';
 
 const AddFoodScreen = () => {
   const toast = useToast();
@@ -31,6 +33,25 @@ const AddFoodScreen = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
   const [food, setFood] = useState([]);
+  const [myFood, setMyFood] = useState(context.my_food);
+
+  const [time, setTime] = useState(0);
+
+  const getTime = item => {
+    if (item === time) {
+      if (item === 1) {
+        return '#f9a5ff';
+      } else return '#a572de';
+    } else return colors.LIGHT_GREY;
+  };
+
+  const getLabel = item => {
+    if (item === time) {
+      if (item === 1) {
+        return '#f9a5ff';
+      } else return '#a572de';
+    } else return colors.BLACK;
+  };
 
   const [search, setSearch] = useState('');
 
@@ -44,7 +65,7 @@ const AddFoodScreen = () => {
     });
   }, [navigation]);
 
-  const handleSearch = async searchValue => {
+  const searchFood = async searchValue => {
     if (searchValue.length < 2) {
       Alert.alert(
         'Search term too short',
@@ -57,156 +78,154 @@ const AddFoodScreen = () => {
       setIsSearching(true);
       setFood([]);
       try {
-        const response = await fetch(
-          `${context.BASE_URL}/api/food/search/search?name=${searchValue}`,
-          {
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization:
-                `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
-            },
+        const url = `${context.BASE_URL}/api/food/search/search?name=${searchValue}`;
+        const response = await fetch(url, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:
+              `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
           },
-        );
+        });
         const result = await response.json();
         setTimeout(() => {
           setFood(result.results);
           setIsSearching(false);
-        }, 1500);
+        }, 500);
       } catch (error) {
         console.error(error);
       }
-      // } finally {
-      //   setIsSearching(false);
-      // }
-      // setTimeout(() => {
-      //   context.searchFood(searchValue);
-      //   setIsSearching(false);
-      // }, 1500);
     }
   };
 
-  const addFood = async item => {
+  const searchMyFood = async searchValue => {
     try {
-      const response = await fetch(`${context.BASE_URL}/api/diary/food`, {
+      const url = `${context.BASE_URL}/api/myFood/search?name=${searchValue}`;
+      const response = await fetch(url, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization:
-            'Bearer' + (await AsyncStorage.getItem('@storage_Key')),
+            `Bearer` + (await AsyncStorage.getItem('@storage_Key')),
         },
-        method: 'POST',
-        body: JSON.stringify({
-          diary_id: diaryId,
-          serving_size_food_id: item.nutrition_facts[0].id,
-          quantity: 1,
-          meal: meal,
-        }),
       });
       const result = await response.json();
-      if (result.status === 'OK') {
-        //setIsAdded(true);
-        toast.show('Food logged successfully to your diary', {
-          type: 'success',
-          placement: 'bottom',
-          duration: 1700,
-          offset: 30,
-          animationType: 'slide-in',
-        });
-        setTimeout(() => {
-          navigation.goBack();
-        }, 1700);
-        // return () => clearTimeout(time);
-      } else {
-        alert('Error adding food');
-        console.log(result);
-      }
+      setMyFood(result.results);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        <SearchInput
-          icon="search"
-          initialPlaceholder="Search for a food"
-          onChangeText={setSearch}
-          value={search}
-          onSubmitEditing={() => handleSearch(search)}
-        />
-        {isSearched === false ? (
-          <Text style={styles.textHeader}></Text>
-        ) : isSearching === true ? (
-          <View>
-            <Text style={styles.textHeader}>Searching ...</Text>
-            <AnimatedLottieView
-              autoPlay
-              source={require('../../assets/lottie/14427-simple-dot-loading-ver02.json')}
-            />
-          </View>
-        ) : (
-          <Text style={styles.textHeader}>Search Result</Text>
-        )}
+    <View style={styles.container}>
+      <SearchInput
+        icon="search"
+        initialPlaceholder="Search for a food"
+        onChangeText={value => {
+          setSearch(value);
+          if (time === 1) {
+            searchMyFood(value);
+          }
+        }}
+        value={search}
+        onSubmitEditing={() => {
+          if (time === 0) {
+            searchFood(search);
+          }
+        }}
+      />
+      <View style={{backgroundColor: '#fff', marginTop: 2}}>
         <View
           style={{
-            flex: 1,
-            marginBottom: 10,
-            //backgroundColor: colors.RED_MEET,
+            flexDirection: 'row',
+            //borderBottomWidth: 0.5,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 30,
+            marginBottom: 0.5,
+            marginTop: 10,
+            width: '100%',
           }}>
-          {food.length > 0 ? (
-            <>
-              <FlatList
-                data={food}
-                renderItem={({item}) => (
-                  <AddFoodItem
-                    onPress={() =>
-                      navigation.navigate('DetailFoodScreen', {
-                        food: item,
-                        diaryId: diaryId,
-                        meal: meal,
-                      })
-                    }
-                    item={item}
-                    addFood={() => {
-                      addFood(item);
-                    }}
-                  />
-                )}
-                keyExtractor={item => item.id}
-              />
-            </>
-          ) : null}
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isAdded}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <>
-            <View style={{flex: 1}}>
-              <View
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderBottomColor: getTime(0),
+              borderBottomWidth: 2,
+              borderRightColor: getTime(0),
+              borderRightWidth: time === 0 ? 2 : 0,
+              marginRight: 2,
+            }}
+            onPress={() => {
+              setTime(0);
+            }}>
+            <View>
+              {/* <TouchableOpacity
+              onPress={() => {
+                setTime(0);
+              }}> */}
+              <Text
                 style={{
                   flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  color: getLabel(0),
+                  fontSize: 16,
+                  fontFamily: font.DEFAULT_FONT,
+                  fontWeight: time === 0 ? '900' : '500',
+                  marginHorizontal: 10,
                 }}>
-                <AnimatedLottieView
-                  style={{height: 100, alignSelf: 'center'}}
-                  autoPlay
-                  source={require('../../assets/lottie/91001-success.json')}
-                />
-                <Text>Added</Text>
-              </View>
+                Standard Food
+              </Text>
+              {/* </TouchableOpacity> */}
             </View>
-          </>
-        </Modal>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderBottomColor: getTime(1),
+              borderBottomWidth: 2,
+              borderLeftColor: getTime(1),
+              borderLeftWidth: time === 1 ? 2 : 0,
+            }}
+            onPress={() => {
+              setTime(1);
+            }}>
+            <View>
+              <Text
+                style={{
+                  flex: 1,
+                  color: getLabel(1),
+                  fontSize: 16,
+                  fontFamily: font.DEFAULT_FONT,
+                  fontWeight: time === 1 ? '900' : '500',
+                  marginHorizontal: 10,
+                }}>
+                Custom Food
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-    </>
+      {time === 0 ? (
+        <StandardFoodScreen
+          meal={meal}
+          diaryId={diaryId}
+          isSearched={isSearched}
+          isSearching={isSearching}
+          food={food}
+        />
+      ) : (
+        <CustomFoodScreen
+          meal={meal}
+          diaryId={diaryId}
+          isSearched={isSearched}
+          isSearching={isSearching}
+          food={myFood}
+        />
+      )}
+    </View>
   );
 };
 

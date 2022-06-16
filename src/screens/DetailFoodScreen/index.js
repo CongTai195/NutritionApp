@@ -166,7 +166,15 @@ const DetailFoodScreen = () => {
             showsVerticalScrollIndicator={false}
             style={styles.container}>
             <View style={styles.imageSection}>
-              <Image style={styles.image} source={{uri: `${food.imageURL}`}} />
+              <Image
+                style={styles.image}
+                source={{
+                  uri:
+                    food.imageURL !== null
+                      ? `${food.imageURL}`
+                      : 'https://res.cloudinary.com/dxtozrwr9/image/upload/v1655346365/food_jxcqmc.jpg',
+                }}
+              />
             </View>
             <View style={styles.header}>
               <Text style={styles.name}>{food.name}</Text>

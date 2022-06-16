@@ -8,6 +8,9 @@ import DetailFoodScreen from '../../screens/DetailFoodScreen';
 import AddExerciseScreen from '../../screens/AddExerciseScreen';
 import DetailExerciseScreen from '../../screens/DetailExerciseScreen';
 import NutrientScreen from '../../screens/NutrientScreen';
+import CreateFoodScreen from '../../screens/CreateFoodScreen';
+import CreateServingScreen from '../../screens/CreateFoodScreen/CreateServingScreen';
+import CreateExerciseScreen from '../../screens/CreateExerciseScreen';
 
 const DiaryStack = () => {
   const Stack = createStackNavigator();
@@ -41,6 +44,21 @@ const DiaryStack = () => {
       <Stack.Screen
         name="NutrientScreen"
         component={NutrientScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="CreateFoodScreen"
+        component={CreateFoodScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="CreateServingScreen"
+        component={CreateServingScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="CreateExerciseScreen"
+        component={CreateExerciseScreen}
         options={{headerShown: true}}
       />
     </Stack.Navigator>

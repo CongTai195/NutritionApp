@@ -43,7 +43,7 @@ const NutritionUpdateScreen = () => {
       headerTitleAlign: 'center',
       headerRight: () => (
         <View style={{marginRight: 15}}>
-          <TouchableOpacity onPress={() => addFood()}>
+          <TouchableOpacity onPress={() => updateProcess()}>
             <Ionicons
               name="checkmark-outline"
               size={25}
@@ -55,7 +55,7 @@ const NutritionUpdateScreen = () => {
     });
   }, [navigation, carbs, fat, protein]);
 
-  const addFood = async () => {
+  const updateProcess = async () => {
     if (carbs + fat + protein < 100) {
       toast.show('Macronutrients must equal 100%', {
         type: 'warning',

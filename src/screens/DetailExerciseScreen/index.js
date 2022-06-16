@@ -137,80 +137,61 @@ const DetailExerciseScreen = () => {
     }
   };
   return (
-    <>
-      {isAdded === false ? (
-        <>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={styles.container}>
-            <View style={styles.imageSection}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri: `${exercise.imageURL}`,
-                }}
-              />
-            </View>
-            <View style={styles.header}>
-              <Text style={styles.name}>{exercise.name.split(', ')[0]}</Text>
-              <Text style={styles.information}>{exercise.name}</Text>
-            </View>
-            <View style={styles.others}>
-              {/* <TouchableOpacity activeOpacity={0.5}> */}
-              <View style={styles.childOthers}>
-                <Text style={styles.labelText}>Duration (in minute)</Text>
-                <QuantitySelector
-                  quantity={quantity}
-                  setQuantity={value => setQuantity(value)}
-                />
-              </View>
-              <View style={styles.childOthers}>
-                <Text style={styles.labelText}>Calories burn</Text>
-                <Text style={styles.servingSizeText}>
-                  {action === 'View'
-                    ? Math.round(exercise.calories * quantity)
-                    : Math.round(
-                        (exercise.calories / exercise.duration) * quantity,
-                      )}
-                </Text>
-              </View>
-              {/* </TouchableOpacity> */}
-            </View>
-            <View style={styles.others}>
-              {/* <TouchableOpacity activeOpacity={0.5}> */}
-              <View style={styles.childOthers}>
-                <Text style={[styles.labelText, {fontWeight: '900'}]}>
-                  Benefit of Running
-                </Text>
-              </View>
-              {/* <View style={{}}> */}
-              {benefits?.split('; ').map((benefit, index) => (
-                <View key={index} style={styles.childBenefit}>
-                  <Text style={[styles.labelText, {marginBottom: 10}]}>
-                    {'  '}- {benefit}.
-                  </Text>
-                </View>
-              ))}
-              {/* </View> */}
-              {/* </TouchableOpacity> */}
-            </View>
-          </ScrollView>
-        </>
-      ) : (
-        <>
-          <View style={{flex: 1}}>
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <AnimatedLottieView
-                style={{height: 100, alignSelf: 'center'}}
-                autoPlay
-                source={require('../../assets/lottie/91001-success.json')}
-              />
-            </View>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <View style={styles.imageSection}>
+        <Image
+          style={styles.image}
+          source={{
+            uri:
+              exercise.imageURL !== null
+                ? `${exercise.imageURL}`
+                : 'https://res.cloudinary.com/dxtozrwr9/image/upload/v1655346153/exercise_r0ajjo.jpg',
+          }}
+        />
+      </View>
+
+      <View style={styles.header}>
+        <Text style={styles.name}>{exercise.name.split(', ')[0]}</Text>
+        <Text style={styles.information}>{exercise.name}</Text>
+      </View>
+      <View style={styles.others}>
+        {/* <TouchableOpacity activeOpacity={0.5}> */}
+        <View style={styles.childOthers}>
+          <Text style={styles.labelText}>Duration (in minute)</Text>
+          <QuantitySelector
+            quantity={quantity}
+            setQuantity={value => setQuantity(value)}
+          />
+        </View>
+        <View style={styles.childOthers}>
+          <Text style={styles.labelText}>Calories burn</Text>
+          <Text style={styles.servingSizeText}>
+            {action === 'View'
+              ? Math.round(exercise.calories * quantity)
+              : Math.round((exercise.calories / exercise.duration) * quantity)}
+          </Text>
+        </View>
+        {/* </TouchableOpacity> */}
+      </View>
+      <View style={styles.others}>
+        {/* <TouchableOpacity activeOpacity={0.5}> */}
+        <View style={styles.childOthers}>
+          <Text style={[styles.labelText, {fontWeight: '900'}]}>
+            Benefit of Running
+          </Text>
+        </View>
+        {/* <View style={{}}> */}
+        {benefits?.split('; ').map((benefit, index) => (
+          <View key={index} style={styles.childBenefit}>
+            <Text style={[styles.labelText, {marginBottom: 10}]}>
+              {'  '}- {benefit}.
+            </Text>
           </View>
-        </>
-      )}
-    </>
+        ))}
+        {/* </View> */}
+        {/* </TouchableOpacity> */}
+      </View>
+    </ScrollView>
   );
 };
 

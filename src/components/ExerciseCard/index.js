@@ -53,7 +53,12 @@ const ExerciseCard = ({exercise, onPress}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          source={{uri: exercise?.imageURL}}>
+          source={{
+            uri:
+              exercise.imageURL !== null
+                ? `${exercise.imageURL}`
+                : 'https://res.cloudinary.com/dxtozrwr9/image/upload/v1655346153/exercise_r0ajjo.jpg',
+          }}>
           <View style={{alignItems: 'center', margin: 5}}>
             <Text
               style={{
