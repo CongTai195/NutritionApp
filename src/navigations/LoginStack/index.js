@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
 import {} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import SuccessfulRegister from '../../components/RegisterComponent/SuccessfulRegister';

@@ -56,7 +56,9 @@ const CreateFoodScreen = () => {
                   meal: meal,
                 });
               } else {
-                alert("Your serving has to be as example '3 cups'");
+                alert(
+                  'Your serving size must in a format such as "1 bowl, 100g, ..."',
+                );
                 console.log('NOT OK');
               }
             }}>
@@ -72,7 +74,10 @@ const CreateFoodScreen = () => {
   }, [navigation, name, detail, serving]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+    <ScrollView
+      contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
+      showsVerticalScrollIndicator={false}
+      style={styles.container}>
       <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Name</Text>
@@ -120,6 +125,16 @@ const CreateFoodScreen = () => {
           </View>
         </View>
       </View>
+      <Text
+        style={{
+          marginHorizontal: 30,
+          textAlign: 'center',
+          fontSize: 16,
+          color: '#ded006',
+          fontFamily: font.DEFAULT_FONT,
+        }}>
+        Your serving size must in a format such as "1 bowl, 100g, ..."
+      </Text>
     </ScrollView>
   );
 };

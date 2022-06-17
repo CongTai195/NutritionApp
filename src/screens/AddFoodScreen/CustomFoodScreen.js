@@ -121,7 +121,7 @@ const CustomFoodScreen = ({isSearched, isSearching, food, diaryId, meal}) => {
       ) : (
         <Text style={styles.textHeader}>Search Result</Text>
       )} */}
-      <Text style={styles.textHeader}>My Food</Text>
+      <Text style={styles.textHeader}>{food?.length > 0 ? 'My Food' : ''}</Text>
       <View
         style={{
           flex: 1,

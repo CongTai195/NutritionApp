@@ -1,4 +1,4 @@
-import React, {useState, useContext, useLayoutEffect} from 'react';
+import React, {useState, useContext, useLayoutEffect, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import styles from './style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,6 +25,7 @@ import {DataContext} from '../../context/Context';
 const LoginScreen = () => {
   const context = useContext(DataContext);
   const navigation = useNavigation();
+  const token = context.token;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Sign In',
@@ -60,7 +62,7 @@ const LoginScreen = () => {
     }
   };
 
-  const onPress = () => {
+  const onPress = async () => {
     if (!data.username) {
       setError(prev => {
         return {...prev, username: 'Please input your email'};
@@ -72,9 +74,19 @@ const LoginScreen = () => {
       });
     }
     if (data.username && data.password) {
-      context.login(data.username, data.password);
+      const result = await context.login(data.username, data.password);
+      if (result) {
+        navigation.replace('App');
+      }
     }
   };
+
+  useEffect(() => {
+    if (!token) {
+    } else {
+      navigation.replace('App');
+    }
+  }, [token]);
 
   const RenderLogo = () => {
     return (
@@ -89,7 +101,7 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={'height'}>
-      <View style={styles.inner}>
+      <View style={[styles.inner, {opacity: context.isLoading ? 0.4 : 1}]}>
         {RenderLogo()}
         <View style={styles.button}>
           <Input

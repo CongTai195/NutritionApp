@@ -8,35 +8,11 @@ import {ToastProvider} from 'react-native-toast-notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BackgroundFetch from 'react-native-background-fetch';
 import PushNotification from 'react-native-push-notification';
+import {NavigationContainer} from '@react-navigation/native';
+import MainStack from './src/navigations/MainStack';
 
 const App = () => {
-  // useEffect(() => {
-  //   BackgroundFetch.configure(
-  //     {
-  //       minimumFetchInterval: 15, // fetch interval in minutes
-  //     },
-  //     async taskId => {
-  //       //console.log('Received background-fetch event: ', taskId);
-  //       PushNotification.localNotification({
-  //         //... You can use all the options from localNotifications
-  //         channelId: 'my-channel',
-  //         message: "You haven't log your meal", // (required)
-  //         color: 'red',
-  //         playSound: true,
-  //         soundName: 'default',
-  //         allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-  //       });
-  //       //console.log('Finish background-fetch event: ', taskId);
-  //       // Call finish upon completion of the background task
-  //       BackgroundFetch.finish(taskId);
-  //     },
-  //     error => {
-  //       console.error('RNBackgroundFetch failed to start.');
-  //     },
-  //   );
-  // }, []);
   return (
-    // <NavigationContainer>
     <ToastProvider
       successIcon={
         <Ionicons
@@ -62,11 +38,12 @@ const App = () => {
       }>
       <DataProvider>
         <View style={styles.container}>
-          <BottomTab />
+          <NavigationContainer>
+            <MainStack />
+          </NavigationContainer>
         </View>
       </DataProvider>
     </ToastProvider>
-    //</NavigationContainer>
   );
 };
 

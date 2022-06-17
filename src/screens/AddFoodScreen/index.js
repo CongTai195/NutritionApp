@@ -118,22 +118,24 @@ const AddFoodScreen = () => {
 
   return (
     <View style={styles.container}>
-      <SearchInput
-        icon="search"
-        initialPlaceholder="Search for a food"
-        onChangeText={value => {
-          setSearch(value);
-          if (time === 1) {
-            searchMyFood(value);
-          }
-        }}
-        value={search}
-        onSubmitEditing={() => {
-          if (time === 0) {
-            searchFood(search);
-          }
-        }}
-      />
+      <View>
+        <SearchInput
+          icon="search"
+          initialPlaceholder="Search for a food"
+          onChangeText={value => {
+            setSearch(value);
+            if (time === 1) {
+              searchMyFood(value);
+            }
+          }}
+          value={search}
+          onSubmitEditing={() => {
+            if (time === 0) {
+              searchFood(search);
+            }
+          }}
+        />
+      </View>
       <View style={{backgroundColor: '#fff', marginTop: 2}}>
         <View
           style={{

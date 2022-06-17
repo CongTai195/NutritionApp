@@ -10,9 +10,9 @@ const styles = StyleSheet.create({
     //flex: 1,
   },
   dot: {
-    width: 50,
-    height: 4,
-    borderRadius: 25,
+    width: 10,
+    height: 10,
+    borderRadius: 30,
     borderColor: '#c9c9c9',
     backgroundColor: '#ededed',
     borderWidth: 1,

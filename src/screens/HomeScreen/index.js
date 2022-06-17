@@ -44,6 +44,8 @@ const fat_image = require('../../assets/images/fat.jpg');
 const banner = require('../../assets/images/Banner.jpg');
 const fire = require('../../assets/images/fire.png');
 const glass = require('../../assets/images/glass.png');
+import LottieView from 'lottie-react-native';
+import Loading from '../../components/Loading';
 
 const HomeScreen = () => {
   const context = useContext(DataContext);
@@ -51,6 +53,7 @@ const HomeScreen = () => {
   const diary = context.diary_today;
   const calories = diary?.process?.calories;
   const food = diary?.food;
+  //const isLoading = context.isLoading;
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
   const calories_breakfast =
     breakfast?.length > 0
@@ -77,8 +80,8 @@ const HomeScreen = () => {
   const total_protein = Math.round(
     (calories * diary?.process?.protein) / 100 / 4,
   );
-  const exercise = diary.exercise;
-  const water = diary.water;
+  const exercise = diary?.exercise;
+  const water = diary?.water;
   const navigation = useNavigation();
   const date = moment().toDate().toISOString().split('T')[0];
   const windowWidth = Dimensions.get('window').width;
@@ -88,6 +91,7 @@ const HomeScreen = () => {
   //const [time, setTime] = useState(new Date(Date.now()));
 
   const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 6});
+  const [isLoading, setIsLoading] = useState(true);
 
   const onNutrientUpdate = React.useRef(({viewableItems}) => {
     if (viewableItems.length > 0) {
@@ -185,57 +189,32 @@ const HomeScreen = () => {
     context.getDiary(date);
   }, []);
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     setTime(new Date(Date.now()));
-  //   }, 30000);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (
-  //     time.getHours() === 8 &&
-  //     time.getMinutes() === 25 &&
-  //     calories_breakfast === 0
-  //   ) {
-  //     testPush("You haven't log your Breakfast.");
-  //   }
-  //   if (
-  //     time.getHours() === 19 &&
-  //     time.getMinutes() === 58 &&
-  //     calories_lunch === 0
-  //   ) {
-  //     testPush("You haven't log your Lunch.");
-  //   }
-  //   if (
-  //     time.getHours() === 20 &&
-  //     time.getMinutes() === 0 &&
-  //     calories_dinner === 0
-  //   ) {
-  //     testPush("You haven't log your Dinner.");
-  //   }
-  // }, [time.getMinutes()]);
   useEffect(() => {
     BackgroundFetch.configure(
       {
-        minimumFetchInterval: 15, // fetch interval in minutes
+        minimumFetchInterval: 30, // fetch interval in minutes
       },
       async taskId => {
         let time = new Date(Date.now());
         if (
-          time.getHours() === 8 &&
-          time.getMinutes() === 25 &&
+          time.getHours() === 9 &&
+          time.getMinutes() <= 30 &&
           calories_breakfast === 0
         ) {
-          testPush(`${time}: You haven't log your Dinner.`);
+          testPush(`${time}: You haven't log your Breakfast.`);
+        }
+        if (
+          time.getHours() === 13 &&
+          time.getMinutes() <= 30 &&
+          calories_lunch === 0
+        ) {
+          testPush(`${time}: You haven't log your Lunch.`);
         }
         if (
           time.getHours() === 19 &&
-          time.getMinutes() === 58 &&
-          calories_lunch === 0
+          time.getMinutes() <= 30 &&
+          calories_dinner === 0
         ) {
-          testPush(`${time}: You haven't log your Dinner.`);
-        }
-        if (time.getHours() === 16 && calories_dinner === 0) {
           testPush(`${time}: You haven't log your Dinner.`);
         }
         BackgroundFetch.finish(taskId);
@@ -324,223 +303,269 @@ const HomeScreen = () => {
     },
   ];
 
-  return (
-    <View style={styles.container}>
-      {/* <View style={styles.screen}> */}
-      <Header
-        onPress={() => {
-          navigation.navigate('More');
-        }}
-        onBellPress={() => {
-          navigation.navigate('NotificationScreen');
-        }}
-        name={user.name}
-      />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <Banner /> */}
-        <CaloriesRemaining
-          goal={calories}
-          food={calories_in}
-          exercise={calories_out}
-          onPress={() => {
-            navigation.navigate('Diary');
-          }}
-        />
-        {/* </View> */}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 10,
-            marginTop: 10,
-            marginRight: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Label>Nutrients</Label>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('NutrientScreen');
-            }}>
-            <Ionicons name="arrow-forward-outline" size={25} color="black" />
-          </TouchableOpacity>
-        </View>
-        <Carousel
-          data={nutrientArray}
-          renderItem={({item, index}) => (
-            // <View key={index}>
-            <Card
-              key={item.id}
-              name={item.name}
-              mass={item.mass}
-              status={item.status}
-              image={item.image}
-              lightColor={item.lightColor}
-              color={item.color}
-              darkColor={item.darkColor}
-            />
-            // </View>
-          )}
-          snapToInterval={windowWidth - 5}
-          viewabilityConfig={viewConfigRef.current}
-          onViewableItemsChanged={onNutrientUpdate.current}
-          activeIndex={activeNutrientIndex}
-          dotColor={colors.BACK_GROUND_COLOR}
-        />
+  useEffect(() => {
+    if (
+      isNaN(total_carbs) ||
+      isNaN(total_fat) ||
+      isNaN(total_protein) ||
+      weights.length === 0
+    ) {
+      console.log('NOT OK');
+      //context.setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  }, [total_carbs, total_fat, total_protein, weights]);
 
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 10,
-            marginTop: 10,
-            marginRight: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Label>Exercises</Label>
-          <TouchableOpacity
+  return (
+    <>
+      {isLoading ? (
+        <View style={styles.container}>
+          <Header
             onPress={() => {
-              navigation.navigate('Diary');
-            }}>
-            <Ionicons name="arrow-forward-outline" size={25} color="black" />
-          </TouchableOpacity>
+              navigation.navigate('More');
+            }}
+            onBellPress={() => {
+              navigation.navigate('NotificationScreen');
+            }}
+            name={user.name}
+          />
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Loading />
+          </View>
         </View>
-        {exercise?.length === 0 ? (
-          <>
+      ) : (
+        <View style={styles.container}>
+          <Header
+            onPress={() => {
+              navigation.navigate('More');
+            }}
+            onBellPress={() => {
+              navigation.navigate('NotificationScreen');
+            }}
+            name={user.name}
+          />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <CaloriesRemaining
+              goal={calories}
+              food={calories_in}
+              exercise={calories_out}
+              onPress={() => {
+                navigation.navigate('Diary');
+              }}
+            />
+            {!(
+              isNaN(total_carbs) &&
+              isNaN(total_fat) &&
+              isNaN(total_protein)
+            ) ? (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginLeft: 10,
+                    marginTop: 10,
+                    marginRight: 25,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Label>Nutrients</Label>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('NutrientScreen');
+                    }}>
+                    <Ionicons
+                      name="arrow-forward-outline"
+                      size={25}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Carousel
+                  data={nutrientArray}
+                  renderItem={({item, index}) => (
+                    // <View key={index}>
+                    <Card
+                      key={item.id}
+                      name={item.name}
+                      mass={item.mass}
+                      status={item.status}
+                      image={item.image}
+                      lightColor={item.lightColor}
+                      color={item.color}
+                      darkColor={item.darkColor}
+                    />
+                    // </View>
+                  )}
+                  snapToInterval={windowWidth - 5}
+                  viewabilityConfig={viewConfigRef.current}
+                  onViewableItemsChanged={onNutrientUpdate.current}
+                  activeIndex={activeNutrientIndex}
+                  dotColor={colors.BACK_GROUND_COLOR}
+                />
+              </>
+            ) : null}
+
             <View
               style={{
-                margin: 5,
-                paddingHorizontal: 10,
-                alignItems: 'center',
+                flexDirection: 'row',
+                marginLeft: 10,
+                marginTop: 10,
+                marginRight: 25,
                 justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <View>
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  onPress={() => {
-                    navigation.navigate('Diary');
-                  }}>
-                  <Banner image={banner} />
-                </TouchableOpacity>
-              </View>
+              <Label>Exercises</Label>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Diary');
+                }}>
+                <Ionicons
+                  name="arrow-forward-outline"
+                  size={25}
+                  color="black"
+                />
+              </TouchableOpacity>
             </View>
-          </>
-        ) : (
-          <>
-            <Carousel
-              data={exercise}
-              renderItem={({item, index}) => (
-                <ExerciseCard
-                  onPress={() => {
-                    navigation.navigate('DetailExerciseScreen', {
-                      exercise: item,
-                      action: 'Update',
-                    });
-                  }}
-                  exercise={item}
-                  key={index}
+            {exercise?.length === 0 ? (
+              <>
+                <View
+                  style={{
+                    margin: 5,
+                    paddingHorizontal: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <View>
+                    <TouchableOpacity
+                      activeOpacity={0.9}
+                      onPress={() => {
+                        navigation.navigate('Diary');
+                      }}>
+                      <Banner image={banner} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </>
+            ) : (
+              <>
+                <Carousel
+                  data={exercise}
+                  renderItem={({item, index}) => (
+                    <ExerciseCard
+                      onPress={() => {
+                        navigation.navigate('DetailExerciseScreen', {
+                          exercise: item,
+                          action: 'Update',
+                        });
+                      }}
+                      exercise={item}
+                      key={index}
+                    />
+                  )}
+                  snapToInterval={windowWidth - 5}
+                  viewabilityConfig={viewConfigRef.current}
+                  onViewableItemsChanged={onExercisesUpdate.current}
+                  activeIndex={activeExercisesIndex}
+                  dotColor={colors.BACK_GROUND_COLOR}
                 />
-              )}
-              snapToInterval={windowWidth - 5}
-              viewabilityConfig={viewConfigRef.current}
-              onViewableItemsChanged={onExercisesUpdate.current}
-              activeIndex={activeExercisesIndex}
-              dotColor={colors.BACK_GROUND_COLOR}
-            />
-          </>
-        )}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 10,
-            marginTop: 10,
-            marginRight: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Label>Progress</Label>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AddWeightScreen', {
-                date: diary.date,
-                index: activeLogIndex,
-              });
-            }}>
-            <Ionicons name="add-sharp" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-        {weights.length > 0 ? (
-          <Carousel
-            data={logArray}
-            renderItem={({item, index}) => (
-              // <View key={index}>
-
-              <Progress
-                color={item.color}
-                lightColor={item.lightColor}
-                name={item.name}
-                data={item.data}
-                labels={item.labels}
-                label={item.label}
-                height={200}
-                labelColor={item.labelColor}
-              />
-              // </View>
+              </>
             )}
-            snapToInterval={windowWidth - 5}
-            viewabilityConfig={viewConfigRef.current}
-            onViewableItemsChanged={onLogUpdate.current}
-            activeIndex={activeLogIndex}
-            dotColor={colors.BACK_GROUND_COLOR}
-          />
-        ) : null}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 10,
-            marginTop: 10,
-            marginRight: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Label>Water</Label>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginLeft: 10,
+                marginTop: 10,
+                marginRight: 25,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Label>Progress</Label>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('AddWeightScreen', {
+                    date: diary.date,
+                    index: activeLogIndex,
+                  });
+                }}>
+                <Ionicons name="add-sharp" size={30} color="black" />
+              </TouchableOpacity>
+            </View>
+            {weights.length > 0 ? (
+              <Carousel
+                data={logArray}
+                renderItem={({item, index}) => (
+                  // <View key={index}>
 
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 16,
-              fontFamily: font.DEFAULT_FONT,
-              fontWeight: '900',
-            }}>
-            {water} / 2000 ml
-          </Text>
-          {/* <Ionicons name="add-sharp" size={30} color="black" /> */}
+                  <Progress
+                    color={item.color}
+                    lightColor={item.lightColor}
+                    name={item.name}
+                    data={item.data}
+                    labels={item.labels}
+                    label={item.label}
+                    height={200}
+                    labelColor={item.labelColor}
+                  />
+                  // </View>
+                )}
+                snapToInterval={windowWidth - 5}
+                viewabilityConfig={viewConfigRef.current}
+                onViewableItemsChanged={onLogUpdate.current}
+                activeIndex={activeLogIndex}
+                dotColor={colors.BACK_GROUND_COLOR}
+              />
+            ) : null}
+            <View
+              style={{
+                flexDirection: 'row',
+                marginLeft: 10,
+                marginTop: 10,
+                marginRight: 25,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Label>Water</Label>
+
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 16,
+                  fontFamily: font.DEFAULT_FONT,
+                  fontWeight: '900',
+                }}>
+                {water} / 2000 ml
+              </Text>
+            </View>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate('AddWaterScreen', {
+                  diaryId: diary.id,
+                });
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 10,
+                  backgroundColor: '#f2fac4',
+                }}>
+                {Array(4)
+                  .fill(1)
+                  .map((item, index) => (
+                    <WaterAdd
+                      key={index}
+                      image={glass}
+                      color={index <= water / 500 - 1 ? '#86c6fd' : '#f2fac4'}
+                    />
+                  ))}
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => {
-            navigation.navigate('AddWaterScreen', {
-              diaryId: diary.id,
-            });
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 10,
-              backgroundColor: '#f2fac4',
-            }}>
-            {Array(4)
-              .fill(1)
-              .map((item, index) => (
-                <WaterAdd
-                  key={index}
-                  image={glass}
-                  color={index <= water / 500 - 1 ? '#86c6fd' : '#f2fac4'}
-                />
-              ))}
-          </View>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+      )}
+    </>
   );
 };
 
@@ -556,7 +581,27 @@ const Header = ({onPress, onBellPress, name}) => (
     <HeaderTitle name={name} />
     <View style={styles.iconNotification}>
       <TouchableOpacity onPress={onBellPress}>
-        <Ionicons name="notifications-outline" size={25} color={colors.BLACK} />
+        <Ionicons name="notifications-outline" size={35} color={colors.BLACK} />
+        <View
+          style={{
+            backgroundColor: 'red',
+            height: 20,
+            width: 20,
+            borderRadius: 20,
+            position: 'absolute',
+            right: 0,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: '#FFF',
+              fontFamily: font.DEFAULT_FONT,
+              fontWeight: '900',
+            }}>
+            3
+          </Text>
+        </View>
       </TouchableOpacity>
     </View>
   </View>

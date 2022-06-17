@@ -188,15 +188,19 @@ export class DataProvider extends Component {
         this.getWeight();
         this.getMyFood();
         this.getMyExercise();
+        return true;
       } else {
-        alert('Invalid username or password');
+        setTimeout(() => {
+          alert('Invalid username or password');
+          return false;
+        }, 1000);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setTimeout(() => {
         this.setIsLoading(false);
-      }, 1500);
+      }, 1000);
     }
   };
 
@@ -269,14 +273,16 @@ export class DataProvider extends Component {
       if (result.status === 'OK') {
         await AsyncStorage.removeItem('@storage_Key');
         this.removeToken();
-        this.setState({user: {}});
         this.setState({diary_today: {}});
         this.setState({diary: []});
         this.setState({weight: []});
         this.setState({my_food: []});
         this.setState({my_exercise: []});
+        //this.setState({user: {}});
+        return true;
       } else {
         console.log(result);
+        return false;
       }
     } catch (error) {
       console.error(error);

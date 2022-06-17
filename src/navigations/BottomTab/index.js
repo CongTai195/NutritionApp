@@ -19,8 +19,6 @@ import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BottomTab = () => {
-  const context = useContext(DataContext);
-  const token = context.token;
   const Tab = createBottomTabNavigator();
   // const [token, setToken] = useState(null);
 
@@ -49,95 +47,75 @@ const BottomTab = () => {
       return 'flex';
     }
   };
-
-  // const getKey = async () => {
-  //   setToken(await AsyncStorage.getItem('@storage_Key'));
-  // };
-
-  // useEffect(() => {
-  //   getKey();
-  // });
-
-  // if (context.isLoading) {
+  // if (!token) {
   //   return (
-  //     <View style={styles.container}>
-  //       <ActivityIndicator
-  //         size={'large'}
-  //         color={colors.PURE_WHITE}
-  //         style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-  //       />
-  //     </View>
+  //     <NavigationContainer>
+  //       <LoginStack />
+  //     </NavigationContainer>
   //   );
   // } else
-  if (!token) {
-    return (
-      <NavigationContainer>
-        <LoginStack />
-      </NavigationContainer>
-    );
-  } else
-    return (
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={{
-            tabBarShowLabel: false,
-            tabBarStyle: {
-              backgroundColor: colors.PURE_WHITE,
-              position: 'absolute',
-              left: 10,
-              right: 10,
-              bottom: 10,
-              elevation: 0,
-              borderRadius: 10,
-              ...styles.shadow,
-            },
-            tabBarLabelStyle: {fontSize: 16, fontWeight: '700'},
-            tabBarActiveTintColor: colors.ACTIVE_BUTTON_BOTTOM_TAB,
-            tabBarInactiveTintColor: colors.INACTIVE_BUTTON_BOTTOM_TAB,
-          }}>
-          <Tab.Screen
-            name="Home"
-            component={HomeStack}
-            options={({route}) => ({
-              headerShown: false,
-              tabBarIcon: ({color}) => (
-                <Ionicons name="home" size={30} color={color} />
-              ),
-              tabBarStyle: {
-                display: getTabBarVisibility(route),
-                backgroundColor: colors.PURE_WHITE,
-                position: 'absolute',
-                left: 10,
-                right: 10,
-                bottom: 10,
-                elevation: 0,
-                borderRadius: 10,
-                ...styles.shadow,
-              },
-            })}
-          />
-          <Tab.Screen
-            name="Diary"
-            component={DiaryStack}
-            options={({route}) => ({
-              headerShown: false,
-              tabBarIcon: ({color}) => (
-                <Ionicons name="reader" size={30} color={color} />
-              ),
-              tabBarStyle: {
-                display: getTabBarVisibility(route),
-                backgroundColor: colors.PURE_WHITE,
-                position: 'absolute',
-                left: 10,
-                right: 10,
-                bottom: 10,
-                elevation: 0,
-                borderRadius: 10,
-                ...styles.shadow,
-              },
-            })}
-          />
-          {/* <Tab.Screen
+  return (
+    // <NavigationContainer>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: colors.PURE_WHITE,
+          position: 'absolute',
+          left: 10,
+          right: 10,
+          bottom: 10,
+          elevation: 0,
+          borderRadius: 10,
+          ...styles.shadow,
+        },
+        tabBarLabelStyle: {fontSize: 16, fontWeight: '700'},
+        tabBarActiveTintColor: colors.ACTIVE_BUTTON_BOTTOM_TAB,
+        tabBarInactiveTintColor: colors.INACTIVE_BUTTON_BOTTOM_TAB,
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={({route}) => ({
+          headerShown: false,
+          tabBarIcon: ({color}) => (
+            <Ionicons name="home" size={30} color={color} />
+          ),
+          tabBarStyle: {
+            display: getTabBarVisibility(route),
+            backgroundColor: colors.PURE_WHITE,
+            position: 'absolute',
+            left: 10,
+            right: 10,
+            bottom: 10,
+            elevation: 0,
+            borderRadius: 10,
+            ...styles.shadow,
+          },
+        })}
+      />
+      <Tab.Screen
+        name="Diary"
+        component={DiaryStack}
+        options={({route}) => ({
+          headerShown: false,
+          tabBarIcon: ({color}) => (
+            <Ionicons name="reader" size={30} color={color} />
+          ),
+          tabBarStyle: {
+            display: getTabBarVisibility(route),
+            backgroundColor: colors.PURE_WHITE,
+            position: 'absolute',
+            left: 10,
+            right: 10,
+            bottom: 10,
+            elevation: 0,
+            borderRadius: 10,
+            ...styles.shadow,
+          },
+        })}
+      />
+      {/* <Tab.Screen
             name="Progress"
             component={ProgressScreen}
             options={{
@@ -147,30 +125,30 @@ const BottomTab = () => {
               ),
             }}
           /> */}
-          <Tab.Screen
-            name="More"
-            component={MoreStack}
-            options={({route}) => ({
-              headerShown: false,
-              tabBarIcon: ({color}) => (
-                <Ionicons name="ellipsis-horizontal" size={30} color={color} />
-              ),
-              tabBarStyle: {
-                display: getTabBarVisibility(route),
-                backgroundColor: colors.PURE_WHITE,
-                position: 'absolute',
-                left: 10,
-                right: 10,
-                bottom: 10,
-                elevation: 0,
-                borderRadius: 10,
-                ...styles.shadow,
-              },
-            })}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    );
+      <Tab.Screen
+        name="More"
+        component={MoreStack}
+        options={({route}) => ({
+          headerShown: false,
+          tabBarIcon: ({color}) => (
+            <Ionicons name="ellipsis-horizontal" size={30} color={color} />
+          ),
+          tabBarStyle: {
+            display: getTabBarVisibility(route),
+            backgroundColor: colors.PURE_WHITE,
+            position: 'absolute',
+            left: 10,
+            right: 10,
+            bottom: 10,
+            elevation: 0,
+            borderRadius: 10,
+            ...styles.shadow,
+          },
+        })}
+      />
+    </Tab.Navigator>
+    // </NavigationContainer>
+  );
 };
 
 export default BottomTab;

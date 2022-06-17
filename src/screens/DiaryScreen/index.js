@@ -20,6 +20,8 @@ import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DataContext} from '../../context/Context';
 import WaterItem from '../../components/WaterItem';
+import LottieView from 'lottie-react-native';
+import Loading from '../../components/Loading';
 
 const DiaryScreen = () => {
   const context = useContext(DataContext);
@@ -126,11 +128,7 @@ const DiaryScreen = () => {
       />
       <View style={styles.container}>
         {isLoading ? (
-          <ActivityIndicator
-            size={'large'}
-            color={colors.BACK_GROUND_COLOR}
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-          />
+          <Loading />
         ) : Object.values(diary).length > 0 ? (
           <>
             <CaloriesRemaining

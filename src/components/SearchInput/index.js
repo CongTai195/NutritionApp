@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-} from 'react-native';
+import {View, Text, TextInput} from 'react-native';
 import styles from './style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../assets/colors/colors';

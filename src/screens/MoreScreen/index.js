@@ -6,8 +6,9 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useLayoutEffect, useContext} from 'react';
+import React, {useLayoutEffect, useContext, useState} from 'react';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../../assets/colors/colors';
@@ -16,6 +17,8 @@ import font from '../../assets/fonts/font';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import {CommonActions} from '@react-navigation/native';
+import Loading from '../../components/Loading';
 
 const MoreScreen = () => {
   const context = useContext(DataContext);
@@ -25,11 +28,12 @@ const MoreScreen = () => {
   const startingWeight = user?.process?.starting_weight;
   const currentWeight = user?.process?.current_weight;
   const formatDate = input => {
-    var datePart = input.match(/\d+/g),
+    var datePart = input?.match(/\d+/g),
       month = datePart[1],
       day = datePart[2];
     return day;
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   const streak = parseInt(formatDate(today)) - parseInt(formatDate(startDay));
 
@@ -50,8 +54,18 @@ const MoreScreen = () => {
       {
         text: 'Yes',
         onPress: async () => {
+          //navigation.reset();
+          setIsLoading(true);
           const token = await AsyncStorage.getItem('@storage_Key');
-          context.logout(token);
+          await context.logout(token);
+          setTimeout(() => {
+            setIsLoading(false);
+            const resetAction = CommonActions.reset({
+              index: 0,
+              routes: [{name: 'LoginStack'}],
+            });
+            navigation.dispatch(resetAction);
+          }, 1000);
         },
       },
       // The "No" button
@@ -65,10 +79,12 @@ const MoreScreen = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.LIGHT_GREY}}>
       <ScrollView
+        pointerEvents="none"
         style={styles.container}
         contentContainerStyle={{
           justifyContent: 'center',
           alignItems: 'center',
+          opacity: isLoading ? 0.4 : 1,
         }}>
         <View style={styles.profileSection}>
           <View style={styles.streak}>
@@ -358,6 +374,16 @@ const MoreScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.LIGHT_GREY,
+          justifyContent: 'center',
+          alignItems: 'center',
+          display: isLoading ? 'flex' : 'none',
+        }}>
+        <Loading style={{position: 'absolute', top: -200}} />
+      </View>
     </SafeAreaView>
   );
 };

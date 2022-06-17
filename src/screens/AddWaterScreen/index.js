@@ -78,9 +78,9 @@ const AddWaterScreen = () => {
           animationType: 'slide-in',
         });
         setTimeout(() => {
-          navigation.goBack();
+          navigation.pop(1);
         }, 1700);
-        // return () => clearTimeout(time);
+        return () => clearTimeout(time);
       } else {
         alert('Error adding water');
         console.log(result);
