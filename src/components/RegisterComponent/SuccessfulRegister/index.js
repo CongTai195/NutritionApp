@@ -142,7 +142,6 @@ const AccountRegister = () => {
       <View style={styles.button}>
         <Button
           onPress={() => {
-            context.setToken();
             navigation.replace('App');
           }}
           text={'CONTINUE'}

@@ -24,8 +24,8 @@ export class DataProvider extends Component {
 
       isLoading: false,
 
-      BASE_URL: 'http://10.0.2.2:8000',
-      token: null,
+      //BASE_URL: 'http://10.0.2.2:8000',
+      BASE_URL: 'http://192.168.1.164:8001',
     };
   }
 
@@ -107,14 +107,6 @@ export class DataProvider extends Component {
     }
   };
 
-  setToken = async () => {
-    this.setState({token: await AsyncStorage.getItem('@storage_Key')});
-  };
-
-  removeToken = () => {
-    this.setState({token: null});
-  };
-
   setRegisterData = ({name, value}, callback) => {
     this.setState(
       {
@@ -131,7 +123,6 @@ export class DataProvider extends Component {
         this.getMyFood();
         this.getMyExercise();
       }
-      this.setToken();
     }
   }
 
@@ -183,7 +174,6 @@ export class DataProvider extends Component {
       const result = await response.json();
       if (result.status === 'OK') {
         await AsyncStorage.setItem('@storage_Key', result.results.token);
-        await this.setToken();
         this.setState({user: result.results.info});
         this.getWeight();
         this.getMyFood();
@@ -272,7 +262,6 @@ export class DataProvider extends Component {
       const result = await response.json();
       if (result.status === 'OK') {
         await AsyncStorage.removeItem('@storage_Key');
-        this.removeToken();
         this.setState({diary_today: {}});
         this.setState({diary: []});
         this.setState({weight: []});
@@ -383,7 +372,6 @@ export class DataProvider extends Component {
       diary_today,
       food,
       BASE_URL,
-      token,
       isLoading,
       weight_week,
       weight_month,
@@ -399,7 +387,6 @@ export class DataProvider extends Component {
       getDiary,
       setIsLoading,
       setRegisterData,
-      setToken,
       updateDiary,
       getWeight,
       getUser,
@@ -417,7 +404,6 @@ export class DataProvider extends Component {
           diary_today,
           BASE_URL,
           register_data,
-          token,
           weight_week,
           weight_month,
           weight_3_months,
@@ -433,7 +419,6 @@ export class DataProvider extends Component {
           login,
           register,
           logout,
-          setToken,
           updateDiary,
           getUser,
           updateWaterAmount,

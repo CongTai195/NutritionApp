@@ -21,11 +21,12 @@ import Heading from '../../components/Heading';
 import colors from '../../assets/colors/colors';
 import font from '../../assets/fonts/font';
 import {DataContext} from '../../context/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const context = useContext(DataContext);
   const navigation = useNavigation();
-  const token = context.token;
+  const [token, setToken] = useState(null);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Sign In',
@@ -81,9 +82,16 @@ const LoginScreen = () => {
     }
   };
 
+  const getToken = async () => {
+    setToken(await AsyncStorage.getItem('@storage_Key'));
+  };
+
   useEffect(() => {
-    if (!token) {
-    } else {
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    if (token) {
       navigation.replace('App');
     }
   }, [token]);

@@ -53,6 +53,7 @@ const HomeScreen = () => {
   const diary = context.diary_today;
   const calories = diary?.process?.calories;
   const food = diary?.food;
+  const fix = true;
   //const isLoading = context.isLoading;
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
   const calories_breakfast =
@@ -187,6 +188,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     context.getDiary(date);
+    console.log('Called Get Diary');
   }, []);
 
   useEffect(() => {
@@ -305,15 +307,15 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (
-      isNaN(total_carbs) ||
-      isNaN(total_fat) ||
-      isNaN(total_protein) ||
-      weights.length === 0
+      !(
+        isNaN(total_carbs) ||
+        isNaN(total_fat) ||
+        isNaN(total_protein) ||
+        weights.length === 0
+      )
     ) {
-      console.log('NOT OK');
-      //context.setIsLoading(false);
-    } else {
       setIsLoading(false);
+      //context.setIsLoading(false);
     }
   }, [total_carbs, total_fat, total_protein, weights]);
 
