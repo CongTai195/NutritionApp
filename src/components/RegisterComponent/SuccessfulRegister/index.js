@@ -67,13 +67,6 @@ const AccountRegister = () => {
             }}>
             <Text style={styles.textDescription}>Your BMR score is:</Text>
             <TouchableOpacity
-              onFocus={() => {
-                console.log('Focus');
-              }}
-              onBlur={() => {
-                console.log('Blur');
-                setBMRNote(false);
-              }}
               onPress={() => {
                 setBMRNote(!BMTNote);
               }}>
@@ -106,10 +99,6 @@ const AccountRegister = () => {
             }}>
             <Text style={styles.textDescription}>Your TDEE score is:</Text>
             <TouchableOpacity
-              onBlur={() => {
-                console.log('Blur');
-                setBMRNote(false);
-              }}
               onPress={() => {
                 setTDEENote(!TDEENote);
               }}>

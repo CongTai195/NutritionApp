@@ -39,17 +39,13 @@ const AddExerciseScreen = () => {
 
   const getTime = item => {
     if (item === time) {
-      if (item === 1) {
-        return '#4a61fd';
-      } else return '#d4d021';
+      return colors.TEXT;
     } else return colors.LIGHT_GREY;
   };
 
   const getLabel = item => {
     if (item === time) {
-      if (item === 1) {
-        return '#4a61fd';
-      } else return '#d4d021';
+      return colors.TEXT;
     } else return colors.BLACK;
   };
 
@@ -58,8 +54,8 @@ const AddExerciseScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `${meal}`,
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });

@@ -30,8 +30,8 @@ const LoginScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Sign In',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BLUE},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
@@ -100,7 +100,9 @@ const LoginScreen = () => {
     return (
       <View style={styles.logo}>
         <Image
-          source={require('../../assets/images/logo.jpg')}
+          source={{
+            uri: 'https://res.cloudinary.com/dxtozrwr9/image/upload/v1655717041/logo_vv1ftl.jpg',
+          }}
           style={styles.logoImage}
         />
       </View>
@@ -124,7 +126,7 @@ const LoginScreen = () => {
             onBlur={() =>
               setInitialPlaceholder({
                 ...initialPlaceholder,
-                username: 'Username',
+                username: 'Email',
               })
             }
             onChangeText={value => onChange({name: 'username', value})}
@@ -153,7 +155,7 @@ const LoginScreen = () => {
                 {/* <Text style={styles.textHidePassword}>
                 {secureTextEntry === false ? 'Hide' : 'Show'}
               </Text> */}
-                {secureTextEntry === false ? (
+                {secureTextEntry === true ? (
                   <Ionicons
                     name="eye-off-outline"
                     size={24}

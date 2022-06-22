@@ -20,6 +20,7 @@ import {DataContext} from '../../context/Context';
 import {useToast} from 'react-native-toast-notifications';
 import {Picker} from '@react-native-picker/picker';
 import moment from 'moment';
+import image from '../../constants/image';
 
 const CreateServingScreen = () => {
   const toast = useToast();
@@ -94,6 +95,7 @@ const CreateServingScreen = () => {
         method: 'POST',
         body: JSON.stringify({
           name: name,
+          imageURL: image.DEFAULT_FOOD,
           detail: detail,
           serving_size_name: serving,
           calories: data.calories,

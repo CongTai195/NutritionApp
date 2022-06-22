@@ -1,4 +1,10 @@
-import {TextInput, Text, View, TouchableOpacity} from 'react-native';
+import {
+  TextInput,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import React, {useLayoutEffect, useState, useEffect, useContext} from 'react';
 import styles from './style';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -110,19 +116,15 @@ const AddWeightScreen = () => {
           : logType === 1
           ? 'Heart Rate Log'
           : 'Blood Pressure Log',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerRight: () => (
         <View style={{marginRight: 15}}>
           <TouchableOpacity
             onPress={() => getDiary(date.toISOString().split('T')[0])}>
-            <Ionicons
-              name="checkmark-outline"
-              size={25}
-              color={colors.PURE_WHITE}
-            />
+            <Ionicons name="checkmark-outline" size={25} color={colors.TEXT} />
           </TouchableOpacity>
         </View>
       ),
@@ -238,7 +240,9 @@ const AddWeightScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
+      style={styles.container}>
       <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Change data</Text>
@@ -440,7 +444,7 @@ const AddWeightScreen = () => {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -24,7 +24,7 @@ const Input = props => {
         <TextInput
           style={styles.input}
           placeholder={props.initialPlaceholder}
-          placeholderTextColor={colors.LIGHT_GREY}
+          placeholderTextColor={'#cbcbcb'}
           onChangeText={props.onChangeText}
           secureTextEntry={props.secureText}
           value={props.value}

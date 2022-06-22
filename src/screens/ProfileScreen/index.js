@@ -13,6 +13,7 @@ import styles from './style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import font from '../../assets/fonts/font';
 import {DataContext} from '../../context/Context';
+import image from '../../constants/image';
 
 const ProfileScreen = () => {
   const context = useContext(DataContext);
@@ -30,8 +31,8 @@ const ProfileScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `${name}`,
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
@@ -43,7 +44,12 @@ const ProfileScreen = () => {
       <View style={styles.headerSection}>
         <Image
           style={styles.avatar}
-          source={require('../../assets/images/defaultAvatar.png')}
+          source={{
+            uri:
+              user.gender === 1
+                ? image.DEFAULT_AVATAR_MEN
+                : image.DEFAULT_AVATAR_WOMEN,
+          }}
         />
         <View style={styles.nameSection}>
           <Text style={styles.lightText}>{name}</Text>
@@ -100,7 +106,7 @@ const ProfileScreen = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.5}>
+        {/* <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Profile Photo</Text>
             <Image
@@ -111,10 +117,10 @@ const ProfileScreen = () => {
                 borderRadius: 50,
                 margin: 10,
               }}
-              source={require('../../assets/images/defaultAvatar.png')}
+              source={{uri: image.DEFAULT_AVATAR}}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>

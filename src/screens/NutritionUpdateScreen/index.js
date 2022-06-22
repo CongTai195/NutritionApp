@@ -37,18 +37,14 @@ const NutritionUpdateScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Carbs, Protein & Fat',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerRight: () => (
         <View style={{marginRight: 15}}>
           <TouchableOpacity onPress={() => updateProcess()}>
-            <Ionicons
-              name="checkmark-outline"
-              size={25}
-              color={colors.PURE_WHITE}
-            />
+            <Ionicons name="checkmark-outline" size={25} color={colors.TEXT} />
           </TouchableOpacity>
         </View>
       ),

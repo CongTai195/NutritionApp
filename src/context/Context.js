@@ -24,8 +24,9 @@ export class DataProvider extends Component {
 
       isLoading: false,
 
-      //BASE_URL: 'http://10.0.2.2:8000',
-      BASE_URL: 'http://192.168.1.164:8001',
+      BASE_URL: 'http://10.0.2.2:8000',
+      //BASE_URL: 'http://192.168.1.164:8001',
+      //BASE_URL: 'https://nutritious-senior-project.herokuapp.com',
     };
   }
 
@@ -171,6 +172,12 @@ export class DataProvider extends Component {
           password: password,
         }),
       });
+      console.log(
+        JSON.stringify({
+          email: userName,
+          password: password,
+        }),
+      );
       const result = await response.json();
       if (result.status === 'OK') {
         await AsyncStorage.setItem('@storage_Key', result.results.token);
@@ -180,6 +187,7 @@ export class DataProvider extends Component {
         this.getMyExercise();
         return true;
       } else {
+        console.log(result);
         setTimeout(() => {
           alert('Invalid username or password');
           return false;

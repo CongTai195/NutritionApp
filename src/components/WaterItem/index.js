@@ -33,39 +33,35 @@ const WaterItem = ({meal, listItem, onPress, date}) => {
 
   return (
     <View style={styles.childAdding}>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={[styles.headerText, {flex: 1}]}>Water</Text>
-        <>
-          {amount === 0 ? null : (
-            <>
-              <Text style={styles.headerText}>{Math.round(amount)} ml</Text>
-            </>
-          )}
-        </>
-      </View>
-      <>
-        <View style={styles.separator}></View>
-        <View style={styles.separator}></View>
-      </>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={
-          onPress
-          // navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
-        }>
-        <View style={styles.addFood}>
-          <Ionicons name="add-outline" size={16} color={'black'} />
-          <Text
-            style={{
-              fontSize: 14,
-              color: 'black',
-              fontWeight: '500',
-              fontFamily: font.DEFAULT_FONT,
-            }}>
-            Add Water
-          </Text>
+      <View style={styles.header}>
+        <View style={{flex: 1}}>
+          <Text style={[styles.headerText, {flex: 1}]}>Water</Text>
+          <>
+            {amount === 0 ? null : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={styles.caloText}>{amount}</Text>
+                <Text style={styles.kcaloText}>ml</Text>
+              </View>
+            )}
+          </>
         </View>
-      </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={
+            onPress
+            // navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
+          }>
+          <View style={[styles.addFood, {marginBottom: amount === 0 ? 0 : 20}]}>
+            <Ionicons name="add-outline" size={25} color={'white'} />
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

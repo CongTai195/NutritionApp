@@ -4,7 +4,7 @@ import font from '../../assets/fonts/font';
 const styles = StyleSheet.create({
   container: {flex: 1},
   textHeader: {
-    color: colors.BLACK,
+    color: '#C6A079',
     fontSize: 18,
     fontWeight: '900',
     margin: 10,

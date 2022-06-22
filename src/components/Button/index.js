@@ -5,8 +5,8 @@ import styles from './style';
 const Button = props => {
   const getDisable = () => {
     if (props.disable) {
-      return '#6080f1';
-    } else return colors.BLUE;
+      return colors.LIGHT_THEME;
+    } else return colors.THEME;
   };
   return (
     <View style={[styles.buttonPart]}>
@@ -20,8 +20,8 @@ const Button = props => {
       ) : (
         <ActivityIndicator
           size={'large'}
-          color={colors.PURE_WHITE}
-          style={[styles.button, {backgroundColor: colors.BLUE}]}
+          color={colors.TEXT}
+          style={[styles.button, {backgroundColor: colors.THEME}]}
         />
       )}
     </View>

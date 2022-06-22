@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     //flex: 1,
-    color: 'black',
+    color: colors.TEXT,
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
     fontWeight: '500',
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   amountText: {
-    color: 'black',
+    color: colors.TEXT,
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
     fontWeight: '500',

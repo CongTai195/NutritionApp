@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
     margin: 12,
   },
   textButton: {
-    color: colors.WHITE,
+    width: '100%',
+    textAlign: 'center',
+    color: colors.TEXT,
     fontWeight: 'bold',
     fontSize: 18,
   },

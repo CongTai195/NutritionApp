@@ -7,7 +7,10 @@ const SearchInput = props => {
   return (
     <View style={styles.container}>
       <View style={styles.inputPart}>
-        <Icon name={props.icon} color={colors.BLACK} size={20} />
+        <View
+          style={{width: 40, justifyContent: 'center', alignItems: 'center'}}>
+          <Icon name={props.icon} color={colors.GREY} size={20} />
+        </View>
         <TextInput
           style={styles.input}
           placeholder={props.initialPlaceholder}

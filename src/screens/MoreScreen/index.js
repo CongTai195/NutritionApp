@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import {CommonActions} from '@react-navigation/native';
 import Loading from '../../components/Loading';
+import image from '../../constants/image';
 
 const MoreScreen = () => {
   const context = useContext(DataContext);
@@ -95,7 +96,12 @@ const MoreScreen = () => {
           <View style={styles.profile}>
             <Image
               style={styles.avatar}
-              source={require('../../assets/images/defaultAvatar.png')}
+              source={{
+                uri:
+                  user.gender === 1
+                    ? image.DEFAULT_AVATAR_MEN
+                    : image.DEFAULT_AVATAR_WOMEN,
+              }}
             />
             <Text style={styles.boldText}>{user.name}</Text>
           </View>
@@ -115,13 +121,13 @@ const MoreScreen = () => {
             onPress={() => navigation.navigate('ProfileScreen')}>
             <View style={styles.child}>
               <Ionicons
-                name="person-outline"
+                name="information-circle-outline"
                 size={24}
                 color={'black'}
                 style={{marginRight: 10}}
               />
               <View style={{flex: 1}}>
-                <Text style={styles.textChild}>My Profile</Text>
+                <Text style={styles.textChild}>My Info</Text>
               </View>
               <Ionicons
                 name="chevron-forward-outline"
@@ -130,24 +136,9 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity>
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="barbell-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Workout Routine</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
+        </View>
+
+        <View style={styles.othersSection}>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
@@ -170,6 +161,9 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.othersSection}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NutritionUpdateScreen');
@@ -192,184 +186,19 @@ const MoreScreen = () => {
               />
             </View>
           </TouchableOpacity>
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="receipt-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Meals, Recipes {'&'} Food</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="alarm-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Reminders</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="apps-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Apps {'&'} Devices</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="body-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Steps</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="people-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Friends</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="mail-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Message</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="settings-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Settings</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="shield-checkmark-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Privacy Center</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity activeOpacity={0.5}>
-            <View style={styles.child}>
-              <Ionicons
-                name="help-circle-outline"
-                size={24}
-                color={'black'}
-                style={{marginRight: 10}}
-              />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>Help</Text>
-              </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
-            </View>
-          </TouchableOpacity> */}
+        </View>
+        <View style={styles.logOutSection}>
           <TouchableOpacity onPress={() => logOut()} activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
                 name="log-out-outline"
                 size={24}
-                color={'black'}
+                color={'red'}
                 style={{marginRight: 10}}
               />
               <View style={{flex: 1}}>
                 <Text style={styles.textChild}>Log Out</Text>
               </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={'black'}
-              />
             </View>
           </TouchableOpacity>
         </View>

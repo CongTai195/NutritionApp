@@ -54,18 +54,14 @@ const SignupScreen = () => {
           : index === 3 || index === 4
           ? 'You'
           : 'Sign Up',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BLUE},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerLeft: () => (
         <View style={styles.iconNotification}>
           <TouchableOpacity onPress={() => onPrev()}>
-            <Ionicons
-              name="arrow-back-outline"
-              size={25}
-              color={colors.PURE_WHITE}
-            />
+            <Ionicons name="arrow-back-outline" size={25} color={colors.TEXT} />
           </TouchableOpacity>
         </View>
       ),

@@ -1,5 +1,11 @@
 import React, {useState, useContext} from 'react';
-import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import styles from './style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../../assets/colors/colors';
@@ -80,7 +86,7 @@ const SecondGoalRegister = props => {
             Not including workouts - we count that separately.
           </Text>
         </View>
-        <View style={{flex: 1, width: width}}>
+        <ScrollView style={{flex: 1, width: width}}>
           {array.map(item => (
             <TouchableOpacity
               onPress={() => onPress(item.name)}
@@ -109,7 +115,7 @@ const SecondGoalRegister = props => {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
       <View style={styles.button}>
         <Button

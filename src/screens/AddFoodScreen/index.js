@@ -39,17 +39,13 @@ const AddFoodScreen = () => {
 
   const getTime = item => {
     if (item === time) {
-      if (item === 1) {
-        return '#f9a5ff';
-      } else return '#a572de';
+      return colors.TEXT;
     } else return colors.LIGHT_GREY;
   };
 
   const getLabel = item => {
     if (item === time) {
-      if (item === 1) {
-        return '#f9a5ff';
-      } else return '#a572de';
+      return colors.TEXT;
     } else return colors.BLACK;
   };
 
@@ -58,8 +54,8 @@ const AddFoodScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `${meal}`,
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
@@ -121,7 +117,7 @@ const AddFoodScreen = () => {
       <View>
         <SearchInput
           icon="search"
-          initialPlaceholder="Search for a food"
+          initialPlaceholder="Search food"
           onChangeText={value => {
             setSearch(value);
             if (time === 1) {

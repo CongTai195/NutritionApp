@@ -20,6 +20,7 @@ import {DataContext} from '../../context/Context';
 import {useToast} from 'react-native-toast-notifications';
 import {Picker} from '@react-native-picker/picker';
 import moment from 'moment';
+import image from '../../constants/image';
 
 const CreateExerciseScreen = () => {
   const toast = useToast();
@@ -57,6 +58,7 @@ const CreateExerciseScreen = () => {
           name: name,
           duration: duration,
           calories: calories,
+          imageURL: image.DEFAULT_EXERCISE,
         }),
       });
       const result = await response.json();

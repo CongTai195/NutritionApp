@@ -4,7 +4,7 @@ import font from '../../assets/fonts/font';
 
 const styles = StyleSheet.create({
   counter: {
-    backgroundColor: colors.BACK_GROUND_COLOR,
+    backgroundColor: colors.THEME,
     //height: "20%",
     padding: 10,
     width: '95%',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   textChild: {
     fontSize: 16,
     fontWeight: '400',
-    color: colors.PURE_WHITE,
+    color: colors.TEXT,
     marginVertical: 10,
     fontFamily: font.DEFAULT_FONT,
   },

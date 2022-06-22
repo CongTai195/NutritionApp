@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textHeader: {
-    color: 'black',
+    color: '#C6A079',
     fontSize: 18,
     fontWeight: '900',
     margin: 10,

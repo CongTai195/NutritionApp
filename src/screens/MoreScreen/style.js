@@ -72,7 +72,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
   },
+  logOutSection: {
+    width: '35%',
+    backgroundColor: colors.PURE_WHITE,
+    marginTop: 40,
+    borderRadius: 10,
+  },
   textChild: {
+    width: '100%',
     fontSize: 16,
     color: 'black',
     fontFamily: font.DEFAULT_FONT,

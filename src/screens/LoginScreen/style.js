@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   textSignup: {
     fontSize: 16,
     color: colors.PURE_WHITE,
-    marginHorizontal: 10,
+    //marginHorizontal: 10,
     fontWeight: '900',
     fontFamily: font.DEFAULT_FONT,
   },

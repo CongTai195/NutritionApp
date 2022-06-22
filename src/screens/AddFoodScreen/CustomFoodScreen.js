@@ -88,20 +88,20 @@ const CustomFoodScreen = ({isSearched, isSearching, food, diaryId, meal}) => {
           <View
             style={{
               borderRadius: 10,
-              backgroundColor: '#fff',
+              backgroundColor: colors.THEME,
               justifyContent: 'center',
               alignItems: 'center',
               width: Dimensions.get('window').width * 0.9,
               height: 100,
               //flexDirection: 'row',
             }}>
-            <Ionicons name="pizza-outline" size={40} color={'#f9a5ff'} />
+            <Ionicons name="pizza-outline" size={40} color={colors.TEXT} />
             <Text
               style={{
                 fontSize: 24,
                 fontWeight: '900',
                 fontFamily: font.DEFAULT_FONT,
-                color: '#f9a5ff',
+                color: colors.TEXT,
               }}>
               Create a Food
             </Text>

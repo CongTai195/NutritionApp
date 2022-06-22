@@ -19,6 +19,7 @@ import {DataContext} from '../../context/Context';
 import {color} from 'react-native-reanimated';
 import {useToast} from 'react-native-toast-notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import image from '../../constants/image';
 
 const AddWaterScreen = () => {
   const toast = useToast();
@@ -31,8 +32,8 @@ const AddWaterScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `Water`,
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerRight: () => (
@@ -43,7 +44,7 @@ const AddWaterScreen = () => {
             <Ionicons
               name="checkmark-outline"
               size={25}
-              color={amount === 0 ? colors.GREY : colors.PURE_WHITE}
+              color={amount === 0 ? colors.GREY : colors.TEXT}
             />
           </TouchableOpacity>
         </View>
@@ -93,10 +94,7 @@ const AddWaterScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.imageHeader}>
-        <Image
-          style={styles.image}
-          source={require('../../assets//images/bottle.jpg')}
-        />
+        <Image style={styles.image} source={{uri: image.BOTTLE}} />
       </View>
       <View style={{flex: 1}}>
         <View

@@ -8,11 +8,30 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PURE_WHITE,
     marginBottom: 10,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   headerText: {
     fontSize: 16,
     fontWeight: '900',
-    color: colors.BLACK,
+    color: '#C6A079',
     margin: 10,
+    fontFamily: font.DEFAULT_FONT,
+  },
+  caloText: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: '#000',
+    marginLeft: 10,
+    fontFamily: font.DEFAULT_FONT,
+  },
+  kcaloText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#000',
+    marginHorizontal: 5,
     fontFamily: font.DEFAULT_FONT,
   },
   separator: {
@@ -20,10 +39,14 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.BACK_GROUND_COLOR,
   },
   addFood: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    backgroundColor: '#ECC49F',
+    height: 30,
+    width: 30,
+    borderRadius: 40,
+    justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginRight: 20,
+    // marginBottom: 20,
   },
   container: {
     //backgroundColor: '#f4f4f4',
@@ -36,7 +59,7 @@ const styles = StyleSheet.create({
   rowFront: {
     backgroundColor: '#FFF',
     //borderRadius: 10,
-    height: 60,
+    height: 80,
     //margin: 5,
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},

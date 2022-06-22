@@ -21,6 +21,7 @@ import {DataContext} from '../../context/Context';
 import AddExerciseItem from '../../components/AddExerciseItem';
 import {useToast} from 'react-native-toast-notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {color} from 'react-native-reanimated';
 
 const CustomExerciseScreen = ({
   isSearched,
@@ -53,20 +54,20 @@ const CustomExerciseScreen = ({
           <View
             style={{
               borderRadius: 10,
-              backgroundColor: '#fff',
+              backgroundColor: colors.THEME,
               justifyContent: 'center',
               alignItems: 'center',
               width: Dimensions.get('window').width * 0.9,
               height: 100,
               //flexDirection: 'row',
             }}>
-            <Ionicons name="bicycle-outline" size={40} color={'#4a61fd'} />
+            <Ionicons name="bicycle-outline" size={40} color={colors.TEXT} />
             <Text
               style={{
                 fontSize: 24,
                 fontWeight: '900',
                 fontFamily: font.DEFAULT_FONT,
-                color: '#4a61fd',
+                color: colors.TEXT,
               }}>
               Create an Exercise
             </Text>

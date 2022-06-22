@@ -26,8 +26,8 @@ const NutrientScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Nutrient',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
     });
@@ -58,8 +58,6 @@ const NutrientScreen = () => {
   const exercise = diary?.exercise;
 
   const [date, setDate] = useState(today.toDate().toISOString().split('T')[0]);
-
-  console.log(diary);
 
   const capitalizeFirstLetter = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -185,40 +183,72 @@ const NutrientScreen = () => {
   return (
     <View style={styles.root}>
       <CalendarStrip
-        showMonth={true}
-        scrollable={false}
-        style={{height: 70}}
-        calendarColor={colors.PURE_WHITE}
-        calendarHeaderStyle={{color: colors.PURE_WHITE}}
-        dateNumberStyle={{
-          color: colors.GREY,
-          fontSize: 18,
-          fontFamily: font.DEFAULT_FONT,
-        }}
-        dateNameStyle={{
-          color: colors.GREY,
-          fontSize: 12,
-          fontFamily: font.DEFAULT_FONT,
-        }}
-        highlightDateNameStyle={{
-          color: colors.BACK_GROUND_COLOR,
-          fontSize: 14,
-          fontFamily: font.DEFAULT_FONT,
-          fontWeight: '900',
-        }}
-        highlightDateNumberStyle={{
-          color: colors.BACK_GROUND_COLOR,
-          fontSize: 20,
-          fontFamily: font.DEFAULT_FONT,
-          fontWeight: '900',
-        }}
-        iconContainer={{flex: 0.1}}
-        iconStyle={{tintColor: 'black'}}
-        selectedDate={today}
-        minDate={context.user?.created_at}
-        useIsoWeekday={false}
-        //datesWhitelist={[{start: moment('2021-01-01'), end: moment()}]}
+        // showMonth={true}
+        // scrollable={false}
+        // style={{height: 70}}
+        // calendarColor={colors.PURE_WHITE}
+        // calendarHeaderStyle={{color: colors.PURE_WHITE}}
+        // dateNumberStyle={{
+        //   color: colors.GREY,
+        //   fontSize: 18,
+        //   fontFamily: font.DEFAULT_FONT,
+        // }}
+        // dateNameStyle={{
+        //   color: colors.GREY,
+        //   fontSize: 12,
+        //   fontFamily: font.DEFAULT_FONT,
+        // }}
+        // highlightDateNameStyle={{
+        //   color: colors.BACK_GROUND_COLOR,
+        //   fontSize: 14,
+        //   fontFamily: font.DEFAULT_FONT,
+        //   fontWeight: '900',
+        // }}
+        // highlightDateNumberStyle={{
+        //   color: colors.BACK_GROUND_COLOR,
+        //   fontSize: 20,
+        //   fontFamily: font.DEFAULT_FONT,
+        //   fontWeight: '900',
+        // }}
+        // iconContainer={{flex: 0.1}}
+        // iconStyle={{tintColor: 'black'}}
+        // selectedDate={today}
+        // minDate={context.user?.created_at}
+        // useIsoWeekday={false}
+        // datesWhitelist={[
+        //   {start: context.user?.created_at, end: moment().add(90, 'days')},
+        // ]}
         //startingDate={moment().subtract(3, 'days')}
+        //startingDate={moment().subtract(3, 'days')}
+        //scrollable={true}
+        //minDate={context.user?.created_at}
+        //selectedDate={today}
+
+        calendarAnimation={{type: 'sequence', duration: 30}}
+        daySelectionAnimation={{
+          type: 'border',
+          duration: 200,
+          borderWidth: 2,
+          borderHighlightColor: colors.TEXT,
+        }}
+        style={{
+          height: 100,
+          paddingTop: 10,
+          paddingBottom: 10,
+        }}
+        calendarHeaderStyle={{color: colors.TEXT}}
+        calendarColor={'#fff'}
+        dateNumberStyle={{color: '#b78755'}}
+        dateNameStyle={{color: '#b78755'}}
+        highlightDateNumberStyle={{color: colors.TEXT}}
+        highlightDateNameStyle={{color: colors.TEXT}}
+        disabledDateNameStyle={{color: 'grey'}}
+        disabledDateNumberStyle={{color: 'grey'}}
+        iconContainer={{flex: 0.1}}
+        selectedDate={today}
+        // datesWhitelist={[
+        //   {start: context.user?.created_at, end: moment().add(90, 'days')},
+        // ]}
         onDateSelected={dateSelected => {
           setIsLoading(true);
           setDate(dateSelected.toDate().toISOString().split('T')[0]);

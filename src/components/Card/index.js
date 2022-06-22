@@ -42,7 +42,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        source={image}>
+        source={{uri: image}}>
         <View style={{alignSelf: 'center', margin: 5}}>
           <Progress.Circle
             size={150}

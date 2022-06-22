@@ -35,16 +35,8 @@ import {
   StackedBarChart,
 } from 'react-native-chart-kit';
 import Progress from '../../components/Progress';
+import image from '../../constants/image';
 
-const headerImage = require('../../assets/images/defaultAvatar.png');
-const notification = require('../../assets/images/Notification.png');
-const carbs_image = require('../../assets/images/Carbon.jpg');
-const meat = require('../../assets/images/Beef.jpg');
-const fat_image = require('../../assets/images/fat.jpg');
-const banner = require('../../assets/images/Banner.jpg');
-const fire = require('../../assets/images/fire.png');
-const glass = require('../../assets/images/glass.png');
-import LottieView from 'lottie-react-native';
 import Loading from '../../components/Loading';
 
 const HomeScreen = () => {
@@ -53,7 +45,13 @@ const HomeScreen = () => {
   const diary = context.diary_today;
   const calories = diary?.process?.calories;
   const food = diary?.food;
-  const fix = true;
+  const headerImage =
+    user.gender === 1 ? image.DEFAULT_AVATAR_MEN : image.DEFAULT_AVATAR_WOMEN;
+  const carbs_image = image.CARBS;
+  const meat = image.PROTEIN;
+  const fat_image = image.FAT;
+  const banner = image.DEFAULT_EXERCISE;
+  const glass = image.GLASS;
   //const isLoading = context.isLoading;
   const breakfast = food?.filter(e => e.meal === 'Breakfast');
   const calories_breakfast =
@@ -188,7 +186,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     context.getDiary(date);
-    console.log('Called Get Diary');
   }, []);
 
   useEffect(() => {
@@ -324,6 +321,7 @@ const HomeScreen = () => {
       {isLoading ? (
         <View style={styles.container}>
           <Header
+            avatar={headerImage}
             onPress={() => {
               navigation.navigate('More');
             }}
@@ -340,6 +338,7 @@ const HomeScreen = () => {
       ) : (
         <View style={styles.container}>
           <Header
+            avatar={headerImage}
             onPress={() => {
               navigation.navigate('More');
             }}
@@ -380,7 +379,7 @@ const HomeScreen = () => {
                     <Ionicons
                       name="arrow-forward-outline"
                       size={25}
-                      color="black"
+                      color={colors.TEXT}
                     />
                   </TouchableOpacity>
                 </View>
@@ -426,7 +425,7 @@ const HomeScreen = () => {
                 <Ionicons
                   name="arrow-forward-outline"
                   size={25}
-                  color="black"
+                  color={colors.TEXT}
                 />
               </TouchableOpacity>
             </View>
@@ -445,7 +444,7 @@ const HomeScreen = () => {
                       onPress={() => {
                         navigation.navigate('Diary');
                       }}>
-                      <Banner image={banner} />
+                      <Banner image={{uri: banner}} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -491,7 +490,7 @@ const HomeScreen = () => {
                     index: activeLogIndex,
                   });
                 }}>
-                <Ionicons name="add-sharp" size={30} color="black" />
+                <Ionicons name="add-sharp" size={30} color={colors.TEXT} />
               </TouchableOpacity>
             </View>
             {weights.length > 0 ? (
@@ -532,7 +531,7 @@ const HomeScreen = () => {
 
               <Text
                 style={{
-                  color: 'black',
+                  color: colors.TEXT,
                   fontSize: 16,
                   fontFamily: font.DEFAULT_FONT,
                   fontWeight: '900',
@@ -575,10 +574,10 @@ export default HomeScreen;
 
 const Label = ({children}) => <Text style={styles.label}>{children}</Text>;
 
-const Header = ({onPress, onBellPress, name}) => (
+const Header = ({onPress, onBellPress, name, avatar}) => (
   <View style={styles.header}>
     <TouchableOpacity onPress={onPress}>
-      <ImageContainer image={headerImage} />
+      <ImageContainer image={avatar} />
     </TouchableOpacity>
     <HeaderTitle name={name} />
     <View style={styles.iconNotification}>
@@ -611,7 +610,7 @@ const Header = ({onPress, onBellPress, name}) => (
 
 const ImageContainer = ({image, height = '100%', width = '100%'}) => (
   <View style={styles.imageContainer}>
-    <Image source={image} style={[{height, width}]} />
+    <Image source={{uri: image}} style={[{height, width}]} />
   </View>
 );
 
@@ -648,7 +647,7 @@ const Banner = ({image}) => (
       }}
       source={image}>
       <View style={{alignSelf: 'center', margin: 5}}>
-        <Text
+        {/* <Text
           style={{
             fontFamily: font.DEFAULT_FONT,
             fontSize: 46,
@@ -656,7 +655,7 @@ const Banner = ({image}) => (
             fontWeight: '900',
           }}>
           Let's
-        </Text>
+        </Text> */}
       </View>
     </ImageBackground>
   </View>
@@ -682,7 +681,7 @@ const WaterAdd = ({image, color}) => (
         width: 100,
         height: 100,
       }}
-      source={image}
+      source={{uri: image}}
     />
     <Text
       style={{

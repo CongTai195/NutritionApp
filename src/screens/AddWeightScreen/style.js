@@ -6,8 +6,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.LIGHT_GREY,
     marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   header: {
     backgroundColor: colors.PURE_WHITE,

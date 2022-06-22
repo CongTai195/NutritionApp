@@ -6,7 +6,7 @@ import {
   FlatList,
   Text,
   View,
-  StatusBar,
+  Image,
   LogBox,
 } from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
@@ -19,12 +19,14 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import {DataContext} from '../../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useToast} from 'react-native-toast-notifications';
+import colors from '../../assets/colors/colors';
 
 const DiaryItem = ({meal, listItem, onPress, date}) => {
   const toast = useToast();
   const context = useContext(DataContext);
   const [items, setItems] = useState({});
   const navigation = useNavigation();
+  const [show, setShow] = useState(true);
 
   const calories =
     items.length > 0
@@ -162,6 +164,8 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
         : '');
     const detail = data.item?.food?.detail;
     const duration = data.item?.duration;
+    const imageURL =
+      meal === 'Exercise' ? data.item?.imageURL : data.item.food?.imageURL;
     return (
       <View>
         <TouchableOpacity
@@ -183,25 +187,38 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
             }
           }}
           style={styles.rowFront}>
-          <View>
-            <Text style={styles.textHeader} numberOfLines={1}>
-              {name}{' '}
-            </Text>
-            <View numberOfLines={1} style={{flexDirection: 'row'}}>
-              {meal === 'Exercise' ? (
-                <>
-                  <Text numberOfLines={1} style={styles.textInfo}>
-                    {duration} {duration > 1 ? 'minutes' : 'minute'}, {calories}{' '}
-                    cal
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text numberOfLines={1} style={styles.textInfo}>
-                    {calories} cal, {serving_size}, {detail}
-                  </Text>
-                </>
-              )}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={{marginHorizontal: 10}}>
+              <Image
+                style={{height: 70, width: 70, borderRadius: 10}}
+                source={{uri: imageURL}}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.textHeader} numberOfLines={1}>
+                {name}{' '}
+              </Text>
+              <View numberOfLines={1} style={{flexDirection: 'row'}}>
+                {meal === 'Exercise' ? (
+                  <>
+                    <Text numberOfLines={1} style={styles.textInfo}>
+                      {duration} {duration > 1 ? 'minutes' : 'minute'},{' '}
+                      {calories} cal
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text numberOfLines={1} style={styles.textInfo}>
+                      {calories} cal, {serving_size}, {detail}
+                    </Text>
+                  </>
+                )}
+              </View>
             </View>
           </View>
         </TouchableOpacity>
@@ -230,66 +247,82 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
 
   return (
     <View style={styles.childAdding}>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={[styles.headerText, {flex: 1}]}>{meal}</Text>
-        <>
-          {calories === 0 ? null : (
-            <>
-              <Text style={styles.headerText}>{Math.round(calories)} cal</Text>
-            </>
-          )}
-        </>
+      <View style={styles.header}>
+        <View style={{flex: 1}}>
+          <Text style={[styles.headerText, {flex: 1}]}>{meal}</Text>
+          <>
+            {calories === 0 ? null : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.caloText}>{Math.round(calories)}</Text>
+                <Text style={styles.kcaloText}>kcal</Text>
+              </View>
+            )}
+          </>
+        </View>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={
+            onPress
+            // navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
+          }>
+          <View
+            style={[styles.addFood, {marginBottom: calories === 0 ? 0 : 10}]}>
+            <Ionicons name="add-outline" size={25} color={'white'} />
+          </View>
+        </TouchableOpacity>
       </View>
-      <>
-        <View style={styles.separator}></View>
-      </>
-      <SafeAreaView style={styles.container}>
-        {/* {foods.length > 0
+      {show ? (
+        <SafeAreaView
+          style={[styles.container, {marginBottom: items.length > 0 ? 15 : 0}]}>
+          {/* {foods.length > 0
           ? foods.map((food, index, array) => (
               <MealItem onPress={() => onPress(food)} key={index} item={food} />
             ))
           : null} */}
-        <SwipeListView
-          data={items}
-          renderItem={renderItem}
-          renderHiddenItem={renderHiddenItem}
-          leftOpenValue={75}
-          rightOpenValue={-75}
-          disableRightSwipe
-          scrollEnabled={false}
-        />
-      </SafeAreaView>
-      <>
-        <View style={styles.separator}></View>
-      </>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={
-          onPress
-          // navigation.navigate('AddFoodScreen', {meal: meal, diaryId: diaryId})
-        }>
-        <View style={styles.addFood}>
-          <Ionicons name="add-outline" size={16} color={'black'} />
-          <Text
-            style={{
-              fontSize: 14,
-              color: 'black',
-              fontWeight: '500',
-              fontFamily: font.DEFAULT_FONT,
-            }}>
-            {meal === 'Water'
-              ? 'Add Water'
-              : meal === 'Exercise'
-              ? 'Add Exercise'
-              : 'Add Food'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-      {/* <View
+          <SwipeListView
+            data={items}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+            disableRightSwipe
+            scrollEnabled={false}
+          />
+        </SafeAreaView>
+      ) : null}
+      <View
         style={{
-          borderBottomWidth: 20,
-          borderBottomColor: colors.LIGHT_GREY,
-        }}></View> */}
+          backgroundColor: colors.THEME,
+          borderBottomColor: colors.THEME,
+          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: 10,
+          alignItems: 'flex-end',
+        }}>
+        {items.length > 0 ? (
+          <TouchableOpacity onPress={() => setShow(!show)}>
+            {show ? (
+              <Ionicons
+                style={{marginHorizontal: 15}}
+                name="chevron-up-outline"
+                size={25}
+                color={'black'}
+              />
+            ) : (
+              <Ionicons
+                style={{marginHorizontal: 15}}
+                name="chevron-down-outline"
+                size={25}
+                color={'black'}
+              />
+            )}
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 };
