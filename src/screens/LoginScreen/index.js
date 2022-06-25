@@ -49,17 +49,34 @@ const LoginScreen = () => {
     setSecurityTextEntry(prev => !prev);
   };
 
+  const validateEmail = email => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
   const onChange = ({name, value}) => {
     setData({...data, [name]: value});
 
-    if (value !== '') {
-      setError(prev => {
-        return {...prev, [name]: null};
-      });
+    if (name === 'username') {
+      if (!validateEmail(value)) {
+        setError(prev => {
+          return {...prev, [name]: 'Your email format is not correct'};
+        });
+      } else {
+        setError(prev => {
+          return {...prev, [name]: null};
+        });
+      }
     } else {
-      setError(prev => {
-        return {...prev, [name]: 'This field is required'};
-      });
+      if (value !== '') {
+        setError(prev => {
+          return {...prev, [name]: null};
+        });
+      } else {
+        setError(prev => {
+          return {...prev, [name]: 'This field is required'};
+        });
+      }
     }
   };
 
@@ -74,7 +91,7 @@ const LoginScreen = () => {
         return {...prev, password: 'Please input your password'};
       });
     }
-    if (data.username && data.password) {
+    if (data.username && data.password && validateEmail(data.username)) {
       const result = await context.login(data.username, data.password);
       if (result) {
         navigation.replace('App');
@@ -157,16 +174,12 @@ const LoginScreen = () => {
               </Text> */}
                 {secureTextEntry === true ? (
                   <Ionicons
-                    name="eye-off-outline"
+                    name="eye-off"
                     size={24}
                     color={colors.PURE_WHITE}
                   />
                 ) : (
-                  <Ionicons
-                    name="eye-outline"
-                    size={24}
-                    color={colors.PURE_WHITE}
-                  />
+                  <Ionicons name="eye" size={24} color={colors.PURE_WHITE} />
                 )}
               </Pressable>
             }

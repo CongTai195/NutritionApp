@@ -200,7 +200,9 @@ const GoalUpdateScreen = () => {
             kg on {formatDate(user?.process.created_at)}
           </Text>
         </View>
+      </View>
 
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Current Weight</Text>
           <View style={[styles.textInput]}>
@@ -221,7 +223,9 @@ const GoalUpdateScreen = () => {
           </View>
           <Text style={styles.servingSizeText}>kg</Text>
         </View>
+      </View>
 
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Goal Weight</Text>
           <View style={[styles.textInput]}>
@@ -242,6 +246,9 @@ const GoalUpdateScreen = () => {
           </View>
           <Text style={styles.servingSizeText}>kg</Text>
         </View>
+      </View>
+
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Weekly Goal</Text>
           <Text style={styles.textPicker}>{selectedWeeklyGoal}</Text>
@@ -259,6 +266,8 @@ const GoalUpdateScreen = () => {
             ))}
           </Picker>
         </View>
+      </View>
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Activity Level</Text>
           <Text style={styles.textPicker}>{selectedActivityLevel}</Text>

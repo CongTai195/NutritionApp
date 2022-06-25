@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   add: {
-    backgroundColor: colors.THEME,
+    backgroundColor: '#ECC49F',
     height: 40,
     width: 40,
     borderRadius: 100,

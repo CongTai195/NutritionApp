@@ -20,7 +20,15 @@ const Input = props => {
   return (
     <View>
       <View style={[styles.inputPart, {borderColor: getBorderColor()}]}>
-        <Icon name={props.icon} color={colors.PURE_WHITE} size={20} />
+        <View
+          style={{
+            width: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Icon name={props.icon} color={colors.PURE_WHITE} size={20} />
+        </View>
+
         <TextInput
           style={styles.input}
           placeholder={props.initialPlaceholder}

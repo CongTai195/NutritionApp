@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     width: '95%',
     alignSelf: 'center',
     marginTop: 10,
+    marginBottom: 20,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -74,9 +75,10 @@ const styles = StyleSheet.create({
     //borderBottomWidth: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 40,
+    height: 60,
     marginBottom: 0.5,
     width: '100%',
+    //padding: 20,
   },
   childBenefit: {
     flexDirection: 'row',
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     fontFamily: font.DEFAULT_FONT,
-    fontWeight: '500',
+    fontWeight: '900',
     marginHorizontal: 10,
   },
   amountText: {

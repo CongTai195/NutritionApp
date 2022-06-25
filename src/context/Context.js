@@ -24,9 +24,9 @@ export class DataProvider extends Component {
 
       isLoading: false,
 
-      BASE_URL: 'http://10.0.2.2:8000',
+      //BASE_URL: 'http://10.0.2.2:8000',
       //BASE_URL: 'http://192.168.1.164:8001',
-      //BASE_URL: 'https://nutritious-senior-project.herokuapp.com',
+      BASE_URL: 'https://nutritious-senior-project.herokuapp.com',
     };
   }
 
@@ -243,9 +243,11 @@ export class DataProvider extends Component {
         return true;
       } else {
         console.log(result);
-        setTimeout(() => {
-          alert('Fail Register');
-        }, 1500);
+        if (result.errors.email) {
+          setTimeout(() => {
+            alert(result.errors.email);
+          }, 1500);
+        }
         return false;
       }
     } catch (error) {

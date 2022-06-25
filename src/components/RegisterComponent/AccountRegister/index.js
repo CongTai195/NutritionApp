@@ -42,17 +42,33 @@ const AccountRegister = () => {
     confirmPassword: 'Confirm Password',
   });
   const [error, setError] = useState({});
+  const validateEmail = email => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
   const onChange = ({name, value}) => {
     setData({...data, [name]: value});
 
-    if (value !== '') {
-      setError(prev => {
-        return {...prev, [name]: null};
-      });
+    if (name === 'email') {
+      if (!validateEmail(value)) {
+        setError(prev => {
+          return {...prev, [name]: 'Your email format is not correct'};
+        });
+      } else {
+        setError(prev => {
+          return {...prev, [name]: null};
+        });
+      }
     } else {
-      setError(prev => {
-        return {...prev, [name]: 'This field is required'};
-      });
+      if (value !== '') {
+        setError(prev => {
+          return {...prev, [name]: null};
+        });
+      } else {
+        setError(prev => {
+          return {...prev, [name]: 'This field is required'};
+        });
+      }
     }
   };
   const onPress = async () => {
@@ -86,7 +102,8 @@ const AccountRegister = () => {
       data.password &&
       data.yourName &&
       data.confirmPassword &&
-      data.confirmPassword === data.password
+      data.confirmPassword === data.password &&
+      validateEmail(data.email)
     ) {
       const result = await context.register(
         data.yourName,
@@ -111,7 +128,9 @@ const AccountRegister = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={'height'}>
+    <KeyboardAvoidingView
+      style={[styles.container, {opacity: context.isLoading ? 0.8 : 1}]}
+      behavior={'height'}>
       <Progress progress={progress} />
       <View
         style={{
@@ -124,6 +143,7 @@ const AccountRegister = () => {
       <View style={styles.inner}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Input
+            icon="user"
             name="Your name"
             secureText={false}
             value={data.yourName}
@@ -141,6 +161,7 @@ const AccountRegister = () => {
             error={error.yourName}
           />
           <Input
+            icon="envelope"
             name="Email"
             secureText={false}
             value={data.email}
@@ -158,6 +179,7 @@ const AccountRegister = () => {
             error={error.email}
           />
           <Input
+            icon="lock"
             name="Password"
             secureText={secureTextEntry}
             value={data.password}
@@ -178,22 +200,19 @@ const AccountRegister = () => {
                 onPress={() => changeSecureTextEntry()}>
                 {secureTextEntry === false ? (
                   <Ionicons
-                    name="eye-off-outline"
+                    name="eye-off"
                     size={24}
                     color={colors.PURE_WHITE}
                   />
                 ) : (
-                  <Ionicons
-                    name="eye-outline"
-                    size={24}
-                    color={colors.PURE_WHITE}
-                  />
+                  <Ionicons name="eye" size={24} color={colors.PURE_WHITE} />
                 )}
               </Pressable>
             }
             error={error.password}
           />
           <Input
+            icon="check"
             name="Confirm Password"
             secureText={secureTextEntry}
             value={data.confirmPassword}
@@ -217,16 +236,12 @@ const AccountRegister = () => {
                 onPress={() => changeSecureTextEntry()}>
                 {secureTextEntry === false ? (
                   <Ionicons
-                    name="eye-off-outline"
+                    name="eye-off"
                     size={24}
                     color={colors.PURE_WHITE}
                   />
                 ) : (
-                  <Ionicons
-                    name="eye-outline"
-                    size={24}
-                    color={colors.PURE_WHITE}
-                  />
+                  <Ionicons name="eye" size={24} color={colors.PURE_WHITE} />
                 )}
               </Pressable>
             }

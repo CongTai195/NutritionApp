@@ -39,7 +39,7 @@ const AddWeightScreen = () => {
       month = datePart[1],
       day = datePart[2];
 
-    return day;
+    return day + '/' + month;
   };
 
   const [weights, setWeights] = useState(context.weight_week);
@@ -123,8 +123,13 @@ const AddWeightScreen = () => {
       headerRight: () => (
         <View style={{marginRight: 15}}>
           <TouchableOpacity
+            disabled={weight === 0}
             onPress={() => getDiary(date.toISOString().split('T')[0])}>
-            <Ionicons name="checkmark-outline" size={25} color={colors.TEXT} />
+            <Ionicons
+              name="checkmark-outline"
+              size={25}
+              color={weight === 0 ? colors.LIGHT_TEXT : colors.TEXT}
+            />
           </TouchableOpacity>
         </View>
       ),
@@ -284,7 +289,9 @@ const AddWeightScreen = () => {
               keyboardType={'numeric'}
               //value={weight.toString()}
               onChangeText={value => {
-                setWeight(value);
+                if (value === '') {
+                  setWeight(0);
+                } else setWeight(value);
               }}
             />
           </View>
@@ -338,7 +345,6 @@ const AddWeightScreen = () => {
               }}>
               <Text
                 style={{
-                  flex: 1,
                   color: getLabel(0),
                   fontSize: 16,
                   fontFamily: font.DEFAULT_FONT,
@@ -364,7 +370,6 @@ const AddWeightScreen = () => {
               }}>
               <Text
                 style={{
-                  flex: 1,
                   color: getLabel(1),
                   fontSize: 16,
                   fontFamily: font.DEFAULT_FONT,
@@ -390,7 +395,6 @@ const AddWeightScreen = () => {
               }}>
               <Text
                 style={{
-                  flex: 1,
                   color: getLabel(2),
                   fontSize: 16,
                   fontFamily: font.DEFAULT_FONT,

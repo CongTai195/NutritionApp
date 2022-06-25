@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: width - 50,
-    height: 45,
+    height: 50,
     margin: 12,
     //padding: 15,
     borderWidth: 1.5,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
     fontSize: 14,
     color: colors.RED,
-    fontWeight: '900',
+    fontWeight: '500',
   },
 });
 

@@ -379,7 +379,7 @@ const HomeScreen = () => {
                     <Ionicons
                       name="arrow-forward-outline"
                       size={25}
-                      color={colors.TEXT}
+                      color={colors.BLACK}
                     />
                   </TouchableOpacity>
                 </View>
@@ -425,7 +425,7 @@ const HomeScreen = () => {
                 <Ionicons
                   name="arrow-forward-outline"
                   size={25}
-                  color={colors.TEXT}
+                  color={colors.BLACK}
                 />
               </TouchableOpacity>
             </View>
@@ -490,7 +490,7 @@ const HomeScreen = () => {
                     index: activeLogIndex,
                   });
                 }}>
-                <Ionicons name="add-sharp" size={30} color={colors.TEXT} />
+                <Ionicons name="add-sharp" size={30} color={colors.BLACK} />
               </TouchableOpacity>
             </View>
             {weights.length > 0 ? (
@@ -531,7 +531,7 @@ const HomeScreen = () => {
 
               <Text
                 style={{
-                  color: colors.TEXT,
+                  color: colors.BLACK,
                   fontSize: 16,
                   fontFamily: font.DEFAULT_FONT,
                   fontWeight: '900',

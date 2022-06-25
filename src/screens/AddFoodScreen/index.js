@@ -132,80 +132,80 @@ const AddFoodScreen = () => {
           }}
         />
       </View>
-      <View style={{backgroundColor: '#fff', marginTop: 2}}>
-        <View
+
+      <View
+        style={{
+          flexDirection: 'row',
+          //borderBottomWidth: 0.5,
+          alignSelf: 'center',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+          //height: 40,
+          marginBottom: 0.5,
+          marginTop: 10,
+          width: '100%',
+          backgroundColor: colors.LIGHT_GREY,
+        }}>
+        <TouchableOpacity
           style={{
-            flexDirection: 'row',
-            //borderBottomWidth: 0.5,
+            flex: 1,
+            backgroundColor: colors.PURE_WHITE,
             justifyContent: 'center',
             alignItems: 'center',
-            height: 30,
-            marginBottom: 0.5,
-            marginTop: 10,
-            width: '100%',
+            borderColor: getTime(0),
+            borderWidth: 2,
+            marginRight: 2,
+            borderRadius: 10,
+            height: 60,
+            marginHorizontal: 10,
+          }}
+          onPress={() => {
+            setTime(0);
           }}>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderBottomColor: getTime(0),
-              borderBottomWidth: 2,
-              borderRightColor: getTime(0),
-              borderRightWidth: time === 0 ? 2 : 0,
-              marginRight: 2,
-            }}
-            onPress={() => {
-              setTime(0);
-            }}>
-            <View>
-              {/* <TouchableOpacity
-              onPress={() => {
-                setTime(0);
-              }}> */}
-              <Text
-                style={{
-                  flex: 1,
-                  color: getLabel(0),
-                  fontSize: 16,
-                  fontFamily: font.DEFAULT_FONT,
-                  fontWeight: time === 0 ? '900' : '500',
-                  marginHorizontal: 10,
-                }}>
-                Standard Food
-              </Text>
-              {/* </TouchableOpacity> */}
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderBottomColor: getTime(1),
-              borderBottomWidth: 2,
-              borderLeftColor: getTime(1),
-              borderLeftWidth: time === 1 ? 2 : 0,
-            }}
-            onPress={() => {
-              setTime(1);
-            }}>
-            <View>
-              <Text
-                style={{
-                  flex: 1,
-                  color: getLabel(1),
-                  fontSize: 16,
-                  fontFamily: font.DEFAULT_FONT,
-                  fontWeight: time === 1 ? '900' : '500',
-                  marginHorizontal: 10,
-                }}>
-                Custom Food
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+          <View>
+            <Text
+              style={{
+                color: getLabel(0),
+                fontSize: 16,
+                fontFamily: font.DEFAULT_FONT,
+                fontWeight: time === 0 ? '900' : '500',
+                marginHorizontal: 10,
+              }}>
+              Standard Food
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: colors.PURE_WHITE,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderColor: getTime(1),
+            borderWidth: 2,
+            marginRight: 2,
+            borderRadius: 10,
+            height: 60,
+            marginRight: 10,
+          }}
+          onPress={() => {
+            setTime(1);
+          }}>
+          <View>
+            <Text
+              style={{
+                color: getLabel(1),
+                fontSize: 16,
+                fontFamily: font.DEFAULT_FONT,
+                fontWeight: time === 1 ? '900' : '500',
+                marginHorizontal: 10,
+              }}>
+              Custom Food
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
+
       {time === 0 ? (
         <StandardFoodScreen
           meal={meal}

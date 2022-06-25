@@ -121,13 +121,13 @@ const MoreScreen = () => {
             onPress={() => navigation.navigate('ProfileScreen')}>
             <View style={styles.child}>
               <Ionicons
-                name="information-circle-outline"
+                name="information-circle"
                 size={24}
                 color={'black'}
                 style={{marginRight: 10}}
               />
-              <View style={{flex: 1}}>
-                <Text style={styles.textChild}>My Info</Text>
+              <View style={styles.labelPart}>
+                <Text style={styles.textChild}>My Information</Text>
               </View>
               <Ionicons
                 name="chevron-forward-outline"
@@ -146,12 +146,12 @@ const MoreScreen = () => {
             }}>
             <View style={styles.child}>
               <Ionicons
-                name="checkmark-done-outline"
+                name="flame"
                 size={24}
                 color={'black'}
                 style={{marginRight: 10}}
               />
-              <View style={{flex: 1}}>
+              <View style={styles.labelPart}>
                 <Text style={styles.textChild}>Goals</Text>
               </View>
               <Ionicons
@@ -171,12 +171,12 @@ const MoreScreen = () => {
             activeOpacity={0.5}>
             <View style={styles.child}>
               <Ionicons
-                name="pie-chart-outline"
+                name="nutrition"
                 size={24}
                 color={'black'}
                 style={{marginRight: 10}}
               />
-              <View style={{flex: 1}}>
+              <View style={styles.labelPart}>
                 <Text style={styles.textChild}>Nutrition</Text>
               </View>
               <Ionicons
@@ -196,7 +196,7 @@ const MoreScreen = () => {
                 color={'red'}
                 style={{marginRight: 10}}
               />
-              <View style={{flex: 1}}>
+              <View style={styles.labelPart}>
                 <Text style={styles.textChild}>Log Out</Text>
               </View>
             </View>

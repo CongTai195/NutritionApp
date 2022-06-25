@@ -44,7 +44,7 @@ const AddWaterScreen = () => {
             <Ionicons
               name="checkmark-outline"
               size={25}
-              color={amount === 0 ? colors.GREY : colors.TEXT}
+              color={amount === 0 ? colors.LIGHT_TEXT : colors.TEXT}
             />
           </TouchableOpacity>
         </View>

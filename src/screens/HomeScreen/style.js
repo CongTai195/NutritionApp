@@ -50,10 +50,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {paddingHorizontal: 10, flex: 1, justifyContent: 'center'},
+  title: {
+    paddingHorizontal: 10,
+    flex: 1,
+    justifyContent: 'center',
+  },
   bigTitle: {
     fontSize: 20,
-    color: colors.TEXT,
+    color: colors.BLACK,
     fontWeight: '900',
     fontFamily: font.DEFAULT_FONT,
   },
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: font.DEFAULT_FONT,
     fontWeight: '700',
-    color: colors.TEXT,
+    color: colors.BLACK,
     fontSize: 20,
     flex: 1,
   },

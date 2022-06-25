@@ -92,64 +92,54 @@ const ProfileScreen = () => {
           alignSelf: 'flex-start',
           margin: 10,
           fontSize: 16,
-          color: 'black',
+          color: colors.BLACK,
           fontWeight: '900',
         }}>
         Personal Details
       </Text>
       <View style={styles.infoSection}>
-        {/* <View style={styles.childInfoSection}> */}
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>User Name</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{name}</Text>
+            <Text style={[styles.textChild, {color: colors.TEXT}]}>{name}</Text>
           </View>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity activeOpacity={0.5}>
-          <View style={styles.child}>
-            <Text style={[styles.textChild, {flex: 1}]}>Profile Photo</Text>
-            <Image
-              style={{
-                height: 40,
-                width: 40,
-                resizeMode: 'cover',
-                borderRadius: 50,
-                margin: 10,
-              }}
-              source={{uri: image.DEFAULT_AVATAR}}
-            />
-          </View>
-        </TouchableOpacity> */}
-
+      </View>
+      <View style={styles.infoSection}>
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Age</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{age}</Text>
+            <Text style={[styles.textChild, {color: colors.TEXT}]}>{age}</Text>
           </View>
         </TouchableOpacity>
-
+      </View>
+      <View style={styles.infoSection}>
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Height</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{height} cm</Text>
+            <Text style={[styles.textChild, {color: colors.TEXT}]}>
+              {height} cm
+            </Text>
           </View>
         </TouchableOpacity>
-
+      </View>
+      <View style={styles.infoSection}>
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Sex</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{sex}</Text>
+            <Text style={[styles.textChild, {color: colors.TEXT}]}>{sex}</Text>
           </View>
         </TouchableOpacity>
-
+      </View>
+      <View style={styles.infoSection}>
         <TouchableOpacity activeOpacity={0.5}>
           <View style={styles.child}>
             <Text style={[styles.textChild, {flex: 1}]}>Email Address</Text>
-            <Text style={[styles.textChild, {color: 'blue'}]}>{email}</Text>
+            <Text style={[styles.textChild, {color: colors.TEXT}]}>
+              {email}
+            </Text>
           </View>
         </TouchableOpacity>
-        {/* </View> */}
       </View>
     </ScrollView>
   );

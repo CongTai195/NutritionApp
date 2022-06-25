@@ -26,7 +26,7 @@ const NutritionUpdateScreen = () => {
   const user = context.user;
   const navigation = useNavigation();
   const route = useRoute();
-  const [isAdded, setIsAdded] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
 
   const [carbs, setCarbs] = useState(parseInt(user?.process.carbs));
 
@@ -43,8 +43,14 @@ const NutritionUpdateScreen = () => {
       headerTitleAlign: 'center',
       headerRight: () => (
         <View style={{marginRight: 15}}>
-          <TouchableOpacity onPress={() => updateProcess()}>
-            <Ionicons name="checkmark-outline" size={25} color={colors.TEXT} />
+          <TouchableOpacity
+            disabled={!isEdited}
+            onPress={() => updateProcess()}>
+            <Ionicons
+              name="checkmark-outline"
+              size={25}
+              color={isEdited ? colors.TEXT : colors.LIGHT_TEXT}
+            />
           </TouchableOpacity>
         </View>
       ),
@@ -103,6 +109,8 @@ const NutritionUpdateScreen = () => {
           <Text style={styles.labelText}>Calories</Text>
           <Text style={styles.servingSizeText}>{user?.process.calories}</Text>
         </View>
+      </View>
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Carbohydrates</Text>
           <View style={[styles.textInput]}>
@@ -114,6 +122,7 @@ const NutritionUpdateScreen = () => {
               keyboardType={'numeric'}
               //value={weight.toString()}
               onChangeText={value => {
+                setIsEdited(true);
                 if (value === '') {
                   setCarbs(0);
                 } else setCarbs(parseInt(value));
@@ -123,6 +132,8 @@ const NutritionUpdateScreen = () => {
           </View>
           <Text style={styles.servingSizeText}>%</Text>
         </View>
+      </View>
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Protein</Text>
           <View style={[styles.textInput]}>
@@ -134,6 +145,7 @@ const NutritionUpdateScreen = () => {
               keyboardType={'numeric'}
               //value={weight.toString()}
               onChangeText={value => {
+                setIsEdited(true);
                 if (value === '') {
                   setProtein(0);
                 } else setProtein(parseInt(value));
@@ -143,6 +155,8 @@ const NutritionUpdateScreen = () => {
           </View>
           <Text style={styles.servingSizeText}>%</Text>
         </View>
+      </View>
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Fat</Text>
           <View style={[styles.textInput]}>
@@ -154,6 +168,7 @@ const NutritionUpdateScreen = () => {
               keyboardType={'numeric'}
               //value={weight.toString()}
               onChangeText={value => {
+                setIsEdited(true);
                 if (value === '') {
                   setFat(0);
                 } else setFat(parseInt(value));
