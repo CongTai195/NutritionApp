@@ -29,9 +29,9 @@ const QuantitySelector = ({quantity, setQuantity}) => {
           onChangeText={value => {
             if (value === '') {
               setQuantity(1);
-            } else setQuantity(parseInt(value));
+            } else setQuantity(parseFloat(value));
           }}
-          value={quantity.toString()}
+          defaultValue={quantity.toString()}
         />
       </View>
 

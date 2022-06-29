@@ -61,21 +61,21 @@ const CreateServingScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Nutrition Fact',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerRight: () => (
         <View style={{marginRight: 15}}>
           <TouchableOpacity
-            disabled={!(data.calories !== '')}
+            disabled={!(data.calories !== 0)}
             onPress={() => {
               createFood();
             }}>
             <Ionicons
               name="checkmark-outline"
               size={25}
-              color={colors.PURE_WHITE}
+              color={data.calories === 0 ? colors.LIGHT_TEXT : colors.GREEN}
             />
           </TouchableOpacity>
         </View>
@@ -207,9 +207,9 @@ const CreateServingScreen = () => {
       contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
       showsVerticalScrollIndicator={false}
       style={styles.container}>
-      <View style={styles.others}>
-        {array?.map(item => (
-          <View key={item.id} style={styles.childOthers}>
+      {array?.map(item => (
+        <View key={item.id} style={styles.othersSub}>
+          <View style={styles.childOthersSub}>
             <Text style={styles.labelText}>{item.name}</Text>
             <View style={[styles.textInput]}>
               <TextInput
@@ -220,13 +220,15 @@ const CreateServingScreen = () => {
                 style={styles.amountText}
                 //value={weight.toString()}
                 onChangeText={value => {
-                  setData({...data, [item.label]: parseInt(value)});
+                  if (value === '') {
+                    setData({...data, [item.label]: parseInt(0)});
+                  } else setData({...data, [item.label]: parseInt(value)});
                 }}
               />
             </View>
           </View>
-        ))}
-      </View>
+        </View>
+      ))}
     </ScrollView>
   );
 };

@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     fontFamily: font.DEFAULT_FONT,
   },
   others: {
+    marginBottom: 30,
     backgroundColor: colors.PURE_WHITE,
     width: '95%',
     alignSelf: 'center',
@@ -70,6 +71,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   childOthers: {
+    flexDirection: 'row',
+    //borderBottomWidth: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    marginBottom: 0.5,
+    width: '100%',
+  },
+  othersSub: {
+    marginBottom: 10,
+    backgroundColor: colors.PURE_WHITE,
+    width: '95%',
+    alignSelf: 'center',
+    marginTop: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  childOthersSub: {
     flexDirection: 'row',
     //borderBottomWidth: 0.5,
     justifyContent: 'center',

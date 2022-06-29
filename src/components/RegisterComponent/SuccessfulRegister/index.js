@@ -32,8 +32,8 @@ const AccountRegister = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Account Created',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BLUE},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerLeft: () => null,

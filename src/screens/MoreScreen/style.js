@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     width: '95%',
     backgroundColor: colors.PURE_WHITE,
     marginTop: 20,
-    //marginBottom: 50,
+    marginBottom: 20,
     borderRadius: 10,
     justifyContent: 'center',
     alignContent: 'center',

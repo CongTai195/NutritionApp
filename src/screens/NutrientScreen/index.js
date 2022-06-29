@@ -313,7 +313,7 @@ const NutrientScreen = () => {
                             {item.left > 0 ? (
                               <>
                                 <Text style={styles.labelText}>
-                                  {item.left}
+                                  {Math.round(item.left * 10) / 10}
                                 </Text>
                               </>
                             ) : (

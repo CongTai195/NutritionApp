@@ -31,7 +31,7 @@ const Card = ({name, status, image, mass, lightColor, color, darkColor}) => {
             fontFamily: font.DEFAULT_FONT,
             fontWeight: '900',
           }}>
-          {status} / {mass} g
+          {Math.round(status * 10) / 10} / {mass} g
         </Text>
       </View>
       <ImageBackground

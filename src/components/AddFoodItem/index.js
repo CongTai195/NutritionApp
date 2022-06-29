@@ -5,7 +5,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../../assets/colors/colors';
 
 const AddFoodItem = ({item, onPress, addFood}) => {
-  console.log(item);
   return (
     <View style={styles.container}>
       <View style={styles.information}>
@@ -47,7 +46,12 @@ const AddFoodItem = ({item, onPress, addFood}) => {
       </View>
       <View style={styles.add}>
         <TouchableOpacity onPress={addFood}>
-          <Ionicons name="add-outline" size={25} color={'white'} />
+          <Ionicons
+            style={{textAlign: 'center'}}
+            name="add-outline"
+            size={30}
+            color={'white'}
+          />
         </TouchableOpacity>
       </View>
     </View>

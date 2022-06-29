@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 15,
-    padding: 8,
+    //padding: 8,
   },
   textHeader: {
     fontSize: 15,

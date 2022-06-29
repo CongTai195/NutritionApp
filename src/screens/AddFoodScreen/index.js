@@ -50,6 +50,32 @@ const AddFoodScreen = () => {
   };
 
   const [search, setSearch] = useState('');
+  const [show, setShow] = useState(false);
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  const data = [
+    'Beef',
+    'Egg',
+    'Pork',
+    'Chicken',
+    'Sugar',
+    'Shrimp',
+    'Salmon',
+    'Tuna',
+    'Green Bell Pepper',
+    'Red Bell Pepper',
+    'Potato',
+    'Sweet Potato',
+    'Broccoli',
+    'Oil',
+    'Rice',
+    'Oat',
+    'Banh Mi',
+    'Pho',
+  ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -112,23 +138,38 @@ const AddFoodScreen = () => {
     }
   };
 
+  console.log(myFood);
+
   return (
     <View style={styles.container}>
       <View>
         <SearchInput
+          show={show}
+          data={
+            time === 0
+              ? data.filter(item => item.toLowerCase().indexOf(search) > -1)
+              : []
+          }
           icon="search"
           initialPlaceholder="Search food"
           onChangeText={value => {
+            if (value === '') setShow(false);
+            else setShow(true);
             setSearch(value);
-            if (time === 1) {
-              searchMyFood(value);
-            }
+            // if (time === 1) {
+            //   searchMyFood(capitalizeFirstLetter(value));
+            // }
+          }}
+          onPress={value => {
+            setSearch(value);
+            searchFood(capitalizeFirstLetter(value));
+            setShow(false);
           }}
           value={search}
           onSubmitEditing={() => {
             if (time === 0) {
-              searchFood(search);
-            }
+              searchFood(capitalizeFirstLetter(search));
+            } else searchMyFood(capitalizeFirstLetter(search));
           }}
         />
       </View>

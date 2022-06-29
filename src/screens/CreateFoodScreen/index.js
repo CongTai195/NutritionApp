@@ -37,8 +37,8 @@ const CreateFoodScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Create Food',
-      headerTintColor: '#fff',
-      headerStyle: {backgroundColor: colors.BACK_GROUND_COLOR},
+      headerTintColor: colors.TEXT,
+      headerStyle: {backgroundColor: colors.THEME},
       headerTitleStyle: {fontWeight: '700', fontFamily: font.DEFAULT_FONT},
       headerTitleAlign: 'center',
       headerRight: () => (
@@ -65,7 +65,11 @@ const CreateFoodScreen = () => {
             <Ionicons
               name="arrow-forward-outline"
               size={25}
-              color={colors.PURE_WHITE}
+              color={
+                name !== '' && detail !== '' && serving !== ''
+                  ? colors.TEXT
+                  : colors.LIGHT_TEXT
+              }
             />
           </TouchableOpacity>
         </View>
@@ -81,7 +85,6 @@ const CreateFoodScreen = () => {
       <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Name</Text>
-
           <View style={[styles.textInput]}>
             <TextInput
               placeholder={'Required'}
@@ -94,7 +97,8 @@ const CreateFoodScreen = () => {
             />
           </View>
         </View>
-
+      </View>
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Detail</Text>
           <View style={[styles.textInput]}>
@@ -109,7 +113,8 @@ const CreateFoodScreen = () => {
             />
           </View>
         </View>
-
+      </View>
+      <View style={styles.others}>
         <View style={styles.childOthers}>
           <Text style={styles.labelText}>Serving Size</Text>
           <View style={[styles.textInput]}>
@@ -130,7 +135,7 @@ const CreateFoodScreen = () => {
           marginHorizontal: 30,
           textAlign: 'center',
           fontSize: 16,
-          color: '#ded006',
+          color: colors.YELLOW,
           fontFamily: font.DEFAULT_FONT,
         }}>
         Your serving size must in a format such as "1 bowl, 100g, ..."

@@ -272,7 +272,12 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
           }>
           <View
             style={[styles.addFood, {marginBottom: calories === 0 ? 0 : 10}]}>
-            <Ionicons name="add-outline" size={25} color={'white'} />
+            <Ionicons
+              style={{textAlign: 'center', width: 24}}
+              size={25}
+              name="add"
+              color={'white'}
+            />
           </View>
         </TouchableOpacity>
       </View>

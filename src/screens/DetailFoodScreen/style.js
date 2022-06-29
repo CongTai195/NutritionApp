@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    height: Dimensions.get('window').width / 1.5,
+    height: Dimensions.get('window').width / 1.6,
     width: Dimensions.get('window').width,
     resizeMode: 'cover',
     //marginHorizontal: 10,

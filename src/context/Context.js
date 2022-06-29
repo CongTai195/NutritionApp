@@ -172,17 +172,10 @@ export class DataProvider extends Component {
           password: password,
         }),
       });
-      console.log(
-        JSON.stringify({
-          email: userName,
-          password: password,
-        }),
-      );
       const result = await response.json();
       if (result.status === 'OK') {
         await AsyncStorage.setItem('@storage_Key', result.results.token);
         this.setState({user: result.results.info});
-        this.getWeight();
         this.getMyFood();
         this.getMyExercise();
         return true;
