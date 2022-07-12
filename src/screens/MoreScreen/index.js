@@ -23,6 +23,7 @@ import image from '../../constants/image';
 
 const MoreScreen = () => {
   const context = useContext(DataContext);
+  const SECOND_IN_A_DAY = 1000 * 3600 * 24;
   const user = context.user;
   const startDay = user?.created_at;
   const today = moment().toDate().toISOString().split('T')[0];
@@ -36,7 +37,10 @@ const MoreScreen = () => {
   };
   const [isLoading, setIsLoading] = useState(false);
 
-  const streak = parseInt(formatDate(today)) - parseInt(formatDate(startDay));
+  const streak = Math.round(
+    (new Date(today).getTime() - new Date(startDay).getTime()) /
+      SECOND_IN_A_DAY,
+  );
 
   const navigation = useNavigation();
   useLayoutEffect(() => {

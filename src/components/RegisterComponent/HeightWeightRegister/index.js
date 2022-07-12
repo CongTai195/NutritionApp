@@ -8,6 +8,8 @@ import Progress from '../Progress';
 import {DataContext} from '../../../context/Context';
 
 const HeightWeightRegister = props => {
+  const MIN_BMI = 18.5;
+  const MAX_BMI = 24.9;
   const context = useContext(DataContext);
   const width = Dimensions.get('window').width;
   const progress = [
@@ -23,10 +25,51 @@ const HeightWeightRegister = props => {
   const [weight, setWeight] = useState(
     context.register_data?.starting_weight || '',
   );
-  const [BMI, setBMI] = useState(0);
+  const [BMI, setBMI] = useState(
+    Math.round((weight / (((height / 100) * height) / 100)) * 10) / 10 || 0,
+  );
   const [goalWeight, setGoalWeight] = useState(
     context.register_data?.goal_weight || '',
   );
+
+  const verifyGoalWeigh = value => {
+    setGoalWeight(value);
+    if (value > weight && context.register_data?.goal === 'Lose Weight') {
+      context.setRegisterData(
+        {
+          name: 'goal_weight',
+          value: value,
+        },
+        () => {
+          context.setRegisterData({
+            name: 'goal',
+            value: 'Gain Weight',
+          });
+        },
+      );
+    } else if (
+      value < weight &&
+      context.register_data?.goal === 'Gain Weight'
+    ) {
+      context.setRegisterData(
+        {
+          name: 'goal_weight',
+          value: value,
+        },
+        () => {
+          context.setRegisterData({
+            name: 'goal',
+            value: 'Lose Weight',
+          });
+        },
+      );
+    } else {
+      context.setRegisterData({
+        name: 'goal_weight',
+        value: value,
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -184,6 +227,7 @@ const HeightWeightRegister = props => {
               </View>
             )}
           </View>
+
           {context.register_data?.goal === 'Maintain Weight' ? null : (
             <>
               <View
@@ -202,6 +246,8 @@ const HeightWeightRegister = props => {
                     {marginHorizontal: 15, flexDirection: 'row'},
                   ]}>
                   <TextInput
+                    editable={weight !== ''}
+                    selectTextOnFocus={weight !== ''}
                     maxLength={3}
                     placeholder="kg"
                     placeholderTextColor="#c4c4c4"
@@ -211,17 +257,13 @@ const HeightWeightRegister = props => {
                     ]}
                     keyboardType={'numeric'}
                     onChangeText={value => {
-                      setGoalWeight(value);
-                      context.setRegisterData({
-                        name: 'goal_weight',
-                        value: value,
-                      });
+                      verifyGoalWeigh(value);
                     }}
                     value={goalWeight.toString()}
                   />
                 </View>
               </View>
-              <View
+              {/* <View
                 style={{
                   marginTop: 20,
                   marginVertical: 10,
@@ -233,6 +275,64 @@ const HeightWeightRegister = props => {
                   Don't worry, this doesn't affect your daily calorie goal and
                   you can always change it later.
                 </Text>
+              </View> */}
+              <View
+                style={{
+                  marginTop: 15,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginHorizontal: 30,
+                }}>
+                {BMI === 0 ? null : (
+                  <View>
+                    <Text style={styles.textDescriptionBMI}>
+                      Your weight should be in range of:
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={styles.textBMI}>
+                        {Math.round(MIN_BMI * Math.pow(height / 100, 2))}
+                      </Text>
+                      <Text style={styles.textBMI}>-</Text>
+                      <Text style={styles.textBMI}>
+                        {Math.round(MAX_BMI * Math.pow(height / 100, 2))}
+                      </Text>
+                      <Text style={styles.textKGs}>kgs</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginHorizontal: 30,
+                }}>
+                {BMI === 0 ? null : (
+                  <View>
+                    <Text style={styles.textDescriptionBMI}>
+                      Your ideal weight is:
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={styles.textBMI}>
+                        {context.register_data.gender === 'Male'
+                          ? Math.round((height - 152.4) * 1.1 + 48)
+                          : Math.round((height - 152.4) * 0.9 + 45)}
+                      </Text>
+                      <Text style={styles.textIdealKGs}>kgs</Text>
+                    </View>
+                  </View>
+                )}
               </View>
             </>
           )}

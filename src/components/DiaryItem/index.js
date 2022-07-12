@@ -259,7 +259,7 @@ const DiaryItem = ({meal, listItem, onPress, date}) => {
                   alignItems: 'center',
                 }}>
                 <Text style={styles.caloText}>{Math.round(calories)}</Text>
-                <Text style={styles.kcaloText}>kcal</Text>
+                <Text style={styles.kcaloText}>calories</Text>
               </View>
             )}
           </>

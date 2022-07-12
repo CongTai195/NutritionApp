@@ -138,8 +138,6 @@ const AddFoodScreen = () => {
     }
   };
 
-  console.log(myFood);
-
   return (
     <View style={styles.container}>
       <View>
@@ -147,7 +145,9 @@ const AddFoodScreen = () => {
           show={show}
           data={
             time === 0
-              ? data.filter(item => item.toLowerCase().indexOf(search) > -1)
+              ? data.filter(
+                  item => item.toLowerCase().indexOf(search.toLowerCase()) > -1,
+                )
               : []
           }
           icon="search"

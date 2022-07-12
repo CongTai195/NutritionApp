@@ -242,13 +242,13 @@ const NutrientScreen = () => {
         dateNameStyle={{color: '#b78755'}}
         highlightDateNumberStyle={{color: colors.TEXT}}
         highlightDateNameStyle={{color: colors.TEXT}}
-        disabledDateNameStyle={{color: 'grey'}}
-        disabledDateNumberStyle={{color: 'grey'}}
+        disabledDateNameStyle={{color: colors.LIGHT_TEXT}}
+        disabledDateNumberStyle={{color: colors.LIGHT_TEXT}}
         iconContainer={{flex: 0.1}}
-        selectedDate={today}
-        // datesWhitelist={[
-        //   {start: context.user?.created_at, end: moment().add(90, 'days')},
-        // ]}
+        selectedDate={date}
+        datesWhitelist={[
+          {start: context.user?.created_at, end: moment().add(90, 'days')},
+        ]}
         onDateSelected={dateSelected => {
           setIsLoading(true);
           setDate(dateSelected.toDate().toISOString().split('T')[0]);

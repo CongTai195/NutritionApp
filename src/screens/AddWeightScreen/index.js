@@ -221,19 +221,51 @@ const AddWeightScreen = () => {
         const action = await context.updateDiary(diary_id, body);
         if (action) {
           setWeight('');
-          toast.show('Data logged successfully', {
-            type: 'success',
-            placement: 'bottom',
-            duration: 1700,
-            offset: 30,
-            animationType: 'slide-in',
-          });
-          const time = setTimeout(() => {
-            navigation.navigate('HomeScreen');
-            context.getWeight();
-            context.getUser();
-          }, 1700);
-          return () => clearTimeout(time);
+          if (logType === 0) {
+            if (weight <= parseFloat(user?.process.goal_weight)) {
+              toast.show('You have reached your goal. Congratulations!', {
+                type: 'success',
+                placement: 'top',
+                duration: 2500,
+                offset: 30,
+                animationType: 'slide-in',
+              });
+              const time = setTimeout(() => {
+                navigation.navigate('HomeScreen');
+                context.getWeight();
+                context.getUser();
+              }, 1700);
+              return () => clearTimeout(time);
+            } else {
+              toast.show('Data logged successfully', {
+                type: 'success',
+                placement: 'bottom',
+                duration: 1700,
+                offset: 30,
+                animationType: 'slide-in',
+              });
+              const time = setTimeout(() => {
+                navigation.navigate('HomeScreen');
+                context.getWeight();
+                context.getUser();
+              }, 1700);
+              return () => clearTimeout(time);
+            }
+          } else {
+            toast.show('Data logged successfully', {
+              type: 'success',
+              placement: 'bottom',
+              duration: 1700,
+              offset: 30,
+              animationType: 'slide-in',
+            });
+            const time = setTimeout(() => {
+              navigation.navigate('HomeScreen');
+              context.getWeight();
+              context.getUser();
+            }, 1700);
+            return () => clearTimeout(time);
+          }
         }
       }
       if (result.status === 'NG') {

@@ -96,6 +96,7 @@ export class DataProvider extends Component {
         method: 'GET',
       });
       const result = await response.json();
+      console.log('GETWEIGHT:', result);
       if (result.status === 'OK') {
         this.setState({weight_week: result.results[0]});
         this.setState({weight_month: result.results[1]});
@@ -295,6 +296,7 @@ export class DataProvider extends Component {
         },
       );
       const result = await response.json();
+      console.log('GETDIARY:', result);
       if (result.status === 'OK') {
         if (date === this.state.today) {
           this.setState({diary_today: result.results});
@@ -302,12 +304,17 @@ export class DataProvider extends Component {
         this.setState({diary: result.results});
       }
       if (result.status === 'NG') {
-        this.createDiary(date);
+        if (result.errors.error === 'Diary not existed') {
+          await this.createDiary(date);
+        } else {
+          alert(result.errors.error);
+        }
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      this.getWeight();
     }
-    this.getWeight();
   };
 
   updateDiary = async (diaryID, params) => {
@@ -354,6 +361,7 @@ export class DataProvider extends Component {
         }),
       });
       const result = await response.json();
+      console.log('CREATEDIARY:', result);
       if (result.status === 'OK') {
         if (date === this.state.today) {
           this.setState({diary_today: result.results});

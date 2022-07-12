@@ -82,6 +82,27 @@ const styles = StyleSheet.create({
     color: colors.GREEN_SELECTED,
     fontFamily: font.DEFAULT_FONT,
     textAlign: 'center',
+    marginHorizontal: 4,
+  },
+  textKGs: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: colors.GREEN_SELECTED,
+    fontFamily: font.DEFAULT_FONT,
+    textAlign: 'center',
+    marginHorizontal: 4,
+    position: 'absolute',
+    right: 50,
+  },
+  textIdealKGs: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: colors.GREEN_SELECTED,
+    fontFamily: font.DEFAULT_FONT,
+    textAlign: 'center',
+    marginHorizontal: 4,
+    position: 'absolute',
+    right: 25,
   },
 });
 
